@@ -1028,7 +1028,7 @@ class JobsScreen extends StatelessWidget {
         ),
         const SizedBox(height: 20),
         Obx(() => SizedBox(
-          height: 380,
+          height: 390,
           child: ListView.builder(
             scrollDirection: Axis.horizontal,
             padding: const EdgeInsets.symmetric(horizontal: 12),
@@ -1064,9 +1064,9 @@ class JobsScreen extends StatelessWidget {
             // Thumbnail
             Stack(
               children: [
-                Image.network(
+                Image.asset(
                   gig.thumbnailUrl,
-                  height: 180,
+                  height: 160,
                   width: double.infinity,
                   fit: BoxFit.cover,
                 ),
@@ -1118,7 +1118,12 @@ class JobsScreen extends StatelessWidget {
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Text(gig.sellerName, style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 13)),
+                            Text(
+                              gig.sellerName, 
+                              style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 13),
+                              maxLines: 1,
+                              overflow: TextOverflow.ellipsis,
+                            ),
                             Text('Top Rated', style: TextStyle(color: Colors.grey[500], fontSize: 11)),
                           ],
                         ),
