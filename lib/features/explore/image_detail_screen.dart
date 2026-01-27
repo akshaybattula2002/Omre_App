@@ -20,14 +20,10 @@ class ImageDetailScreen extends StatelessWidget {
           Center(
             child: Hero(
               tag: imageUrl,
-              child: Image.network(
+              child: Image.asset(
                 imageUrl,
                 fit: BoxFit.contain,
                 width: double.infinity,
-                loadingBuilder: (context, child, progress) {
-                  if (progress == null) return child;
-                  return const Center(child: CircularProgressIndicator(color: Color(0xFF2555C8)));
-                },
               ),
             ),
           ),

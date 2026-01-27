@@ -104,7 +104,7 @@ class CategoryCoursesScreen extends StatelessWidget {
         children: [
           ClipRRect(
             borderRadius: const BorderRadius.vertical(top: Radius.circular(20)),
-            child: Image.network(course.thumbnailUrl, height: 160, width: double.infinity, fit: BoxFit.cover),
+            child: Image.asset(course.thumbnailUrl, height: 160, width: double.infinity, fit: BoxFit.cover),
           ),
           Padding(
             padding: const EdgeInsets.all(16),

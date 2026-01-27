@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import '../../core/constants/app_assets.dart';
 
 class VideoUploadScreen extends StatefulWidget {
   const VideoUploadScreen({super.key});
@@ -56,7 +57,7 @@ class _VideoUploadScreenState extends State<VideoUploadScreen> {
                 ),
                 itemCount: 20,
                 itemBuilder: (context, index) {
-                  final imageUrl = 'https://picsum.photos/seed/upload$index/300/300';
+                  final imageUrl = AppAssets.getRandomThumbnail();
                   return GestureDetector(
                     onTap: () {
                       setState(() => _selectedImage = imageUrl);
@@ -64,7 +65,7 @@ class _VideoUploadScreenState extends State<VideoUploadScreen> {
                     },
                     child: ClipRRect(
                       borderRadius: BorderRadius.circular(8),
-                      child: Image.network(imageUrl, fit: BoxFit.cover),
+                      child: Image.asset(imageUrl, fit: BoxFit.cover),
                     ),
                   );
                 },
@@ -140,7 +141,7 @@ class _VideoUploadScreenState extends State<VideoUploadScreen> {
                 child: _selectedImage != null
                     ? ClipRRect(
                         borderRadius: BorderRadius.circular(16),
-                        child: Image.network(_selectedImage!, fit: BoxFit.cover),
+                        child: Image.asset(_selectedImage!, fit: BoxFit.cover),
                       )
                     : Column(
                         mainAxisAlignment: MainAxisAlignment.center,

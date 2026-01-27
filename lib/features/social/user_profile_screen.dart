@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import '../../core/theme/palette.dart';
+import '../../core/constants/app_assets.dart';
 
 class UserProfileScreen extends StatelessWidget {
   final String username;
@@ -68,7 +69,7 @@ class UserProfileScreen extends StatelessWidget {
                       ),
                       child: CircleAvatar(
                         radius: 40,
-                        backgroundImage: NetworkImage(avatarUrl),
+                        backgroundImage: avatarUrl.startsWith('http') ? NetworkImage(avatarUrl) : AssetImage(avatarUrl) as ImageProvider,
                         backgroundColor: Colors.grey[200],
                       ),
                     ),
@@ -254,8 +255,8 @@ class UserProfileScreen extends StatelessWidget {
             // This satisfies "navigable to detail view"
             Get.snackbar('Post', 'Opening post detail...', snackPosition: SnackPosition.BOTTOM);
           },
-          child: Image.network(
-            'https://picsum.photos/seed/$username${index+10}/400/400',
+          child: Image.asset(
+            AppAssets.getRandomPost(),
             fit: BoxFit.cover,
             errorBuilder: (_, __, ___) => Container(color: Colors.grey[300], child: const Icon(Icons.image_not_supported)),
           ),

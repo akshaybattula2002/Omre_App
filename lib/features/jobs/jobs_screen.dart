@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import '../../core/theme/palette.dart';
+import '../../core/constants/app_assets.dart';
 import 'package:intl/intl.dart';
 import 'gig_detail_screen.dart';
 import 'category_services_screen.dart';
@@ -86,7 +87,7 @@ class JobsController extends GetxController {
       salary: r'$140k - $180k',
       easyApply: true,
       postedAt: DateTime.now().subtract(const Duration(hours: 2)),
-      logoUrl: 'https://picsum.photos/seed/tech/100/100',
+      logoUrl: AppAssets.getRandomThumbnail(),
     ),
     JobModel(
       title: 'Product Designer',
@@ -96,7 +97,7 @@ class JobsController extends GetxController {
       salary: r'$60 - $90 /hr',
       easyApply: false,
       postedAt: DateTime.now().subtract(const Duration(days: 1)),
-      logoUrl: 'https://picsum.photos/seed/design/100/100',
+      logoUrl: AppAssets.getRandomThumbnail(),
     ),
     JobModel(
       title: 'Marketing Manager',
@@ -106,7 +107,7 @@ class JobsController extends GetxController {
       salary: r'$110k - $130k',
       easyApply: true,
       postedAt: DateTime.now().subtract(const Duration(hours: 5)),
-      logoUrl: 'https://picsum.photos/seed/grow/100/100',
+      logoUrl: AppAssets.getRandomThumbnail(),
     ),
   ].obs;
 
@@ -115,31 +116,31 @@ class JobsController extends GetxController {
       title: 'I will design a modern minimal logo',
       sellerName: 'John Doe',
       sellerLevel: 'Level 2',
-      sellerAvatarUrl: 'https://i.pravatar.cc/150?u=john',
+      sellerAvatarUrl: AppAssets.avatar1,
       rating: 4.9,
       reviewsCount: 230,
       price: r'$50',
-      thumbnailUrl: 'https://picsum.photos/seed/logo/400/300',
+      thumbnailUrl: AppAssets.thumbnail1,
     ),
     GigModel(
       title: 'I will build a responsive Flutter app',
       sellerName: 'Jane Smith',
       sellerLevel: 'Top Rated',
-      sellerAvatarUrl: 'https://i.pravatar.cc/150?u=jane',
+      sellerAvatarUrl: AppAssets.avatar2,
       rating: 5.0,
       reviewsCount: 156,
       price: r'$120',
-      thumbnailUrl: 'https://picsum.photos/seed/app/400/300',
+      thumbnailUrl: AppAssets.thumbnail2,
     ),
     GigModel(
       title: 'I will write high-quality technical blogs',
       sellerName: 'Alex Johnson',
       sellerLevel: 'Level 1',
-      sellerAvatarUrl: 'https://i.pravatar.cc/150?u=alex',
+      sellerAvatarUrl: AppAssets.avatar3,
       rating: 4.8,
       reviewsCount: 89,
       price: r'$35',
-      thumbnailUrl: 'https://picsum.photos/seed/writing/400/300',
+      thumbnailUrl: AppAssets.thumbnail3,
     ),
   ].obs;
 
@@ -666,7 +667,7 @@ class JobsScreen extends StatelessWidget {
                 children: [
                   ClipRRect(
                     borderRadius: BorderRadius.circular(12),
-                    child: Image.network(job.logoUrl, width: 48, height: 48, fit: BoxFit.cover),
+                    child: Image.asset(job.logoUrl, width: 48, height: 48, fit: BoxFit.cover),
                   ),
                   const SizedBox(width: 16),
                   Expanded(
@@ -1110,7 +1111,7 @@ class JobsScreen extends StatelessWidget {
                     children: [
                       CircleAvatar(
                         radius: 16,
-                        backgroundImage: NetworkImage(gig.sellerAvatarUrl),
+                        backgroundImage: AssetImage(gig.sellerAvatarUrl),
                       ),
                       const SizedBox(width: 12),
                       Expanded(
@@ -1218,8 +1219,8 @@ class JobsScreen extends StatelessWidget {
           const SizedBox(height: 40),
           ClipRRect(
             borderRadius: BorderRadius.circular(24),
-            child: Image.network(
-              'https://picsum.photos/seed/team/800/600',
+            child: Image.asset(
+              AppAssets.cover1,
               width: double.infinity,
               height: 400,
               fit: BoxFit.cover,

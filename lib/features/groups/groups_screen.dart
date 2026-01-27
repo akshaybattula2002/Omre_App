@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import '../../core/constants/app_assets.dart';
 
 class GroupsScreen extends StatelessWidget {
   const GroupsScreen({super.key});
@@ -37,13 +38,13 @@ class GroupsScreen extends StatelessWidget {
           _buildGroupItem(
             'Flutter Developers',
             '15K members • 5 posts today',
-            'https://images.unsplash.com/photo-1542831371-29b0f74f9713?q=80&w=2070&auto=format&fit=crop', // Code screen
+            AppAssets.post1, // Code screen
             isDark,
           ),
            _buildGroupItem(
             'Local Foodies',
             '2.3K members • 12 posts today',
-            'https://images.unsplash.com/photo-1504674900247-0877df9cc836?q=80&w=2070&auto=format&fit=crop', // Food
+            AppAssets.post2, // Food
             isDark,
           ),
           
@@ -58,9 +59,9 @@ class GroupsScreen extends StatelessWidget {
             child: ListView(
               scrollDirection: Axis.horizontal,
               children: [
-                _buildDiscoverCard('Hikers Club', 'Outdoor', 'https://images.unsplash.com/photo-1551632811-561732d1e306?q=80&w=2070&auto=format&fit=crop', isDark),
-                _buildDiscoverCard('Book Worms', 'Literature', 'https://images.unsplash.com/photo-1495446815901-a7297e633e8d?q=80&w=2070&auto=format&fit=crop', isDark),
-                _buildDiscoverCard('Gamers Unite', 'Gaming', 'https://images.unsplash.com/photo-1542751371-adc38448a05e?q=80&w=2070&auto=format&fit=crop', isDark),
+                _buildDiscoverCard('Hikers Club', 'Outdoor', AppAssets.post3, isDark),
+                _buildDiscoverCard('Book Worms', 'Literature', AppAssets.post4, isDark),
+                _buildDiscoverCard('Gamers Unite', 'Gaming', AppAssets.post5, isDark),
               ],
             ),
           ),
@@ -89,7 +90,7 @@ class GroupsScreen extends StatelessWidget {
           const SizedBox(height: 12),
           ListTile(
             contentPadding: EdgeInsets.zero,
-            leading: const CircleAvatar(backgroundImage: NetworkImage('https://i.pravatar.cc/150?u=a')),
+            leading: CircleAvatar(backgroundImage: AssetImage(AppAssets.avatar1)),
             title: const Text('Sarah posted in Flutter Developers'),
             subtitle: const Text('Anyone tried the new 3.29 beta yet?'),
             trailing: const Text('2m ago', style: TextStyle(fontSize: 12, color: Colors.grey)),
@@ -106,7 +107,7 @@ class GroupsScreen extends StatelessWidget {
         children: [
           ClipRRect(
             borderRadius: BorderRadius.circular(12),
-            child: Image.network(
+            child: Image.asset(
               imageUrl,
               width: 64,
               height: 64,
@@ -152,7 +153,7 @@ class GroupsScreen extends StatelessWidget {
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(16),
         image: DecorationImage(
-          image: NetworkImage(imageUrl),
+          image: AssetImage(imageUrl),
           fit: BoxFit.cover,
           colorFilter: ColorFilter.mode(Colors.black.withOpacity(0.4), BlendMode.darken),
         ),

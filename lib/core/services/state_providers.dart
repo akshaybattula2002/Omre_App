@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-enum AppMode { social, messenger, education, biz, link, studio, news, video, orbit, games, meeting }
+enum AppMode { social, messenger, education, biz, link, studio, news, video, orbit, games, meeting, mart }
 
 class AppController extends GetxController {
   final _appMode = AppMode.social.obs;
@@ -18,6 +18,8 @@ class AppController extends GetxController {
 
   final isSearching = false.obs;
   final searchController = TextEditingController();
+
+  final isMartServicesView = false.obs;
 
   @override
   void onClose() {

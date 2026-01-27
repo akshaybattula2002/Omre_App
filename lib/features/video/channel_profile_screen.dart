@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'video_player_screen.dart';
+import '../../core/constants/app_assets.dart';
 
 class ChannelProfileScreen extends StatefulWidget {
   final String channelName;
@@ -168,12 +169,12 @@ class _ChannelProfileScreenState extends State<ChannelProfileScreen> with Single
       children: [
         Text('Featured', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18, color: textColor)),
         const SizedBox(height: 12),
-        _buildVideoItem('Flutter 3.0 Full Course', '1.2M views • 1 year ago', 'https://picsum.photos/seed/flutter3/400/220', isDark, textColor),
+        _buildVideoItem('Flutter 3.0 Full Course', '1.2M views • 1 year ago', AppAssets.thumbnail1, isDark, textColor),
         const SizedBox(height: 24),
         Text('Latest Videos', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18, color: textColor)),
         const SizedBox(height: 12),
-        _buildVideoItem('Dart Patterns Explained', '45K views • 2 days ago', 'https://picsum.photos/seed/dart_patterns/400/220', isDark, textColor),
-        _buildVideoItem('State Management 2026', '12K views • 5 days ago', 'https://picsum.photos/seed/state_2026/400/220', isDark, textColor),
+        _buildVideoItem('Dart Patterns Explained', '45K views • 2 days ago', AppAssets.thumbnail2, isDark, textColor),
+        _buildVideoItem('State Management 2026', '12K views • 5 days ago', AppAssets.thumbnail3, isDark, textColor),
       ],
     );
   }
@@ -185,7 +186,7 @@ class _ChannelProfileScreenState extends State<ChannelProfileScreen> with Single
       itemBuilder: (context, index) {
         return Padding(
           padding: const EdgeInsets.only(bottom: 16),
-          child: _buildVideoItem('Video Title #$index - Tutorial', '${(index * 5 + 2)}K views • ${index + 1} days ago', 'https://picsum.photos/seed/video$index/400/220', isDark, textColor),
+          child: _buildVideoItem('Video Title #$index - Tutorial', '${(index * 5 + 2)}K views • ${index + 1} days ago', AppAssets.getRandomThumbnail(), isDark, textColor),
         );
       },
     );
@@ -207,8 +208,8 @@ class _ChannelProfileScreenState extends State<ChannelProfileScreen> with Single
           children: [
             ClipRRect(
               borderRadius: BorderRadius.circular(8),
-              child: Image.network(
-                'https://picsum.photos/seed/short${index + widget.hashCode}/300/500',
+              child: Image.asset(
+                AppAssets.getRandomPost(),
                 fit: BoxFit.cover,
               ),
             ),
@@ -231,10 +232,10 @@ class _ChannelProfileScreenState extends State<ChannelProfileScreen> with Single
 
   Widget _buildPlaylistsTab(bool isDark, Color? textColor, ThemeData theme) {
     final playlists = [
-      {'name': 'Flutter Tutorials', 'count': 45, 'thumbnail': 'https://picsum.photos/seed/p1/400/220'},
-      {'name': 'UI/UX Design Course', 'count': 12, 'thumbnail': 'https://picsum.photos/seed/p2/400/220'},
-      {'name': 'Backend with Node.js', 'count': 28, 'thumbnail': 'https://picsum.photos/seed/p3/400/220'},
-      {'name': 'Coding Tips & Tricks', 'count': 89, 'thumbnail': 'https://picsum.photos/seed/p4/400/220'},
+      {'name': 'Flutter Tutorials', 'count': 45, 'thumbnail': AppAssets.thumbnail1},
+      {'name': 'UI/UX Design Course', 'count': 12, 'thumbnail': AppAssets.thumbnail2},
+      {'name': 'Backend with Node.js', 'count': 28, 'thumbnail': AppAssets.thumbnail3},
+      {'name': 'Coding Tips & Tricks', 'count': 89, 'thumbnail': AppAssets.thumbnail1},
     ];
 
     return ListView.builder(
@@ -252,7 +253,7 @@ class _ChannelProfileScreenState extends State<ChannelProfileScreen> with Single
                 children: [
                   ClipRRect(
                     borderRadius: BorderRadius.circular(8),
-                    child: Image.network(playlist['thumbnail'] as String, width: 140, height: 80, fit: BoxFit.cover),
+                    child: Image.asset(playlist['thumbnail'] as String, width: 140, height: 80, fit: BoxFit.cover),
                   ),
                   Container(
                     width: 50,
@@ -303,14 +304,14 @@ class _ChannelProfileScreenState extends State<ChannelProfileScreen> with Single
           time: time,
           thumbnailUrl: url,
           avatarColor: widget.avatarColor,
-          videoUrl: 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4',
+          videoUrl: AppAssets.sampleVideo,
         ));
       },
       child: Column(
         children: [
           ClipRRect(
             borderRadius: BorderRadius.circular(12),
-            child: Image.network(url, height: 200, width: double.infinity, fit: BoxFit.cover),
+            child: Image.asset(url, height: 200, width: double.infinity, fit: BoxFit.cover),
           ),
           const SizedBox(height: 12),
           Row(

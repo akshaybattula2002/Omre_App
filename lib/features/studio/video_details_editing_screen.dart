@@ -73,7 +73,7 @@ class _VideoDetailsEditingScreenState extends State<VideoDetailsEditingScreen> {
           children: [
              ClipRRect(
                borderRadius: BorderRadius.circular(12),
-               child: Image.network(
+               child: Image.asset(
                  widget.video['thumbnail'],
                  width: double.infinity,
                  height: 200,

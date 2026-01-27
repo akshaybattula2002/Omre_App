@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import '../../../core/constants/app_assets.dart';
 import '../../../core/theme/palette.dart';
 
 class ShortsCommentsSheet extends StatelessWidget {
@@ -54,7 +55,7 @@ class ShortsCommentsSheet extends StatelessWidget {
                     children: [
                       CircleAvatar(
                         radius: 18,
-                        backgroundImage: NetworkImage('https://i.pravatar.cc/150?u=user$index'),
+                        backgroundImage: AssetImage(AppAssets.avatar1),
                       ),
                       const SizedBox(width: 12),
                       Expanded(
@@ -107,7 +108,7 @@ class ShortsCommentsSheet extends StatelessWidget {
               children: [
                 CircleAvatar(
                   radius: 18,
-                  backgroundImage: const NetworkImage('https://images.unsplash.com/photo-1544725176-7c40e5a71c5e?q=80&w=2667&auto=format&fit=crop'),
+                  backgroundImage: const AssetImage(AppAssets.avatar2),
                 ),
                 const SizedBox(width: 12),
                 Expanded(

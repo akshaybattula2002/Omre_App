@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import '../../core/constants/app_assets.dart';
 
 class StudioCommentsScreen extends StatefulWidget {
   const StudioCommentsScreen({super.key});
@@ -15,7 +16,7 @@ class _StudioCommentsScreenState extends State<StudioCommentsScreen> {
   final List<Map<String, dynamic>> publishedComments = [
     {
       'user': 'John Doe',
-      'avatar': 'https://i.pravatar.cc/150?u=john',
+      'avatar': AppAssets.avatar1,
       'comment': 'Amazing video! Really helped me understand GetX better.',
       'video': 'Building a Modern Web App',
       'time': '2h ago',
@@ -23,7 +24,7 @@ class _StudioCommentsScreenState extends State<StudioCommentsScreen> {
     },
     {
       'user': 'Sarah Smith',
-      'avatar': 'https://i.pravatar.cc/150?u=sarah',
+      'avatar': AppAssets.avatar2,
       'comment': 'Can you do a tutorial on Flutter animations next?',
       'video': 'Flutter 2026 Roadmap',
       'time': '5h ago',
@@ -31,7 +32,7 @@ class _StudioCommentsScreenState extends State<StudioCommentsScreen> {
     },
     {
       'user': 'Mike Wilson',
-      'avatar': 'https://i.pravatar.cc/150?u=mike',
+      'avatar': AppAssets.avatar3,
       'comment': 'The audio quality in this one is much better than the last one.',
       'video': 'Building a Modern Web App',
       'time': '1d ago',
@@ -97,7 +98,7 @@ class _StudioCommentsScreenState extends State<StudioCommentsScreen> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           CircleAvatar(
-                            backgroundImage: NetworkImage(comment['avatar']),
+                            backgroundImage: AssetImage(comment['avatar']),
                             radius: 20,
                           ),
                           const SizedBox(width: 16),

@@ -56,6 +56,45 @@ class HomeController extends GetxController {
           ),
         ],
       ),
+       UserStoryGroup(
+        username: 'dummy_user',
+        avatarUrl: AppAssets.avatar4,
+        stories: [
+          StoryModel(
+            id: 's4',
+            username: 'dummy_user',
+            avatarUrl: AppAssets.avatar4,
+            imageUrl: AppAssets.dummyStory,
+            timestamp: DateTime.now().subtract(const Duration(minutes: 30)),
+          ),
+        ],
+      ),
+      UserStoryGroup(
+        username: 'travel_lover',
+        avatarUrl: AppAssets.avatar5,
+        stories: [
+          StoryModel(
+            id: 's5',
+            username: 'travel_lover',
+            avatarUrl: AppAssets.avatar5,
+            imageUrl: AppAssets.post4,
+            timestamp: DateTime.now().subtract(const Duration(hours: 1)),
+          ),
+        ],
+      ),
+       UserStoryGroup(
+        username: 'tech_guru',
+        avatarUrl: AppAssets.avatar1,
+        stories: [
+           StoryModel(
+            id: 's6',
+            username: 'tech_guru',
+            avatarUrl: AppAssets.avatar1,
+            imageUrl: AppAssets.post5,
+             timestamp: DateTime.now().subtract(const Duration(hours: 4)),
+          ),
+        ],
+      ),
     ]);
 
     // Mock posts
@@ -113,6 +152,24 @@ class HomeController extends GetxController {
         caption: 'Can we appreciate how smooth Flutter animations are? OMRE is a prime example!',
         likes: 56,
         timestamp: '2h ago',
+      ),
+      PostModel(
+        id: 'p7',
+        username: 'design_pro',
+        avatarUrl: AppAssets.avatar4,
+        imageUrl: AppAssets.post3,
+        caption: 'Minimalist setups are the best! 🖥️✨ #setup #workspace',
+        likes: 189,
+        timestamp: '4h ago',
+      ),
+      PostModel(
+        id: 'p8',
+        username: 'nature_explorer',
+        avatarUrl: AppAssets.avatar5,
+        imageUrl: AppAssets.post2,
+        caption: 'Lost in the woods... 🌲🍃',
+        likes: 76,
+        timestamp: '6h ago',
       ),
     ]);
   }

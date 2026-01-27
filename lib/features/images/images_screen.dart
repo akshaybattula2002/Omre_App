@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
+import '../../core/constants/app_assets.dart';
 
 class ImagesScreen extends StatelessWidget {
   const ImagesScreen({super.key});
@@ -11,16 +12,16 @@ class ImagesScreen extends StatelessWidget {
     final isDark = theme.brightness == Brightness.dark;
 
     final List<String> images = [
-      'https://images.unsplash.com/photo-1506744038136-46273834b3fb?q=80&w=2070&auto=format&fit=crop',
-      'https://images.unsplash.com/photo-1542204165-65bf26472b9b?q=80&w=1974&auto=format&fit=crop',
-      'https://images.unsplash.com/photo-1554048612-387768052bf7?q=80&w=2080&auto=format&fit=crop',
-      'https://images.unsplash.com/photo-1493976040374-85c8e12f0c0e?q=80&w=2070&auto=format&fit=crop',
-      'https://images.unsplash.com/photo-1518770660439-4636190af475?q=80&w=2070&auto=format&fit=crop',
-      'https://images.unsplash.com/photo-1551033406-611cf9a28f67?q=80&w=1974&auto=format&fit=crop',
-      'https://images.unsplash.com/photo-1547891654-e66ed7ebb968?q=80&w=2070&auto=format&fit=crop',
-      'https://images.unsplash.com/photo-1476514525535-07fb3b4ae5f1?q=80&w=2070&auto=format&fit=crop',
-      'https://images.unsplash.com/photo-1501854140884-074cf2b2c75d?q=80&w=2062&auto=format&fit=crop',
-      'https://images.unsplash.com/photo-1518098268026-4e1c26063852?q=80&w=1976&auto=format&fit=crop',
+      AppAssets.thumbnail1,
+      AppAssets.thumbnail2,
+      AppAssets.thumbnail3,
+      AppAssets.thumbnail1,
+      AppAssets.thumbnail2,
+      AppAssets.thumbnail3,
+      AppAssets.thumbnail1,
+      AppAssets.thumbnail2,
+      AppAssets.thumbnail3,
+      AppAssets.thumbnail1,
     ];
 
     return Scaffold(
@@ -46,7 +47,7 @@ class ImagesScreen extends StatelessWidget {
         itemBuilder: (context, index) {
           return ClipRRect(
             borderRadius: BorderRadius.circular(16),
-            child: Image.network(
+            child: Image.asset(
               images[index],
               fit: BoxFit.cover,
             ),

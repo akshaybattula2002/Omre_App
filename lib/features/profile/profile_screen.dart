@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'profile_detail_screens.dart';
 import 'settings/settings_screen.dart';
+import '../../core/constants/app_assets.dart';
 
 class ProfileScreen extends StatelessWidget {
   const ProfileScreen({super.key});
@@ -16,7 +17,7 @@ class ProfileScreen extends StatelessWidget {
         children: [
           const CircleAvatar(
             radius: 50,
-            backgroundImage: NetworkImage('https://i.pravatar.cc/150?u=me'),
+            backgroundImage: AssetImage(AppAssets.avatar1),
           ),
           const SizedBox(height: 16),
           Text(

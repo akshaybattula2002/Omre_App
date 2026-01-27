@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import '../../core/constants/app_assets.dart';
 import 'news_detail_screen.dart';
 
 class NewsHomeScreen extends StatefulWidget {
@@ -81,7 +82,7 @@ class _NewsHomeScreenState extends State<NewsHomeScreen> {
                     child: Stack(
                       fit: StackFit.expand,
                       children: [
-                         Image.network(
+                         Image.asset(
                            featuredStory['image']!,
                            fit: BoxFit.cover,
                            errorBuilder: (context, error, stackTrace) => Container(
@@ -209,7 +210,7 @@ class _NewsHomeScreenState extends State<NewsHomeScreen> {
         'summary': 'ISRO confirms the successful launch of Mangalyaan 2, aiming for deeper exploration.',
         'source': 'ISRO News',
         'time': '1h ago',
-        'image': 'https://picsum.photos/seed/india_space/800/600',
+        'image': AppAssets.getRandomPost(),
       };
     } else if (category == 'World') {
       return {
@@ -217,7 +218,7 @@ class _NewsHomeScreenState extends State<NewsHomeScreen> {
         'summary': 'Leaders from 190 countries sign the new pact to reduce carbon emissions by 50%.',
         'source': 'World News',
         'time': '30m ago',
-        'image': 'https://picsum.photos/seed/world_climate/800/600',
+        'image': AppAssets.getRandomPost(),
       };
     } else if (category == 'Local') {
       return {
@@ -225,7 +226,7 @@ class _NewsHomeScreenState extends State<NewsHomeScreen> {
         'summary': 'Over 50,000 participants joined the annual city run, raising millions for charity.',
         'source': 'City Daily',
         'time': '2h ago',
-        'image': 'https://picsum.photos/seed/local_marathon/800/600',
+        'image': AppAssets.getRandomPost(),
       };
     } else if (category == 'Following') {
       return {
@@ -233,7 +234,7 @@ class _NewsHomeScreenState extends State<NewsHomeScreen> {
         'summary': 'Check out the detailed review of the latest flagship smartphone.',
         'source': 'TechRadar',
         'time': '15m ago',
-        'image': 'https://picsum.photos/seed/following_tech/800/600',
+        'image': AppAssets.getRandomPost(),
       };
     } else {
       return {
@@ -241,7 +242,7 @@ class _NewsHomeScreenState extends State<NewsHomeScreen> {
          'summary': 'The latest updates from the world of $category.',
          'source': '$category Central',
          'time': 'Now',
-         'image': 'https://picsum.photos/seed/${category.toLowerCase()}/800/600',
+         'image': AppAssets.getRandomPost(),
       };
     }
   }
@@ -249,24 +250,24 @@ class _NewsHomeScreenState extends State<NewsHomeScreen> {
   List<Map<String, String>> _getStories(String category) {
     if (category == 'India') {
       return [
-        {'title': 'Bangalore Tech Summit 2026 Kicks Off', 'source': 'Tech India', 'time': '4h ago', 'image': 'https://picsum.photos/seed/bangalore/200'},
-         {'title': 'New Metro Lines Operational in Major Cities', 'source': 'Urban Infra', 'time': '6h ago', 'image': 'https://picsum.photos/seed/metro/200'},
-         {'title': 'Cricket: India Wins Series Decider', 'source': 'Sports Today', 'time': '8h ago', 'image': 'https://picsum.photos/seed/cricket/200'},
+        {'title': 'Bangalore Tech Summit 2026 Kicks Off', 'source': 'Tech India', 'time': '4h ago', 'image': AppAssets.thumbnail1},
+         {'title': 'New Metro Lines Operational in Major Cities', 'source': 'Urban Infra', 'time': '6h ago', 'image': AppAssets.thumbnail2},
+         {'title': 'Cricket: India Wins Series Decider', 'source': 'Sports Today', 'time': '8h ago', 'image': AppAssets.thumbnail3},
       ];
     } else if (category == 'World') {
       return [
-         {'title': 'European Union Passes New AI Regulations', 'source': 'EU Herald', 'time': '2h ago', 'image': 'https://picsum.photos/seed/eu_ai/200'},
-         {'title': 'Electric Vehicle Sales Surpass Gas Cars in Nordic Region', 'source': 'Auto World', 'time': '5h ago', 'image': 'https://picsum.photos/seed/ev_cars/200'},
+         {'title': 'European Union Passes New AI Regulations', 'source': 'EU Herald', 'time': '2h ago', 'image': AppAssets.thumbnail1},
+         {'title': 'Electric Vehicle Sales Surpass Gas Cars in Nordic Region', 'source': 'Auto World', 'time': '5h ago', 'image': AppAssets.thumbnail2},
       ];
     } else if (category == 'Local') {
       return [
-         {'title': 'Local Park Renovation Completed', 'source': 'Community News', 'time': '1d ago', 'image': 'https://picsum.photos/seed/park/200'},
-         {'title': 'New Library Branch Opens Downtown', 'source': 'City Gazette', 'time': '2d ago', 'image': 'https://picsum.photos/seed/library/200'},
+         {'title': 'Local Park Renovation Completed', 'source': 'Community News', 'time': '1d ago', 'image': AppAssets.thumbnail3},
+         {'title': 'New Library Branch Opens Downtown', 'source': 'City Gazette', 'time': '2d ago', 'image': AppAssets.thumbnail1},
       ];
     } else {
        return [
-         {'title': 'Latest trends in $category', 'source': '$category Weekly', 'time': '3h ago', 'image': 'https://picsum.photos/seed/${category.toLowerCase()}1/200'},
-         {'title': 'Top 10 moments in $category this week', 'source': 'Daily $category', 'time': '6h ago', 'image': 'https://picsum.photos/seed/${category.toLowerCase()}2/200'},
+         {'title': 'Latest trends in $category', 'source': '$category Weekly', 'time': '3h ago', 'image': AppAssets.thumbnail2},
+         {'title': 'Top 10 moments in $category this week', 'source': 'Daily $category', 'time': '6h ago', 'image': AppAssets.thumbnail3},
       ];
     }
   }
@@ -338,7 +339,7 @@ class _NewsHomeScreenState extends State<NewsHomeScreen> {
           const SizedBox(width: 16),
           ClipRRect(
             borderRadius: BorderRadius.circular(12),
-            child: Image.network(
+            child: Image.asset(
               imageUrl,
               width: 100,
               height: 100,

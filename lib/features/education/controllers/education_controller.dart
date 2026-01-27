@@ -1,5 +1,6 @@
 import 'package:get/get.dart';
 import 'package:flutter/material.dart';
+import '../../../core/constants/app_assets.dart';
 import '../streak_screen.dart';
 import '../certificates_screen.dart';
 import '../explore_courses_screen.dart';
@@ -58,7 +59,7 @@ class EducationController extends GetxController {
       duration: '10h 0m',
       price: 19.99,
       rating: 4.8,
-      thumbnailUrl: 'https://picsum.photos/seed/code/400/300',
+      thumbnailUrl: AppAssets.getRandomThumbnail(),
     ),
     CourseModel(
       title: 'Advanced Flutter Mastery',
@@ -67,7 +68,7 @@ class EducationController extends GetxController {
       duration: '15h 30m',
       price: 24.99,
       rating: 4.9,
-      thumbnailUrl: 'https://picsum.photos/seed/flutter/400/300',
+      thumbnailUrl: AppAssets.getRandomThumbnail(),
     ),
   ].obs;
 
@@ -116,17 +117,17 @@ class EducationController extends GetxController {
     // Mock Data based on category
     if (category == 'Development') {
       return [
-        CourseModel(title: 'Flutter & Dart - The Complete Guide', instructor: 'Maximilian', students: 5000, duration: '40h', price: 14.99, rating: 4.8, thumbnailUrl: 'https://picsum.photos/seed/dev1/400/300'),
-        CourseModel(title: 'Node.js, Express, MongoDB & More', instructor: 'Jonas', students: 3000, duration: '35h', price: 18.99, rating: 4.7, thumbnailUrl: 'https://picsum.photos/seed/dev2/400/300'),
+        CourseModel(title: 'Flutter & Dart - The Complete Guide', instructor: 'Maximilian', students: 5000, duration: '40h', price: 14.99, rating: 4.8, thumbnailUrl: AppAssets.thumbnail1),
+        CourseModel(title: 'Node.js, Express, MongoDB & More', instructor: 'Jonas', students: 3000, duration: '35h', price: 18.99, rating: 4.7, thumbnailUrl: AppAssets.thumbnail2),
       ];
     } else if (category == 'Design') {
       return [
-        CourseModel(title: 'Figma for UI/UX Design', instructor: 'Gary Simon', students: 2500, duration: '12h', price: 12.99, rating: 4.9, thumbnailUrl: 'https://picsum.photos/seed/des1/400/300'),
-        CourseModel(title: 'Complete Web Design Bootcamp', instructor: 'Dr. Angela Yu', students: 4000, duration: '20h', price: 15.99, rating: 4.8, thumbnailUrl: 'https://picsum.photos/seed/des2/400/300'),
+        CourseModel(title: 'Figma for UI/UX Design', instructor: 'Gary Simon', students: 2500, duration: '12h', price: 12.99, rating: 4.9, thumbnailUrl: AppAssets.thumbnail3),
+        CourseModel(title: 'Complete Web Design Bootcamp', instructor: 'Dr. Angela Yu', students: 4000, duration: '20h', price: 15.99, rating: 4.8, thumbnailUrl: AppAssets.thumbnail2),
       ];
     } else if (category == 'Business') {
       return [
-         CourseModel(title: 'The Complete MBA Course', instructor: 'Chris Haroun', students: 10000, duration: '50h', price: 19.99, rating: 4.5, thumbnailUrl: 'https://picsum.photos/seed/bus1/400/300'),
+         CourseModel(title: 'The Complete MBA Course', instructor: 'Chris Haroun', students: 10000, duration: '50h', price: 19.99, rating: 4.5, thumbnailUrl: AppAssets.thumbnail1),
       ];
     } else {
       return recommendedCourses.toList();

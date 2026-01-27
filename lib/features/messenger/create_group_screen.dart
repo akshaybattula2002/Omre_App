@@ -109,7 +109,7 @@ class _CreateGroupScreenState extends State<CreateGroupScreen> {
                     });
                   },
                   title: Text(contact.name),
-                  secondary: CircleAvatar(backgroundImage: NetworkImage(contact.avatarUrl)),
+                  secondary: CircleAvatar(backgroundImage: AssetImage(contact.avatarUrl)),
                   activeColor: AppPalette.accentBlue,
                   checkboxShape: const CircleBorder(),
                 );

@@ -19,6 +19,7 @@ class _LiveChannelScreenState extends State<LiveChannelScreen> {
   late VideoPlayerController _videoPlayerController;
   ChewieController? _chewieController;
   final TextEditingController _chatController = TextEditingController();
+  bool _isFollowing = false;
 
   @override
   void initState() {
@@ -131,13 +132,26 @@ class _LiveChannelScreenState extends State<LiveChannelScreen> {
                             ),
                           ),
                           ElevatedButton(
-                            onPressed: () {},
+                            onPressed: () {
+                              setState(() {
+                                _isFollowing = !_isFollowing;
+                              });
+                              Get.snackbar(
+                                _isFollowing ? 'Followed' : 'Unfollowed',
+                                _isFollowing 
+                                  ? 'You are now following ${widget.channel['streamer']}!' 
+                                  : 'You have unfollowed ${widget.channel['streamer']}.',
+                                backgroundColor: _isFollowing ? Colors.purple : Colors.grey[800],
+                                colorText: Colors.white,
+                                snackPosition: SnackPosition.BOTTOM,
+                              );
+                            },
                             style: ElevatedButton.styleFrom(
-                              backgroundColor: Colors.purple,
+                              backgroundColor: _isFollowing ? Colors.grey[800] : Colors.purple,
                               foregroundColor: Colors.white,
                               shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
                             ),
-                            child: const Text('Follow'),
+                            child: Text(_isFollowing ? 'Following' : 'Follow'),
                           ),
                         ],
                       ),

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../../core/theme/palette.dart';
+import '../../core/constants/app_assets.dart';
 
 class SavedScreen extends StatelessWidget {
   const SavedScreen({super.key});
@@ -42,8 +43,8 @@ class SavedScreen extends StatelessWidget {
       ),
       itemCount: 18,
       itemBuilder: (context, index) {
-        return Image.network(
-          'https://picsum.photos/seed/saved$index/400/400',
+        return Image.asset(
+          AppAssets.getRandomPost(),
           fit: BoxFit.cover,
         );
       },
@@ -69,8 +70,8 @@ class SavedScreen extends StatelessWidget {
             contentPadding: const EdgeInsets.all(12),
             leading: ClipRRect(
               borderRadius: BorderRadius.circular(8),
-              child: Image.network(
-                'https://picsum.photos/seed/col$index/100/100',
+              child: Image.asset(
+                AppAssets.getRandomThumbnail(),
                 width: 60,
                 height: 60,
                 fit: BoxFit.cover,

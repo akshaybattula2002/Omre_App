@@ -1,6 +1,7 @@
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 import 'dart:io';
+import '../../../core/constants/app_assets.dart';
 
 class BizController extends GetxController {
   final _picker = ImagePicker();
@@ -61,10 +62,10 @@ class BizController extends GetxController {
 
   // Products
   final topProducts = <Map<String, dynamic>>[
-    {'rank': 1, 'name': 'Premium Widget', 'sales': '145 sales', 'price': '\$29.99', 'progress': 0.9, 'status': 'Active', 'stock': '150 in stock', 'category': 'Widgets', 'image': 'https://via.placeholder.com/150'},
-    {'rank': 2, 'name': 'Budget Widget', 'sales': '98 sales', 'price': '\$9.99', 'progress': 0.7, 'status': 'Active', 'stock': '500 in stock', 'category': 'Widgets', 'image': 'https://via.placeholder.com/150'},
-    {'rank': 3, 'name': 'Widget Pro Max', 'sales': '76 sales', 'price': '\$99.99', 'progress': 0.5, 'status': 'Draft', 'stock': '25 in stock', 'category': 'Pro', 'image': 'https://via.placeholder.com/150'},
-    {'rank': 4, 'name': 'USB-C Cable', 'sales': '234 sales', 'price': '\$11.70', 'progress': 0.8, 'status': 'Active', 'stock': '1000 in stock', 'category': 'Accessories', 'image': 'https://via.placeholder.com/150'},
+    {'rank': 1, 'name': 'Premium Widget', 'sales': '145 sales', 'price': '\$29.99', 'progress': 0.9, 'status': 'Active', 'stock': '150 in stock', 'category': 'Widgets', 'image': AppAssets.thumbnail1},
+    {'rank': 2, 'name': 'Budget Widget', 'sales': '98 sales', 'price': '\$9.99', 'progress': 0.7, 'status': 'Active', 'stock': '500 in stock', 'category': 'Widgets', 'image': AppAssets.thumbnail2},
+    {'rank': 3, 'name': 'Widget Pro Max', 'sales': '76 sales', 'price': '\$99.99', 'progress': 0.5, 'status': 'Draft', 'stock': '25 in stock', 'category': 'Pro', 'image': AppAssets.thumbnail3},
+    {'rank': 4, 'name': 'USB-C Cable', 'sales': '234 sales', 'price': '\$11.70', 'progress': 0.8, 'status': 'Active', 'stock': '1000 in stock', 'category': 'Accessories', 'image': AppAssets.thumbnail1},
   ].obs;
 
   final filteredProducts = <Map<String, dynamic>>[].obs;

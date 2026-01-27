@@ -12,6 +12,9 @@ class ChatDetailScreen extends GetView<ChatDetailController> {
 
   @override
   Widget build(BuildContext context) {
+    if (!Get.isRegistered<ChatDetailController>()) {
+      Get.put(ChatDetailController());
+    }
     final theme = Theme.of(context);
     final isDark = theme.brightness == Brightness.dark;
     final chat = controller.chat;
@@ -97,7 +100,7 @@ class ChatDetailScreen extends GetView<ChatDetailController> {
               children: [
                 CircleAvatar(
                   radius: 18,
-                  backgroundImage: NetworkImage(chat.avatarUrl),
+                  backgroundImage: AssetImage(chat.avatarUrl),
                 ),
                 const SizedBox(width: 10),
                 Expanded(

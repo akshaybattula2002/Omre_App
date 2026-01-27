@@ -154,7 +154,7 @@ class NewChatScreen extends StatelessWidget {
           children: [
             CircleAvatar(
               radius: 22,
-              backgroundImage: NetworkImage(chat.avatarUrl),
+              backgroundImage: AssetImage(chat.avatarUrl),
             ),
             const SizedBox(width: 16),
             Column(

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import '../../core/constants/app_assets.dart';
 import '../../core/theme/palette.dart';
 import 'controllers/biz_controller.dart';
 import 'create_campaign_screen.dart';
@@ -372,7 +373,7 @@ class WalletScreen extends GetView<BizController> {
         color: isDark ? const Color(0xFF1E1E1E) : Colors.black,
         borderRadius: BorderRadius.circular(24),
         image: const DecorationImage(
-          image: NetworkImage('https://www.transparenttextures.com/patterns/carbon-fibre.png'),
+          image: AssetImage(AppAssets.thumbnail2),
           opacity: 0.1,
           fit: BoxFit.cover,
         ),

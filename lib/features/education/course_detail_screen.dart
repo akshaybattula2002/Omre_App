@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'controllers/education_controller.dart';
+import '../../core/constants/app_assets.dart';
 import '../../core/theme/palette.dart';
 
 class CourseDetailScreen extends GetView<EducationController> {
@@ -54,7 +55,7 @@ class CourseDetailScreen extends GetView<EducationController> {
         background: Stack(
           fit: StackFit.expand,
           children: [
-            Image.network(course.thumbnailUrl, fit: BoxFit.cover),
+            Image.asset(course.thumbnailUrl, fit: BoxFit.cover),
             Container(
               decoration: BoxDecoration(
                 gradient: LinearGradient(
@@ -166,7 +167,7 @@ class CourseDetailScreen extends GetView<EducationController> {
         const SizedBox(height: 16),
         Row(
           children: [
-            CircleAvatar(radius: 30, backgroundImage: NetworkImage('https://i.pravatar.cc/150?u=${course.instructor}')),
+            CircleAvatar(radius: 30, backgroundImage: AssetImage(AppAssets.avatar1)),
             const SizedBox(width: 16),
             Expanded(
               child: Column(

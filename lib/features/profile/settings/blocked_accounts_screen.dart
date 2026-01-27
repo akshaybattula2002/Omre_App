@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import '../../../core/theme/palette.dart';
+import '../../../core/constants/app_assets.dart';
 
 class BlockedAccountsScreen extends StatelessWidget {
   const BlockedAccountsScreen({super.key});
@@ -8,9 +9,9 @@ class BlockedAccountsScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final blockedUsers = [
-      {'name': 'Spambot 2000', 'handle': '@spam_master', 'avatar': 'https://i.pravatar.cc/150?u=spam1'},
-      {'name': 'Toxic User', 'handle': '@toxic_talk', 'avatar': 'https://i.pravatar.cc/150?u=toxic'},
-      {'name': 'Annoying Account', 'handle': '@annoying_user', 'avatar': 'https://i.pravatar.cc/150?u=annoying'},
+      {'name': 'Spambot 2000', 'handle': '@spam_master', 'avatar': AppAssets.avatar3},
+      {'name': 'Toxic User', 'handle': '@toxic_talk', 'avatar': AppAssets.avatar5},
+      {'name': 'Annoying Account', 'handle': '@annoying_user', 'avatar': AppAssets.avatar2},
     ];
 
     return Scaffold(
@@ -26,7 +27,7 @@ class BlockedAccountsScreen extends StatelessWidget {
                 final user = blockedUsers[index];
                 return ListTile(
                   leading: CircleAvatar(
-                    backgroundImage: NetworkImage(user['avatar']!),
+                    backgroundImage: AssetImage(user['avatar']!),
                   ),
                   title: Text(user['name']!, style: const TextStyle(fontWeight: FontWeight.bold)),
                   subtitle: Text(user['handle']!, style: TextStyle(color: Colors.grey[500], fontSize: 12)),

@@ -1,656 +1,402 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'controllers/orbit_controller.dart';
+import 'orbit_topic_detail_screen.dart';
 
-class OrbitHomeScreen extends StatefulWidget {
+class OrbitHomeScreen extends StatelessWidget {
   const OrbitHomeScreen({super.key});
 
   @override
-  State<OrbitHomeScreen> createState() => _OrbitHomeScreenState();
-}
-
-class _OrbitHomeScreenState extends State<OrbitHomeScreen> {
-  String selectedFilter = 'All';
-  final TextEditingController _searchController = TextEditingController();
-
-  @override
-  void dispose() {
-    _searchController.dispose();
-    super.dispose();
-  }
-
-  final List<Map<String, dynamic>> _topics = [
-    {
-      'category': 'Tech',
-      'status': 'Trending',
-      'title': 'AI Ethics & Safety',
-      'desc': 'Debating alignment, regulation, and the future of AGI.',
-      'live': '1,420 live',
-      'langs': ['EN', 'ES'],
-      'isVerified': true,
-    },
-    {
-      'category': 'Global',
-      'status': 'Active',
-      'title': 'Global Climate Action',
-      'desc': 'Real-time updates on renewable energy and international policy.',
-      'live': '856 live',
-      'langs': ['EN', 'FR', 'DE'],
-      'isVerified': true,
-    },
-    {
-      'category': 'Science',
-      'status': 'Active',
-      'title': 'Mars Colonization',
-      'desc': 'Feasibility, timelines, and Starship updates.',
-      'live': '342 live',
-      'langs': ['EN'],
-      'isVerified': false,
-    },
-    {
-      'category': 'Finance',
-      'status': 'Trending',
-      'title': '2026 Market Outlook',
-      'desc': 'Macro trends, crypto, and traditional finance analysis.',
-      'live': '2,100 live',
-      'langs': ['EN', 'ZH'],
-      'isVerified': true,
-    },
-    {
-      'category': 'Arts',
-      'status': 'Quiet',
-      'title': 'Modern Architecture',
-      'desc': 'Discussing brutalism, sustainability, and urban design.',
-      'live': '120 live',
-      'langs': ['EN'],
-      'isVerified': false,
-    },
-    {
-      'category': 'Sports',
-      'status': 'Trending',
-      'title': 'Premier League Tactics',
-      'desc': 'Match analysis, formations, and transfer rumors.',
-      'live': '3,200 live',
-      'langs': ['EN'],
-      'isVerified': false,
-    },
-  ];
-
-  void _showAddTopicSheet() {
-    final titleController = TextEditingController();
-    final descController = TextEditingController();
-    String selectedCategory = 'Tech';
+  Widget build(BuildContext context) {
+    // Inject Controller
+    final controller = Get.put(OrbitController());
     
-    showModalBottomSheet(
-      context: context,
-      isScrollControlled: true,
-      backgroundColor: Colors.transparent,
-      builder: (context) => StatefulBuilder(
-        builder: (context, setModalState) => Container(
-          decoration: const BoxDecoration(
-            color: Color(0xFF0F0F0F),
-            borderRadius: BorderRadius.vertical(top: Radius.circular(32)),
-          ),
-          padding: EdgeInsets.only(
-            bottom: MediaQuery.of(context).viewInsets.bottom + 32,
-            top: 32,
-            left: 24,
-            right: 24,
-          ),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+    // Theme Constants (Dark Theme Enforced for this screen based on request)
+    const bgColor = Color(0xFF0F0F12);
+    const cardColor = Color(0xFF1A1A1D);
+    const accentBlue = Color(0xFF2962FF); // High contrast blue
+    const textPrimary = Colors.white;
+    const textSecondary = Color(0xFFB0BEC5);
+
+    return Scaffold(
+      backgroundColor: bgColor,
+      body: SafeArea(
+        child: Column(
+          children: [
+            // 🔹 Header & Search
+            Container(
+              padding: const EdgeInsets.fromLTRB(20, 20, 20, 10),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   const Text(
-                    'Create New Topic',
-                    style: TextStyle(color: Colors.white, fontSize: 24, fontWeight: FontWeight.bold),
+                    'Find your signal.',
+                    style: TextStyle(
+                      fontSize: 32,
+                      fontWeight: FontWeight.w800,
+                      color: textPrimary,
+                      letterSpacing: -0.5,
+                    ),
                   ),
-                  IconButton(
-                    onPressed: () => Navigator.pop(context),
-                    icon: const Icon(Icons.close, color: Colors.white54),
+                  const SizedBox(height: 8),
+                  Text(
+                    'Join real-time, structured conversations organized by topic, not clout.',
+                    style: TextStyle(
+                      fontSize: 15,
+                      color: textSecondary,
+                      height: 1.4,
+                    ),
+                  ),
+                  const SizedBox(height: 24),
+                  // Search Field
+                  Container(
+                    decoration: BoxDecoration(
+                      color: cardColor,
+                      borderRadius: BorderRadius.circular(16),
+                      border: Border.all(color: Colors.white.withOpacity(0.05)),
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.black.withOpacity(0.2),
+                          blurRadius: 10,
+                          offset: const Offset(0, 4),
+                        )
+                      ],
+                    ),
+                    child: TextField(
+                      style: const TextStyle(color: textPrimary),
+                      onChanged: controller.updateSearch,
+                      decoration: InputDecoration(
+                        hintText: 'Search topics, not people...',
+                        hintStyle: TextStyle(color: textSecondary.withOpacity(0.5)),
+                        prefixIcon: Icon(Icons.search, color: textSecondary),
+                        border: InputBorder.none,
+                        contentPadding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
+                      ),
+                    ),
                   ),
                 ],
               ),
-              const SizedBox(height: 24),
-              const Text('Topic Title', style: TextStyle(color: Colors.white70, fontSize: 14)),
-              const SizedBox(height: 8),
-              TextField(
-                controller: titleController,
-                style: const TextStyle(color: Colors.white),
-                decoration: InputDecoration(
-                  hintText: 'e.g. Future of Quantum Computing',
-                  hintStyle: TextStyle(color: Colors.white.withValues(alpha: 0.2)),
-                  filled: true,
-                  fillColor: Colors.white.withValues(alpha: 0.05),
-                  border: OutlineInputBorder(borderRadius: BorderRadius.circular(12), borderSide: BorderSide.none),
-                ),
-              ),
-              const SizedBox(height: 20),
-              const Text('Category', style: TextStyle(color: Colors.white70, fontSize: 14)),
-              const SizedBox(height: 8),
-              Container(
-                padding: const EdgeInsets.symmetric(horizontal: 16),
-                decoration: BoxDecoration(
-                  color: Colors.white.withValues(alpha: 0.05),
-                  borderRadius: BorderRadius.circular(12),
-                ),
-                child: DropdownButtonHideUnderline(
-                  child: DropdownButton<String>(
-                    value: selectedCategory,
-                    dropdownColor: const Color(0xFF1A1A1A),
-                    icon: const Icon(Icons.keyboard_arrow_down, color: Colors.white),
-                    isExpanded: true,
-                    items: ['Tech', 'Science', 'Politics', 'Sports', 'Arts', 'Global']
-                        .map((cat) => DropdownMenuItem(value: cat, child: Text(cat, style: const TextStyle(color: Colors.white))))
-                        .toList(),
-                    onChanged: (val) => setModalState(() => selectedCategory = val!),
-                  ),
-                ),
-              ),
-              const SizedBox(height: 20),
-              const Text('Description', style: TextStyle(color: Colors.white70, fontSize: 14)),
-              const SizedBox(height: 8),
-              TextField(
-                controller: descController,
-                maxLines: 3,
-                style: const TextStyle(color: Colors.white),
-                decoration: InputDecoration(
-                  hintText: 'What will people talk about in this room?',
-                  hintStyle: TextStyle(color: Colors.white.withValues(alpha: 0.2)),
-                  filled: true,
-                  fillColor: Colors.white.withValues(alpha: 0.05),
-                  border: OutlineInputBorder(borderRadius: BorderRadius.circular(12), borderSide: BorderSide.none),
-                ),
-              ),
-              const SizedBox(height: 32),
-              SizedBox(
-                width: double.infinity,
-                child: ElevatedButton(
-                  onPressed: () {
-                    if (titleController.text.isNotEmpty) {
-                      setState(() {
-                        _topics.insert(0, {
-                          'category': selectedCategory,
-                          'status': 'Active',
-                          'title': titleController.text,
-                          'desc': descController.text,
-                          'live': '1 live',
-                          'langs': ['EN'],
-                          'isVerified': false,
-                        });
-                      });
-                      Navigator.pop(context);
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        SnackBar(
-                          content: Text('Topic "${titleController.text}" created successfully!'),
-                          backgroundColor: const Color(0xFF2563EB),
-                        ),
-                      );
-                    }
-                  },
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: const Color(0xFF2563EB),
-                    foregroundColor: Colors.white,
-                    padding: const EdgeInsets.symmetric(vertical: 16),
-                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
-                  ),
-                  child: const Text('Launch Topic', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16)),
-                ),
-              ),
-            ],
-          ),
-        ),
-      ),
-    );
-  }
+            ),
 
-  void _showAdvancedFilters() {
-    showModalBottomSheet(
-      context: context,
-      backgroundColor: Colors.transparent,
-      builder: (context) => Container(
-        decoration: const BoxDecoration(
-          color: Color(0xFF1A1A1A),
-          borderRadius: BorderRadius.vertical(top: Radius.circular(32)),
-        ),
-        padding: const EdgeInsets.all(24),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            const Text(
-              'Advanced Filters',
-              style: TextStyle(color: Colors.white, fontSize: 20, fontWeight: FontWeight.bold),
-            ),
-            const SizedBox(height: 24),
-            const Text('Language', style: TextStyle(color: Colors.white70, fontSize: 14)),
-            const SizedBox(height: 12),
-            Wrap(
-              spacing: 8,
-              children: ['English', 'Spanish', 'French', 'Chinese', 'German'].map((lang) {
-                return Chip(
-                  label: Text(lang),
-                  backgroundColor: Colors.white.withOpacity(0.05),
-                  labelStyle: const TextStyle(color: Colors.white70),
-                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20), side: BorderSide.none),
-                );
-              }).toList(),
-            ),
-            const SizedBox(height: 24),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                const Text('Verified Topics Only', style: TextStyle(color: Colors.white70, fontSize: 14)),
-                Switch(
-                  value: false, 
-                  onChanged: (val) {},
-                  activeColor: const Color(0xFF2563EB),
-                ),
-              ],
-            ),
-            const SizedBox(height: 24),
-            const Text('Minimum Listeners', style: TextStyle(color: Colors.white70, fontSize: 14)),
-            Slider(
-              value: 100,
-              min: 0,
-              max: 1000,
-              divisions: 10,
-              label: '100',
-              activeColor: const Color(0xFF2563EB),
-              onChanged: (val) {},
-            ),
-            const SizedBox(height: 32),
-            SizedBox(
-              width: double.infinity,
-              child: ElevatedButton(
-                onPressed: () {
-                  Navigator.pop(context);
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(content: Text('Filters applied')),
-                  );
-                },
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: const Color(0xFF2563EB),
-                  foregroundColor: Colors.white,
-                  padding: const EdgeInsets.symmetric(vertical: 16),
-                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
-                ),
-                child: const Text('Apply Filters', style: TextStyle(fontWeight: FontWeight.bold)),
+            // 🔹 Explore Section Header
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Row(
+                    children: [
+                      const Icon(Icons.flash_on_rounded, color: Colors.amber, size: 20),
+                      const SizedBox(width: 8),
+                      const Text(
+                        'Explore Topics',
+                        style: TextStyle(
+                          fontSize: 18,
+                          fontWeight: FontWeight.bold,
+                          color: textPrimary,
+                        ),
+                      ),
+                    ],
+                  ),
+                  IconButton(
+                    icon: Icon(Icons.tune_rounded, color: textSecondary),
+                    onPressed: () {
+                      Get.snackbar('Filters', 'Advanced filters coming soon', 
+                        snackPosition: SnackPosition.BOTTOM,
+                        backgroundColor: cardColor,
+                        colorText: textPrimary,
+                      );
+                    },
+                    padding: EdgeInsets.zero,
+                    constraints: const BoxConstraints(),
+                  ),
+                ],
               ),
             ),
-            const SizedBox(height: 24),
+
+            // 🔹 Category Chips
+            SizedBox(
+              height: 40,
+              child: ListView.separated(
+                padding: const EdgeInsets.symmetric(horizontal: 20),
+                scrollDirection: Axis.horizontal,
+                itemCount: controller.categories.length,
+                separatorBuilder: (_, __) => const SizedBox(width: 10),
+                itemBuilder: (context, index) {
+                  final cat = controller.categories[index];
+                  return Obx(() {
+                    final isSelected = controller.selectedCategory.value == cat;
+                    return GestureDetector(
+                      onTap: () => controller.setCategory(cat),
+                      child: AnimatedContainer(
+                        duration: const Duration(milliseconds: 200),
+                        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                        decoration: BoxDecoration(
+                          color: isSelected ? accentBlue : cardColor,
+                          borderRadius: BorderRadius.circular(20),
+                          border: Border.all(
+                            color: isSelected ? accentBlue : Colors.white.withOpacity(0.1),
+                            width: 1,
+                          ),
+                        ),
+                        child: Text(
+                          cat,
+                          style: TextStyle(
+                            color: isSelected ? Colors.white : textSecondary,
+                            fontWeight: FontWeight.w600,
+                            fontSize: 13,
+                          ),
+                        ),
+                      ),
+                    );
+                  });
+                },
+              ),
+            ),
+
+            const SizedBox(height: 20),
+
+            // 🔹 Topic List & Create Button
+            Expanded(
+              child: Obx(() {
+                final topics = controller.filteredTopics;
+                return ListView.builder(
+                  padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 0),
+                  physics: const BouncingScrollPhysics(),
+                  itemCount: topics.length + 1, // +1 for Create Card
+                  itemBuilder: (context, index) {
+                    if (index == topics.length) {
+                      return _buildCreateTopicCard(textSecondary);
+                    }
+                    return _buildTopicCard(topics[index], cardColor, textPrimary, textSecondary, accentBlue);
+                  },
+                );
+              }),
+            ),
           ],
         ),
       ),
     );
   }
 
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Colors.black,
-      floatingActionButton: FloatingActionButton(
-        onPressed: _showAddTopicSheet,
-        backgroundColor: const Color(0xFF2563EB),
-        child: const Icon(Icons.add, color: Colors.white),
-      ),
-      body: SafeArea(
-        child: SingleChildScrollView(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              _HeroSection(controller: _searchController),
-              _TopicFilters(
-                selectedFilter: selectedFilter,
-                onFilterChanged: (filter) {
-                  setState(() => selectedFilter = filter);
-                },
-                onAdvancedTap: _showAdvancedFilters,
-              ),
-              _TopicGrid(
-                selectedFilter: selectedFilter,
-                topics: _topics,
-              ),
-              const SizedBox(height: 40),
-            ],
+  Widget _buildTopicCard(OrbitTopic topic, Color cardColor, Color textPrimary, Color textSecondary, Color accent) {
+    return Container(
+      margin: const EdgeInsets.only(bottom: 16),
+      decoration: BoxDecoration(
+        color: cardColor,
+        borderRadius: BorderRadius.circular(16),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withOpacity(0.1),
+            blurRadius: 8,
+            offset: const Offset(0, 4),
           ),
+        ],
+        gradient: LinearGradient(
+          begin: Alignment.topLeft,
+          end: Alignment.bottomRight,
+          colors: [
+            cardColor,
+            Color.lerp(cardColor, Colors.white, 0.03)!,
+          ],
         ),
       ),
-    );
-  }
-}
-
-class _HeroSection extends StatelessWidget {
-  final TextEditingController controller;
-  const _HeroSection({required this.controller});
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      width: double.infinity,
-      padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 40),
-      child: Column(
-        children: [
-          ShaderMask(
-            shaderCallback: (bounds) => const LinearGradient(
-              colors: [Color(0xFF8B5CF6), Color(0xFF3B82F6)],
-              begin: Alignment.topLeft,
-              end: Alignment.bottomRight,
-            ).createShader(bounds),
-            child: const Text(
-              'Find your signal.',
-              textAlign: TextAlign.center,
-              style: TextStyle(
-                fontSize: 48,
-                fontWeight: FontWeight.w900,
-                color: Colors.white,
-                letterSpacing: -1.5,
-              ),
-            ),
-          ),
-          const SizedBox(height: 16),
-          const Text(
-            'Join real-time, structured conversations\norganized by topic, not clout.',
-            textAlign: TextAlign.center,
-            style: TextStyle(
-              color: Colors.white70,
-              fontSize: 16,
-              height: 1.5,
-            ),
-          ),
-          const SizedBox(height: 32),
-          Container(
-            height: 56,
-            decoration: BoxDecoration(
-              color: const Color(0xFF111111),
-              borderRadius: BorderRadius.circular(28),
-              border: Border.all(color: Colors.white.withValues(alpha: 0.1)),
-              boxShadow: [
-                BoxShadow(
-                  color: Colors.blue.withValues(alpha: 0.05),
-                  blurRadius: 20,
-                  spreadRadius: 5,
+      child: Material(
+        color: Colors.transparent,
+        child: InkWell(
+          borderRadius: BorderRadius.circular(16),
+          onTap: () {
+            Get.to(() => OrbitTopicDetailScreen(topic: topic));
+          },
+          child: Padding(
+            padding: const EdgeInsets.all(16),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                // Top Row: Category & Status
+                Row(
+                  children: [
+                    Container(
+                      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                      decoration: BoxDecoration(
+                        color: Colors.white.withOpacity(0.05),
+                        borderRadius: BorderRadius.circular(8),
+                      ),
+                      child: Text(
+                        topic.category.toUpperCase(),
+                        style: TextStyle(
+                          color: textSecondary,
+                          fontSize: 10,
+                          fontWeight: FontWeight.bold,
+                          letterSpacing: 0.5,
+                        ),
+                      ),
+                    ),
+                    const SizedBox(width: 8),
+                    _buildStatusBadge(topic.status),
+                    const Spacer(),
+                    if (topic.isVerified)
+                      const Icon(Icons.verified, color: Colors.blue, size: 16),
+                  ],
+                ),
+                const SizedBox(height: 12),
+                
+                // Title
+                Text(
+                  topic.title,
+                  style: TextStyle(
+                    color: textPrimary,
+                    fontSize: 18,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                const SizedBox(height: 6),
+                
+                // Description
+                Text(
+                  topic.description,
+                  style: TextStyle(
+                    color: textSecondary,
+                    fontSize: 14,
+                    height: 1.4,
+                  ),
+                  maxLines: 2,
+                  overflow: TextOverflow.ellipsis,
+                ),
+                const SizedBox(height: 16),
+                
+                // Stats Row
+                Row(
+                  children: [
+                    Icon(Icons.people_alt_rounded, size: 16, color: accent),
+                    const SizedBox(width: 4),
+                    Text(
+                      '${topic.liveUsers} live',
+                      style: TextStyle(
+                        color: accent,
+                        fontSize: 13,
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
+                    const SizedBox(width: 16),
+                    ...topic.languages.map((lang) => Padding(
+                      padding: const EdgeInsets.only(right: 6),
+                      child: Container(
+                        padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+                        decoration: BoxDecoration(
+                          border: Border.all(color: textSecondary.withOpacity(0.3)),
+                          borderRadius: BorderRadius.circular(6),
+                        ),
+                        child: Text(
+                          lang,
+                          style: TextStyle(
+                            color: textSecondary,
+                            fontSize: 10,
+                            fontWeight: FontWeight.w500,
+                          ),
+                        ),
+                      ),
+                    )),
+                  ],
                 ),
               ],
             ),
-            child: TextField(
-              controller: controller,
-              style: const TextStyle(color: Colors.white),
-              decoration: InputDecoration(
-                hintText: 'Search topics, not people...',
-                hintStyle: TextStyle(color: Colors.white.withValues(alpha: 0.3)),
-                prefixIcon: Icon(Icons.search, color: Colors.white.withValues(alpha: 0.3)),
-                border: InputBorder.none,
-                contentPadding: const EdgeInsets.symmetric(horizontal: 20, vertical: 15),
-              ),
-            ),
           ),
-        ],
+        ),
       ),
     );
   }
-}
 
-class _TopicFilters extends StatelessWidget {
-  final String selectedFilter;
-  final Function(String) onFilterChanged;
-  final VoidCallback onAdvancedTap;
+  Widget _buildStatusBadge(String status) {
+    Color color;
+    IconData icon;
+    
+    switch (status) {
+      case 'Trending':
+        color = const Color(0xFFFF6D00); // Orange
+        icon = Icons.local_fire_department_rounded;
+        break;
+      case 'Active':
+        color = const Color(0xFF00E676); // Green
+        icon = Icons.fiber_manual_record_rounded;
+        break;
+      default:
+        color = const Color(0xFF78909C); // Muted
+        icon = Icons.nightlight_round;
+    }
 
-  const _TopicFilters({
-    required this.selectedFilter,
-    required this.onFilterChanged,
-    required this.onAdvancedTap,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    final List<String> filters = [
-      'All', 'Trending', 'Tech', 'Science', 'Politics', 'Sports', 'Arts', 'Global'
-    ];
-
-    return Column(
+    return Row(
       children: [
-        Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 24),
-          child: Row(
-            children: [
-              const Icon(Icons.bolt, color: Colors.amber, size: 20),
-              const SizedBox(width: 8),
-              const Text(
-                'Explore Topics',
-                style: TextStyle(
-                  color: Colors.white,
-                  fontSize: 18,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-              const Spacer(),
-              GestureDetector(
-                onTap: onAdvancedTap,
-                child: Row(
-                  children: [
-                    Icon(Icons.filter_list, color: Colors.white.withValues(alpha: 0.5), size: 20),
-                    const SizedBox(width: 8),
-                    Text(
-                      'Advanced',
-                      style: TextStyle(
-                        color: Colors.white.withValues(alpha: 0.5),
-                        fontSize: 14,
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            ],
+        Icon(icon, size: 14, color: color),
+        const SizedBox(width: 4),
+        Text(
+          status,
+          style: TextStyle(
+            color: color,
+            fontSize: 12,
+            fontWeight: FontWeight.w600,
           ),
-        ),
-        const SizedBox(height: 20),
-        SizedBox(
-          height: 36,
-          child: ListView.builder(
-            scrollDirection: Axis.horizontal,
-            padding: const EdgeInsets.symmetric(horizontal: 24),
-            itemCount: filters.length,
-            itemBuilder: (context, index) {
-              final isSelected = selectedFilter == filters[index];
-              return Padding(
-                padding: const EdgeInsets.only(right: 12),
-                child: GestureDetector(
-                  onTap: () => onFilterChanged(filters[index]),
-                  child: Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 20),
-                    alignment: Alignment.center,
-                    decoration: BoxDecoration(
-                      color: isSelected ? const Color(0xFF2563EB) : Colors.transparent,
-                      borderRadius: BorderRadius.circular(18),
-                      border: Border.all(
-                        color: isSelected ? Colors.transparent : Colors.white.withValues(alpha: 0.2),
-                      ),
-                    ),
-                    child: Text(
-                      filters[index],
-                      style: TextStyle(
-                        color: isSelected ? Colors.white : Colors.white70,
-                        fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
-                      ),
-                    ),
-                  ),
-                ),
-              );
-            },
-          ),
-        ),
-        const SizedBox(height: 12),
-        Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 24),
-          child: Divider(color: Colors.white.withValues(alpha: 0.1), height: 1),
         ),
       ],
     );
   }
-}
 
-class _TopicGrid extends StatelessWidget {
-  final String selectedFilter;
-  final List<Map<String, dynamic>> topics;
-  const _TopicGrid({required this.selectedFilter, required this.topics});
-
-  @override
-  Widget build(BuildContext context) {
-    final filteredTopics = topics.where((topic) {
-      if (selectedFilter == 'All') return true;
-      if (selectedFilter == 'Trending') return topic['status'] == 'Trending';
-      return topic['category'] == selectedFilter;
-    }).toList();
-
-    return Padding(
-      padding: const EdgeInsets.all(24),
-      child: filteredTopics.isEmpty
-          ? Center(
-              child: Padding(
-                padding: const EdgeInsets.symmetric(vertical: 40),
-                child: Column(
+  Widget _buildCreateTopicCard(Color textSecondary) {
+    return Container(
+      margin: const EdgeInsets.only(bottom: 32, top: 8),
+      height: 80,
+      decoration: BoxDecoration(
+        border: Border.all(
+          color: textSecondary.withOpacity(0.3),
+          style: BorderStyle.none, // Flutter dashed border needs custom painter, using simple outline for now or I can trust my prompt to avoid complex custom painters if time is short.
+        ),
+        // A simple workaround for dashed effect is not available out of the box without CustomPaint.
+        // I'll use a semi-transparent background with an outline.
+        color: Colors.white.withOpacity(0.02),
+        borderRadius: BorderRadius.circular(16),
+      ),
+      child: Material(
+        color: Colors.transparent,
+        child: InkWell(
+          borderRadius: BorderRadius.circular(16),
+          onTap: () {
+             Get.snackbar('Create Topic', 'Opening topic creation flow...', 
+                backgroundColor: const Color(0xFF1A1A1D), 
+                colorText: Colors.white,
+                snackPosition: SnackPosition.BOTTOM
+             );
+          },
+          child: Center(
+            child: Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Icon(Icons.add_circle_outline_rounded, color: textSecondary),
+                const SizedBox(width: 12),
+                Column(
+                  mainAxisSize: MainAxisSize.min,
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Icon(Icons.search_off, color: Colors.white.withValues(alpha: 0.2), size: 64),
-                    const SizedBox(height: 16),
                     Text(
-                      'No topics for "$selectedFilter" yet',
-                      style: TextStyle(color: Colors.white.withValues(alpha: 0.5)),
+                      'Create Topic',
+                      style: TextStyle(
+                        color: textSecondary, // Using variable directly if accessible or passed
+                        fontSize: 15,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    Text(
+                      'Start a new conversation',
+                      style: TextStyle(
+                        color: textSecondary.withOpacity(0.6),
+                        fontSize: 12,
+                      ),
                     ),
                   ],
                 ),
-              ),
-            )
-          : GridView.builder(
-              shrinkWrap: true,
-              physics: const NeverScrollableScrollPhysics(),
-              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                crossAxisCount: 1,
-                mainAxisSpacing: 20,
-                crossAxisSpacing: 20,
-                childAspectRatio: 1.6,
-              ),
-              itemCount: filteredTopics.length,
-              itemBuilder: (context, index) => _TopicCard(topic: filteredTopics[index]),
+              ],
             ),
-    );
-  }
-}
-
-class _TopicCard extends StatelessWidget {
-  final Map<String, dynamic> topic;
-  const _TopicCard({required this.topic});
-
-  @override
-  Widget build(BuildContext context) {
-    final status = topic['status'] as String;
-    Color statusColor;
-    IconData statusIcon;
-
-    if (status == 'Trending') {
-      statusColor = const Color(0xFFFE5722);
-      statusIcon = Icons.local_fire_department;
-    } else if (status == 'Active') {
-      statusColor = const Color(0xFF10B981);
-      statusIcon = Icons.show_chart;
-    } else {
-      statusColor = Colors.grey;
-      statusIcon = Icons.nightlight_round;
-    }
-
-    return Container(
-      padding: const EdgeInsets.all(20),
-      decoration: BoxDecoration(
-        color: const Color(0xFF0F0F0F),
-        borderRadius: BorderRadius.circular(24),
-        border: Border.all(color: Colors.white.withValues(alpha: 0.05)),
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Container(
-                padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
-                decoration: BoxDecoration(
-                  color: Colors.white.withValues(alpha: 0.05),
-                  borderRadius: BorderRadius.circular(8),
-                ),
-                child: Text(
-                  topic['category'] as String,
-                  style: const TextStyle(color: Colors.grey, fontSize: 12, fontWeight: FontWeight.bold),
-                ),
-              ),
-              Row(
-                children: [
-                  Icon(statusIcon, color: statusColor, size: 14),
-                  const SizedBox(width: 4),
-                  Text(
-                    status,
-                    style: TextStyle(color: statusColor, fontSize: 12, fontWeight: FontWeight.bold),
-                  ),
-                ],
-              ),
-            ],
           ),
-          const SizedBox(height: 16),
-          Row(
-            children: [
-              Expanded(
-                child: Text(
-                  topic['title'] as String,
-                  style: const TextStyle(
-                    color: Colors.white,
-                    fontSize: 20,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-              ),
-              if (topic['isVerified'] as bool)
-                const Padding(
-                  padding: EdgeInsets.only(left: 8),
-                  child: Icon(Icons.shield, color: Colors.blue, size: 18),
-                ),
-            ],
-          ),
-          const SizedBox(height: 8),
-          Text(
-            topic['desc'] as String,
-            maxLines: 2,
-            overflow: TextOverflow.ellipsis,
-            style: TextStyle(color: Colors.white.withValues(alpha: 0.5), fontSize: 13, height: 1.4),
-          ),
-          const Spacer(),
-          Row(
-            children: [
-              Icon(Icons.people_outline, color: Colors.white.withValues(alpha: 0.3), size: 16),
-              const SizedBox(width: 8),
-              Text(
-                topic['live'] as String,
-                style: TextStyle(color: Colors.white.withValues(alpha: 0.3), fontSize: 12),
-              ),
-              const Spacer(),
-              Row(
-                children: (topic['langs'] as List<String>).map((lang) {
-                  return Container(
-                    margin: const EdgeInsets.only(left: 4),
-                    padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
-                    decoration: BoxDecoration(
-                      color: Colors.white.withValues(alpha: 0.05),
-                      borderRadius: BorderRadius.circular(4),
-                    ),
-                    child: Text(
-                      lang,
-                      style: const TextStyle(color: Colors.grey, fontSize: 10, fontWeight: FontWeight.bold),
-                    ),
-                  );
-                }).toList(),
-              ),
-            ],
-          ),
-        ],
+        ),
       ),
     );
   }

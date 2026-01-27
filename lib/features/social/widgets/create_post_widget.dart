@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import '../../../../core/theme/palette.dart';
+import '../../../../core/constants/app_assets.dart';
 import '../controllers/home_controller.dart';
 import 'dart:io';
 
@@ -23,7 +24,7 @@ class CreatePostWidget extends GetView<HomeController> {
             children: [
               CircleAvatar(
                 backgroundColor: Colors.grey[800],
-                backgroundImage: const NetworkImage('https://i.pravatar.cc/150?u=me'),
+                backgroundImage: const AssetImage(AppAssets.avatar1),
               ),
               const SizedBox(width: 12),
               Expanded(

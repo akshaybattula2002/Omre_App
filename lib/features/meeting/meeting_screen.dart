@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'controllers/meeting_controller.dart';
 
 class MeetingScreen extends StatelessWidget {
@@ -172,7 +173,186 @@ class MeetingScreen extends StatelessWidget {
                 ),
               ),
               
-              // ... existing system check code if needed ...
+
+              // 1️⃣ System Check Card
+              const SizedBox(height: 32),
+
+              Container(
+                padding: const EdgeInsets.all(16),
+                decoration: BoxDecoration(
+                  color: const Color(0xFF13161D),
+                  borderRadius: BorderRadius.circular(20),
+                  border: Border.all(color: Colors.white.withValues(alpha: 0.05)),
+                ),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: const [
+                        Text(
+                          'System Check',
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 16,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                        Icon(Icons.settings, color: Colors.grey),
+                      ],
+                    ),
+                    const SizedBox(height: 16),
+
+                    Obx(() {
+                      final status = controller.cameraStatus.value;
+                      String statusText = 'Unknown';
+                      Color color = Colors.grey;
+                      
+                      if (status.isGranted) {
+                        statusText = 'Ready to use';
+                        color = Colors.green;
+                      } else if (status.isDenied) {
+                        statusText = 'Denied';
+                        color = Colors.red;
+                      } else if (status.isPermanentlyDenied) {
+                        statusText = 'Permanently Denied';
+                        color = Colors.red;
+                      } else if (status.isRestricted) {
+                        statusText = 'Restricted';
+                        color = Colors.orange;
+                      }
+
+                      return InkWell(
+                        onTap: () => controller.requestCameraPermission(),
+                        child: _buildSystemItem(
+                          icon: Icons.videocam,
+                          title: 'FaceTime HD',
+                          status: statusText,
+                          statusColor: color,
+                        ),
+                      );
+                    }),
+                    const SizedBox(height: 12),
+                    Obx(() {
+                      final status = controller.micStatus.value;
+                      String statusText = 'Unknown';
+                      Color color = Colors.grey;
+                      
+                      if (status.isGranted) {
+                        statusText = 'Active';
+                        color = Colors.green;
+                      } else if (status.isDenied) {
+                        statusText = 'Denied';
+                        color = Colors.red;
+                      } else if (status.isPermanentlyDenied) {
+                        statusText = 'Permanently Denied';
+                        color = Colors.red;
+                      } else if (status.isRestricted) {
+                        statusText = 'Restricted';
+                        color = Colors.orange;
+                      }
+
+                      return InkWell(
+                        onTap: () => controller.requestMicPermission(),
+                        child: _buildSystemItem(
+                          icon: Icons.mic,
+                          title: 'MacBook Pro Mic',
+                          status: statusText,
+                          statusColor: color,
+                        ),
+                      );
+                    }),
+                  ],
+                ),
+              ),
+
+              // 2️⃣ Next Up Header
+              const SizedBox(height: 32),
+
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: const [
+                  Text(
+                    'Next Up',
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 18,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  Text(
+                    'See full schedule',
+                    style: TextStyle(
+                      color: Color(0xFF2575FC),
+                      fontSize: 13,
+                      fontWeight: FontWeight.w600,
+                    ),
+                  ),
+                ],
+              ),
+
+              // 3️⃣ Recent Recording Card
+              const SizedBox(height: 32),
+
+              Container(
+                padding: const EdgeInsets.all(16),
+                decoration: BoxDecoration(
+                  gradient: const LinearGradient(
+                    colors: [Color(0xFF1A3D8A), Color(0xFF13161D)],
+                    begin: Alignment.topLeft,
+                    end: Alignment.bottomRight,
+                  ),
+                  borderRadius: BorderRadius.circular(20),
+                ),
+                child: Row(
+                  children: [
+                    Container(
+                      width: 72,
+                      height: 48,
+                      decoration: BoxDecoration(
+                        color: Colors.black.withOpacity(0.3),
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                      child: const Icon(Icons.play_arrow, color: Colors.white),
+                    ),
+                    const SizedBox(width: 16),
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: const [
+                          Row(
+                            children: [
+                              Text(
+                                'Q4 Strategy Sync',
+                                style: TextStyle(
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                              SizedBox(width: 8),
+                              _NewBadge(),
+                            ],
+                          ),
+                          SizedBox(height: 6),
+                          Text(
+                            'Recorded 2h ago',
+                            style: TextStyle(color: Colors.white70, fontSize: 12),
+                          ),
+                          SizedBox(height: 6),
+                          Text(
+                            'Watch Summary',
+                            style: TextStyle(
+                              color: Colors.lightBlueAccent,
+                              fontSize: 13,
+                              fontWeight: FontWeight.w600,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+              ),
             ],
           ),
         ),
@@ -391,5 +571,60 @@ class MeetingScreen extends StatelessWidget {
          ),
        ),
      );
+  }
+  Widget _buildSystemItem({
+    required IconData icon,
+    required String title,
+    required String status,
+    required Color statusColor,
+  }) {
+    return Row(
+      children: [
+        Container(
+          padding: const EdgeInsets.all(10),
+          decoration: BoxDecoration(
+            color: Colors.white.withOpacity(0.05),
+            borderRadius: BorderRadius.circular(12),
+          ),
+          child: Icon(icon, color: Colors.white),
+        ),
+        const SizedBox(width: 16),
+        Expanded(
+          child: Text(
+            title,
+            style: const TextStyle(color: Colors.white),
+          ),
+        ),
+        Row(
+          children: [
+            Icon(Icons.circle, size: 8, color: statusColor),
+            const SizedBox(width: 6),
+            Text(
+              status,
+              style: TextStyle(color: statusColor, fontSize: 12),
+            ),
+          ],
+        ),
+      ],
+    );
+  }
+}
+
+class _NewBadge extends StatelessWidget {
+  const _NewBadge();
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+      decoration: BoxDecoration(
+        color: Colors.redAccent,
+        borderRadius: BorderRadius.circular(6),
+      ),
+      child: const Text(
+        'NEW',
+        style: TextStyle(color: Colors.white, fontSize: 10),
+      ),
+    );
   }
 }

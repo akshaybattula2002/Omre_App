@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../../core/constants/app_assets.dart';
 
 class VideoCommentsSheet extends StatefulWidget {
   const VideoCommentsSheet({super.key});
@@ -113,7 +114,7 @@ class _VideoCommentsSheetState extends State<VideoCommentsSheet> {
               children: [
                 const CircleAvatar(
                   radius: 16,
-                  backgroundImage: NetworkImage('https://picsum.photos/seed/me/200'),
+                  backgroundImage: AssetImage(AppAssets.avatar2),
                 ),
                 const SizedBox(width: 12),
                 Expanded(

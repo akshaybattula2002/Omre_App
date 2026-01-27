@@ -61,7 +61,7 @@ class _NewsDetailScreenState extends State<NewsDetailScreen> {
               background: Stack(
                 fit: StackFit.expand,
                 children: [
-                  Image.network(
+                  Image.asset(
                     widget.story['image']!,
                     fit: BoxFit.cover,
                   ),

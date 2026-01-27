@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import '../../../core/theme/palette.dart';
+import '../../../core/constants/app_assets.dart';
 
 class ProfileController extends GetxController {
   final nameController = TextEditingController(text: 'Alex Johnson');
@@ -48,7 +49,7 @@ class PersonalInfoScreen extends StatelessWidget {
           children: [
             const CircleAvatar(
               radius: 50,
-              backgroundImage: NetworkImage('https://i.pravatar.cc/150?u=me'),
+              backgroundImage: AssetImage(AppAssets.avatar1),
             ),
             TextButton(
               onPressed: () {},

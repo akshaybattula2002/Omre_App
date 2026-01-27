@@ -2,6 +2,7 @@ import 'dart:io';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 import '../models/social_models.dart';
+import '../../../core/constants/app_assets.dart';
 import './home_controller.dart';
 
 class AddStoryController extends GetxController {
@@ -36,7 +37,7 @@ class AddStoryController extends GetxController {
     final newStory = StoryModel(
       id: 'my_story_${DateTime.now().millisecondsSinceEpoch}',
       username: 'Your Story',
-      avatarUrl: 'https://i.pravatar.cc/150?u=me',
+      avatarUrl: AppAssets.avatar1,
       imageUrl: selectedMedia.value!.path,
       timestamp: DateTime.now(),
       isMe: true,

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'dart:io';
+import '../../core/constants/app_assets.dart';
 import '../../core/theme/palette.dart';
 import 'controllers/biz_controller.dart';
 
@@ -149,7 +150,7 @@ class ProductListScreen extends GetView<BizController> {
                                   color: isDark ? Colors.grey[800] : Colors.grey[100],
                                   borderRadius: BorderRadius.circular(8),
                                   image: const DecorationImage(
-                                    image: NetworkImage('https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=150&q=80'),
+                                    image: AssetImage(AppAssets.thumbnail1),
                                     fit: BoxFit.cover,
                                   ),
                                 ),

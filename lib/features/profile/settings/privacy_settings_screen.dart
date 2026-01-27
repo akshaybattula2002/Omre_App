@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import '../../../core/theme/palette.dart';
+import '../../../core/constants/app_assets.dart';
 import 'blocked_accounts_screen.dart';
 
 class PrivacySettingsScreen extends StatefulWidget {
@@ -165,7 +166,7 @@ class GenericUserListScreen extends StatelessWidget {
           : ListView.builder(
               itemCount: users.length,
               itemBuilder: (context, index) => ListTile(
-                leading: CircleAvatar(backgroundImage: NetworkImage(users[index]['avatar']!)),
+                leading: CircleAvatar(backgroundImage: AssetImage(users[index]['avatar']!)),
                 title: Text(users[index]['name']!),
                 subtitle: Text(users[index]['handle']!),
                 trailing: TextButton(onPressed: (){}, child: const Text('Remove')),

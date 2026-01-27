@@ -6,6 +6,7 @@ import 'widgets/shorts_comments_sheet.dart';
 import 'widgets/shorts_share_sheet.dart';
 import 'widgets/shorts_more_sheet.dart';
 import '../../core/theme/palette.dart';
+import '../../core/constants/app_assets.dart';
 import '../video/channel_profile_screen.dart';
 
 class ShortsScreen extends StatelessWidget {
@@ -224,9 +225,11 @@ class _ShortsPageItemState extends State<ShortsPageItem> {
                       children: [
                         CircleAvatar(
                           radius: 20,
-                          backgroundImage: widget.short.creatorAvatar.startsWith('http')
-                              ? NetworkImage(widget.short.creatorAvatar)
-                              : AssetImage(widget.short.creatorAvatar) as ImageProvider,
+                          backgroundImage: AssetImage(
+                            widget.short.creatorAvatar.startsWith('http') 
+                                ? AppAssets.avatar1 
+                                : widget.short.creatorAvatar
+                          ),
                         ),
                         const SizedBox(width: 12),
                         Text(

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import '../../../core/theme/palette.dart';
+import '../../../core/constants/app_assets.dart';
 
 class CallScreen extends StatefulWidget {
   final Map<String, dynamic> caller;
@@ -31,10 +32,15 @@ class _CallScreenState extends State<CallScreen> {
         children: [
           // Background Image (blurred or video feed)
           if (isVideoOn)
-            Image.network(
-              widget.caller['avatarUrl'] ?? 'https://i.pravatar.cc/150',
-              fit: BoxFit.cover,
-            )
+            widget.caller['avatarUrl'].startsWith('http')
+                ? Image.asset(
+                    AppAssets.avatar1,
+                    fit: BoxFit.cover,
+                  )
+                : Image.asset(
+                    widget.caller['avatarUrl'],
+                    fit: BoxFit.cover,
+                  )
           else
             Container(
               decoration: BoxDecoration(
@@ -49,7 +55,9 @@ class _CallScreenState extends State<CallScreen> {
                 children: [
                   CircleAvatar(
                     radius: 80,
-                    backgroundImage: NetworkImage(widget.caller['avatarUrl'] ?? 'https://i.pravatar.cc/150'),
+                    backgroundImage: widget.caller['avatarUrl'].startsWith('http')
+                        ? AssetImage(AppAssets.avatar1)
+                        : AssetImage(widget.caller['avatarUrl']) as ImageProvider,
                   ),
                   const SizedBox(height: 24),
                   Text(

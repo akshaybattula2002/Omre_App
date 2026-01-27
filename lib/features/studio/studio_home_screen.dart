@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'controllers/studio_controller.dart';
+import '../../core/constants/app_assets.dart';
 
 class StudioHomeScreen extends StatelessWidget {
   const StudioHomeScreen({super.key});
@@ -196,8 +197,8 @@ class StudioHomeScreen extends StatelessWidget {
                 children: [
                   ClipRRect(
                     borderRadius: BorderRadius.circular(12),
-                    child: Image.network(
-                      'https://images.unsplash.com/photo-1497215728101-856f4ea42174?q=80&w=2070&auto=format&fit=crop', // Office desk image
+                    child: Image.asset(
+                      AppAssets.thumbnail3,
                       height: 160,
                       width: double.infinity,
                       fit: BoxFit.cover,

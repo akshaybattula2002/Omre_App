@@ -18,6 +18,7 @@ class AppAssets {
   static const String post3 = 'assets/images/posts/post_3.jpg';
   static const String post4 = 'assets/images/posts/post_4.jpg';
   static const String post5 = 'assets/images/posts/post_5.jpg';
+  static const String dummyStory = 'assets/images/posts/dummy_story.jpg';
 
   static const String thumbnail1 = 'assets/images/thumbnails/thumbnail_1.jpg';
   static const String thumbnail2 = 'assets/images/thumbnails/thumbnail_2.jpg';
@@ -32,8 +33,8 @@ class AppAssets {
   static const List<String> thumbnails = [thumbnail1, thumbnail2, thumbnail3];
   static const List<String> covers = [cover1, cover2, cover3];
 
-  static String getRandomAvatar() => (avatars..shuffle()).first;
-  static String getRandomPost() => (posts..shuffle()).first;
-  static String getRandomThumbnail() => (thumbnails..shuffle()).first;
-  static String getRandomCover() => (covers..shuffle()).first;
+  static String getRandomAvatar() => (avatars.toList()..shuffle()).first;
+  static String getRandomPost() => (posts.toList()..shuffle()).first;
+  static String getRandomThumbnail() => (thumbnails.toList()..shuffle()).first;
+  static String getRandomCover() => (covers.toList()..shuffle()).first;
 }

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import '../../core/theme/palette.dart';
+import '../../core/constants/app_assets.dart';
 
 class CertificatesScreen extends StatelessWidget {
   const CertificatesScreen({super.key});
@@ -30,14 +31,14 @@ class CertificatesScreen extends StatelessWidget {
           _buildCertificateItem(
             'Flutter Advanced',
             'Completed Dec 20, 2025',
-            'https://upload.wikimedia.org/wikipedia/commons/1/17/Google-flutter-logo.png', // Mock Logo
+            AppAssets.post1, // Mock Logo
             const Color(0xFF42A5F5),
             isDark,
           ),
           _buildCertificateItem(
             'UI/UX Fundamentals',
             'Completed Nov 10, 2025',
-            'https://upload.wikimedia.org/wikipedia/commons/a/a7/React-icon.svg', // Mock Placeholders
+            AppAssets.post2, // Mock Placeholders
             const Color(0xFFE91E63),
             isDark,
           ),
@@ -99,8 +100,11 @@ class CertificatesScreen extends StatelessWidget {
             decoration: BoxDecoration(
               color: color.withOpacity(0.1),
               borderRadius: BorderRadius.circular(12),
+              image: DecorationImage(
+                image: AssetImage(logoUrl),
+                fit: BoxFit.contain,
+              ),
             ),
-            child: Icon(Icons.star, color: color, size: 30),
           ),
           const SizedBox(width: 16),
           Expanded(

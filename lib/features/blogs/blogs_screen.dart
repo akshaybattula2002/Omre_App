@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import '../../core/constants/app_assets.dart';
 
 class BlogsScreen extends StatelessWidget {
   const BlogsScreen({super.key});
@@ -34,28 +35,28 @@ class BlogsScreen extends StatelessWidget {
             'The Future of Flutter in 2026',
             'Technology',
             '5 min read',
-            'https://images.unsplash.com/photo-1551033406-611cf9a28f67?q=80&w=1974&auto=format&fit=crop',
+            AppAssets.thumbnail1,
             isDark,
           ),
           _buildBlogItem(
             'Sustainable Living: A Weekly Guide',
             'Lifestyle',
             '8 min read',
-            'https://images.unsplash.com/photo-1542601906990-b4d3fb7d5afa?q=80&w=2662&auto=format&fit=crop',
+            AppAssets.thumbnail2,
             isDark,
           ),
           _buildBlogItem(
             'Portrait Photography Masterclass',
             'Photography',
             '12 min read',
-            'https://images.unsplash.com/photo-1554048612-387768052bf7?q=80&w=2080&auto=format&fit=crop',
+            AppAssets.thumbnail3,
             isDark,
           ),
            _buildBlogItem(
             'Top 10 Hidden Gems in Japan',
             'Travel',
             '6 min read',
-            'https://images.unsplash.com/photo-1493976040374-85c8e12f0c0e?q=80&w=2070&auto=format&fit=crop',
+            AppAssets.thumbnail1,
             isDark,
           ),
         ],
@@ -80,8 +81,8 @@ class BlogsScreen extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Image.network(
-            'https://images.unsplash.com/photo-1499750310159-525446b095ef?q=80&w=2070&auto=format&fit=crop', // Laptop/Coffee
+          Image.asset(
+            AppAssets.thumbnail3, // Assuming this is the asset path for the featured blog
             height: 200,
             width: double.infinity,
             fit: BoxFit.cover,
@@ -113,8 +114,7 @@ class BlogsScreen extends StatelessWidget {
                 Row(
                   children: [
                     const CircleAvatar(
-                      radius: 12,
-                      backgroundImage: NetworkImage('https://i.pravatar.cc/150?u=blog'),
+                      backgroundImage: AssetImage(AppAssets.avatar2), // Assuming AppAssets.avatar2 resolves to this path
                     ),
                     const SizedBox(width: 8),
                     const Text('Alex Johnson', style: TextStyle(fontSize: 12, fontWeight: FontWeight.w500)),
@@ -138,8 +138,8 @@ class BlogsScreen extends StatelessWidget {
         children: [
           ClipRRect(
             borderRadius: BorderRadius.circular(12),
-            child: Image.network(
-              imageUrl,
+            child: Image.asset(
+              imageUrl, // Assuming imageUrl now points to an asset path
               width: 100,
               height: 100,
               fit: BoxFit.cover,

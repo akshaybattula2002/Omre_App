@@ -21,7 +21,7 @@ class GigDetailScreen extends StatelessWidget {
             expandedHeight: 300,
             pinned: true,
             flexibleSpace: FlexibleSpaceBar(
-              background: Image.network(gig.thumbnailUrl, fit: BoxFit.cover),
+              background: Image.asset(gig.thumbnailUrl, fit: BoxFit.cover),
             ),
             leading: CircleAvatar(
               backgroundColor: Colors.black26,
@@ -39,7 +39,7 @@ class GigDetailScreen extends StatelessWidget {
                 children: [
                   Row(
                     children: [
-                      CircleAvatar(radius: 20, backgroundImage: NetworkImage(gig.sellerAvatarUrl)),
+                      CircleAvatar(radius: 20, backgroundImage: AssetImage(gig.sellerAvatarUrl)),
                       const SizedBox(width: 12),
                       Column(
                         crossAxisAlignment: CrossAxisAlignment.start,

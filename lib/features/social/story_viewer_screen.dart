@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'dart:io';
 import 'package:get/get.dart';
 import 'controllers/story_viewer_controller.dart';
 import '../../core/theme/palette.dart';
@@ -30,27 +31,48 @@ class StoryViewerScreen extends GetView<StoryViewerController> {
             Positioned.fill(
               child: Obx(() {
                 final story = controller.currentStory;
-                return Image.network(
-                  story.imageUrl,
-                  fit: BoxFit.cover,
-                  errorBuilder: (ctx, err, stack) => Container(
-                    color: Colors.grey[900],
-                    child: const Center(
-                        child: Icon(Icons.broken_image, color: Colors.white54, size: 50)),
-                  ),
-                  loadingBuilder: (context, child, loadingProgress) {
-                    if (loadingProgress == null) return child;
-                    return Center(
-                      child: CircularProgressIndicator(
-                        value: loadingProgress.expectedTotalBytes != null
-                            ? loadingProgress.cumulativeBytesLoaded /
-                                loadingProgress.expectedTotalBytes!
-                            : null,
-                        color: Colors.white,
-                      ),
-                    );
-                  },
-                );
+                if (story.imageUrl.startsWith('http')) {
+                  return Image.network(
+                    story.imageUrl,
+                    fit: BoxFit.cover,
+                    loadingBuilder: (context, child, loadingProgress) {
+                      if (loadingProgress == null) return child;
+                      return Center(
+                        child: CircularProgressIndicator(
+                          value: loadingProgress.expectedTotalBytes != null
+                              ? loadingProgress.cumulativeBytesLoaded /
+                                  loadingProgress.expectedTotalBytes!
+                              : null,
+                          color: Colors.white,
+                        ),
+                      );
+                    },
+                    errorBuilder: (context, error, stackTrace) =>
+                        const Center(child: Icon(Icons.error, color: Colors.white)),
+                  );
+                } else if (story.imageUrl.startsWith('assets/')) {
+                  return Image.asset(
+                    story.imageUrl,
+                    fit: BoxFit.cover,
+                    errorBuilder: (ctx, err, stack) => Container(
+                      color: Colors.grey[900],
+                      child: const Center(
+                          child:
+                              Icon(Icons.broken_image, color: Colors.white54, size: 50)),
+                    ),
+                  );
+                } else {
+                  return Image.file(
+                    File(story.imageUrl),
+                    fit: BoxFit.cover,
+                     errorBuilder: (ctx, err, stack) => Container(
+                      color: Colors.grey[900],
+                      child: const Center(
+                          child:
+                              Icon(Icons.broken_image, color: Colors.white54, size: 50)),
+                    ),
+                  );
+                }
               }),
             ),
 
@@ -94,7 +116,9 @@ class StoryViewerScreen extends GetView<StoryViewerController> {
                   children: [
                     CircleAvatar(
                       radius: 16,
-                      backgroundImage: NetworkImage(group.avatarUrl),
+                      backgroundImage: group.avatarUrl.startsWith('http')
+                          ? NetworkImage(group.avatarUrl)
+                          : AssetImage(group.avatarUrl) as ImageProvider,
                     ),
                     const SizedBox(width: 8),
                     Text(
@@ -201,7 +225,6 @@ class StoryViewerScreen extends GetView<StoryViewerController> {
                 ),
               ),
             ),
-
 
             // Close Button
             Positioned(

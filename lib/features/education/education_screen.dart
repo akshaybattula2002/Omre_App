@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import '../../core/theme/palette.dart';
+import '../../core/constants/app_assets.dart';
 import 'controllers/education_controller.dart';
 
 class EducationScreen extends StatelessWidget {
@@ -156,7 +157,7 @@ class EducationScreen extends StatelessWidget {
         children: [
           Stack(
             children: [
-              Image.network(course.thumbnailUrl, height: 160, width: double.infinity, fit: BoxFit.cover),
+              Image.asset(course.thumbnailUrl, height: 160, width: double.infinity, fit: BoxFit.cover),
               Positioned(
                 top: 12,
                 right: 12,
@@ -425,8 +426,8 @@ class EducationScreen extends StatelessWidget {
               children: [
                 Stack(
                   children: [
-                    Image.network(
-                      'https://images.unsplash.com/photo-1587620962725-abab7fe55159?q=80&w=2662&auto=format&fit=crop',
+                    Image.asset(
+                      AppAssets.getRandomPost(),
                       height: 180,
                       width: double.infinity,
                       fit: BoxFit.cover,

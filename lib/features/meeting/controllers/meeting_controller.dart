@@ -1,15 +1,39 @@
 import 'package:get/get.dart';
 import 'package:flutter/material.dart';
+import 'package:permission_handler/permission_handler.dart';
 import '../../messenger/call_screen.dart';
+import '../../../core/constants/app_assets.dart';
 
 class MeetingController extends GetxController {
+  final cameraStatus = PermissionStatus.denied.obs;
+  final micStatus = PermissionStatus.denied.obs;
+
+  @override
+  void onInit() {
+    super.onInit();
+    checkPermissions();
+  }
+
+  Future<void> checkPermissions() async {
+    cameraStatus.value = await Permission.camera.status;
+    micStatus.value = await Permission.microphone.status;
+  }
+
+  Future<void> requestCameraPermission() async {
+    cameraStatus.value = await Permission.camera.request();
+  }
+
+  Future<void> requestMicPermission() async {
+    micStatus.value = await Permission.microphone.request();
+  }
+
   final upcomingMeetings = <Map<String, dynamic>>[
     {
       'title': 'Project Kickoff',
       'host': 'Alice Smith',
       'time': '10:00 AM',
       'duration': '45 min',
-      'avatar': 'https://i.pravatar.cc/150?u=alice',
+      'avatar': AppAssets.avatar1,
       'code': 'abc-kick-off'
     },
     {
@@ -17,7 +41,7 @@ class MeetingController extends GetxController {
       'host': 'Bob Johnson',
       'time': '2:00 PM',
       'duration': '1 hr',
-      'avatar': 'https://i.pravatar.cc/150?u=bob',
+      'avatar': AppAssets.avatar2,
       'code': 'xyz-design-rev'
     },
   ].obs;
@@ -25,7 +49,7 @@ class MeetingController extends GetxController {
   void startInstantMeeting() {
     Get.back(); // Close modal if open
     Get.to(() => const CallScreen(
-      caller: {'name': 'Instant Meeting', 'avatarUrl': 'https://i.pravatar.cc/150?u=me'},
+      caller: {'name': 'Instant Meeting', 'avatarUrl': AppAssets.avatar1},
       isVideo: true,
     ));
   }
@@ -41,7 +65,7 @@ class MeetingController extends GetxController {
     }
     Get.back(); // Close dialog if open
     Get.to(() => CallScreen(
-      caller: {'name': 'Meeting: $code', 'avatarUrl': 'https://i.pravatar.cc/150?u=meeting'},
+      caller: {'name': 'Meeting: $code', 'avatarUrl': AppAssets.avatar3},
       isVideo: true,
     ));
   }
@@ -55,7 +79,7 @@ class MeetingController extends GetxController {
       'host': 'You',
       'time': 'Tomorrow, 9:00 AM',
       'duration': '30 min',
-      'avatar': 'https://i.pravatar.cc/150?u=me',
+      'avatar': AppAssets.avatar1,
       'code': 'new-meet-123'
     });
     Get.snackbar('Success', 'Meeting scheduled successfully',
@@ -69,7 +93,7 @@ class MeetingController extends GetxController {
     Get.back(); // Close dialog
     // Simulate share screen by opening call screen with a specific indicator or just regular call
     Get.to(() => const CallScreen(
-      caller: {'name': 'Screen Share', 'avatarUrl': 'https://i.pravatar.cc/150?u=screen'},
+      caller: {'name': 'Screen Share', 'avatarUrl': AppAssets.avatar4},
       isVideo: false, // Maybe audio only + visual indicator
     ));
     // In a real app coverage, this might toggle a boolean in the call screen or start a foreground service

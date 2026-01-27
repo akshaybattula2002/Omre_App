@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import '../../core/constants/app_assets.dart';
 
 class BirthdayScreen extends StatelessWidget {
   const BirthdayScreen({super.key});
@@ -33,19 +34,19 @@ class BirthdayScreen extends StatelessWidget {
           _buildBirthdayItem(
             'Michael Chen',
             'Turning 28 tomorrow',
-            'https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?q=80&w=1887&auto=format&fit=crop',
+            AppAssets.post1,
             isDark,
           ),
           _buildBirthdayItem(
-            'Emma Wilson',
+            'Mike',
+            'Turning 28 Tomorrow',
+             AppAssets.post2,
+            isDark,
+          ),
+          _buildBirthdayItem(
+            'Emma',
             'Turning 31 on Sunday',
-            'https://images.unsplash.com/photo-1544005313-94ddf0286df2?q=80&w=1888&auto=format&fit=crop',
-            isDark,
-          ),
-          _buildBirthdayItem(
-            'David Lee',
-            'Turning 24 next week',
-            'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?q=80&w=1887&auto=format&fit=crop',
+            AppAssets.post3,
             isDark,
           ),
           
@@ -151,7 +152,7 @@ class BirthdayScreen extends StatelessWidget {
       contentPadding: const EdgeInsets.symmetric(horizontal: 0, vertical: 8),
       leading: CircleAvatar(
         radius: 24,
-        backgroundImage: NetworkImage(imageUrl),
+        backgroundImage: AssetImage(imageUrl),
       ),
       title: Text(name, style: const TextStyle(fontWeight: FontWeight.bold)),
       subtitle: Text(subtitle, style: TextStyle(color: Colors.grey[600], fontSize: 13)),

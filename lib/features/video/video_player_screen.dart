@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 import 'package:video_player/video_player.dart';
 import 'package:chewie/chewie.dart';
 import '../../core/theme/palette.dart';
+import '../../core/constants/app_assets.dart';
 import 'channel_profile_screen.dart';
 import 'video_comments_sheet.dart';
 
@@ -45,7 +46,11 @@ class _VideoPlayerScreenState extends State<VideoPlayerScreen> {
   }
 
   Future<void> _initializePlayer() async {
-    _videoPlayerController = VideoPlayerController.networkUrl(Uri.parse(widget.videoUrl));
+    if (widget.videoUrl.startsWith('http')) {
+      _videoPlayerController = VideoPlayerController.networkUrl(Uri.parse(widget.videoUrl));
+    } else {
+      _videoPlayerController = VideoPlayerController.asset(widget.videoUrl);
+    }
     await _videoPlayerController.initialize();
     
     setState(() {
@@ -270,13 +275,13 @@ class _VideoPlayerScreenState extends State<VideoPlayerScreen> {
                         children: [
                            Text('Up Next', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: textColor)),
                            const SizedBox(height: 16),
-                           _buildRecommendedVideo('Advance Flutter Animations', 'Flutter Dev', '45K views', '1 day ago', 'https://picsum.photos/seed/flutter_anim/300/200', isDark, textColor),
-                           _buildRecommendedVideo('Dart Macros: Everything You Need to Know', 'Dart Side', '22K views', '3 days ago', 'https://picsum.photos/seed/dart_macros/300/200', isDark, textColor),
-                           _buildRecommendedVideo('State Management Showdown 2026', 'Code With Me', '110K views', '1 week ago', 'https://picsum.photos/seed/state_mgmt/300/200', isDark, textColor),
-                           _buildRecommendedVideo('System Design Interview Guide', 'TechLead', '500K views', '1 month ago', 'https://picsum.photos/seed/sys_design/300/200', isDark, textColor),
-                           _buildRecommendedVideo('Mastering Impeller: The New Renderer', 'Flutter Team', '89K views', '2 weeks ago', 'https://picsum.photos/seed/impeller/300/200', isDark, textColor),
-                           _buildRecommendedVideo('Server Driven UI in Flutter', 'Dev Hub', '34K views', '4 days ago', 'https://picsum.photos/seed/sdui/300/200', isDark, textColor),
-                           _buildRecommendedVideo('Effective GetX Patterns', 'State Masters', '67K views', '1 week ago', 'https://picsum.photos/seed/getx/300/200', isDark, textColor),
+                           _buildRecommendedVideo('Advance Flutter Animations', 'Flutter Dev', '45K views', '1 day ago', AppAssets.thumbnail1, isDark, textColor),
+                           _buildRecommendedVideo('Dart Macros: Everything You Need to Know', 'Dart Side', '22K views', '3 days ago', AppAssets.thumbnail2, isDark, textColor),
+                           _buildRecommendedVideo('State Management Showdown 2026', 'Code With Me', '110K views', '1 week ago', AppAssets.thumbnail3, isDark, textColor),
+                           _buildRecommendedVideo('System Design Interview Guide', 'TechLead', '500K views', '1 month ago', AppAssets.thumbnail1, isDark, textColor),
+                           _buildRecommendedVideo('Mastering Impeller: The New Renderer', 'Flutter Team', '89K views', '2 weeks ago', AppAssets.thumbnail2, isDark, textColor),
+                           _buildRecommendedVideo('Server Driven UI in Flutter', 'Dev Hub', '34K views', '4 days ago', AppAssets.thumbnail3, isDark, textColor),
+                           _buildRecommendedVideo('Effective GetX Patterns', 'State Masters', '67K views', '1 week ago', AppAssets.thumbnail1, isDark, textColor),
                         ],
                       ),
                     ),
@@ -404,7 +409,7 @@ class _VideoPlayerScreenState extends State<VideoPlayerScreen> {
           time: time,
           thumbnailUrl: url,
           avatarColor: Colors.blue[100]!, // Defaulting avatar color for recommendation
-          videoUrl: 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4',
+          videoUrl: AppAssets.sampleVideo,
         ));
       },
       child: Container(
@@ -414,7 +419,7 @@ class _VideoPlayerScreenState extends State<VideoPlayerScreen> {
           children: [
             ClipRRect(
               borderRadius: BorderRadius.circular(8),
-              child: Image.network(
+              child: Image.asset(
                 url,
                 width: 140,
                 height: 80,

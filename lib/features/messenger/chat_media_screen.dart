@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import '../../../core/theme/palette.dart';
+import '../../../core/constants/app_assets.dart';
 
 class ChatMediaScreen extends StatefulWidget {
   final Map<String, dynamic> chatInfo;
@@ -73,8 +74,8 @@ class _ChatMediaScreenState extends State<ChatMediaScreen> with SingleTickerProv
       itemBuilder: (context, index) {
         return Container(
           color: Colors.grey[300],
-          child: Image.network(
-            'https://picsum.photos/200?random=$index',
+          child: Image.asset(
+            AppAssets.getRandomPost(),
             fit: BoxFit.cover,
             errorBuilder: (_, __, ___) => const Icon(Icons.image_not_supported),
           ),

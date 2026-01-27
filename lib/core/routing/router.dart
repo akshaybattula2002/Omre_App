@@ -8,7 +8,7 @@ import '../../features/social/social_home_screen.dart';
 import '../../features/video/video_home_screen.dart';
 import '../../features/news/news_home_screen.dart';
 import '../../features/orbit/orbit_home_screen.dart';
-import '../../features/games/games_home_screen.dart';
+import '../../features/games/game_verse_screen.dart';
 import '../../features/messenger/messenger_home_screen.dart';
 import '../../features/education/education_screen.dart';
 import '../../features/meeting/meeting_screen.dart';
@@ -22,6 +22,7 @@ import '../../features/social/controllers/home_controller.dart';
 import '../../features/messenger/chat_detail_screen.dart';
 import '../../features/messenger/controllers/chat_detail_controller.dart';
 import '../../features/biz/biz_home_screen.dart';
+import '../../features/mart/social_marketplace_screen.dart';
 import '../services/state_providers.dart';
 
 import '../../features/auth/splash_screen.dart';
@@ -104,9 +105,11 @@ class HomeContent extends GetView<AppController> {
         case AppMode.orbit:
           return const OrbitHomeScreen();
         case AppMode.games:
-          return const GamesHomeScreen();
+          return const GameVerseScreen();
         case AppMode.meeting:
           return const MeetingScreen();
+        case AppMode.mart:
+          return const SocialMarketplaceScreen();
       }
     });
   }

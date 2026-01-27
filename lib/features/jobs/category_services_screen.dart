@@ -59,7 +59,7 @@ class _CompactGigCard extends StatelessWidget {
         children: [
           ClipRRect(
             borderRadius: const BorderRadius.horizontal(left: Radius.circular(16)),
-            child: Image.network(gig.thumbnailUrl, width: 120, height: 100, fit: BoxFit.cover),
+            child: Image.asset(gig.thumbnailUrl, width: 120, height: 100, fit: BoxFit.cover),
           ),
           Expanded(
             child: Padding(

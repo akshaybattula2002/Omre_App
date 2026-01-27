@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'video_details_editing_screen.dart';
+import '../../core/constants/app_assets.dart';
 
 class ChannelContentScreen extends StatefulWidget {
   const ChannelContentScreen({super.key});
@@ -21,7 +22,9 @@ class _ChannelContentScreenState extends State<ChannelContentScreen> {
       'visibility': 'Public',
       'likes': '1.2K',
       'comments': '156',
-      'thumbnail': 'https://images.unsplash.com/photo-1497215728101-856f4ea42174?q=80&w=2070&auto=format&fit=crop',
+      'likes': '1.2K',
+      'comments': '156',
+      'thumbnail': AppAssets.thumbnail1,
     },
     {
       'title': 'Flutter 2026 Roadmap',
@@ -30,7 +33,7 @@ class _ChannelContentScreenState extends State<ChannelContentScreen> {
       'visibility': 'Public',
       'likes': '5.4K',
       'comments': '432',
-      'thumbnail': 'https://images.unsplash.com/photo-1551033406-611cf9a28f67?q=80&w=1974&auto=format&fit=crop',
+      'thumbnail': AppAssets.thumbnail2,
     },
     {
       'title': 'AI in Mobile Development',
@@ -39,7 +42,7 @@ class _ChannelContentScreenState extends State<ChannelContentScreen> {
       'visibility': 'Private',
       'likes': '320',
       'comments': '12',
-      'thumbnail': 'https://images.unsplash.com/photo-1677442136019-21780ecad995?q=80&w=2070&auto=format&fit=crop',
+      'thumbnail': AppAssets.thumbnail3,
     },
   ];
 
@@ -117,7 +120,7 @@ class _ChannelContentScreenState extends State<ChannelContentScreen> {
                           children: [
                             ClipRRect(
                               borderRadius: BorderRadius.circular(8),
-                              child: Image.network(
+                              child: Image.asset(
                                 video['thumbnail'],
                                 width: 120,
                                 height: 68,
