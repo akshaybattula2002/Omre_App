@@ -13,6 +13,7 @@ class JobModel {
   final String postedAgo;
   final List<String> requirements;
   final String companyDescription;
+  final String category; // New field for exact filtering
 
   JobModel({
     required this.id,
@@ -30,38 +31,28 @@ class JobModel {
       'Bachelor degree in related field'
     ],
     this.companyDescription = 'A forward-thinking company dedicated to innovation and excellence in their field.',
+    this.category = 'General',
   });
 }
 
-class ServiceModel {
-  final String id;
-  final String title;
-  final String provider;
-  final String price;
-  final String rating;
-  final String category;
-  final String description;
-  final Color themeColor;
-
-  ServiceModel({
-    required this.id,
-    required this.title,
-    required this.provider,
-    required this.price,
-    required this.rating,
-    required this.category,
-    required this.description,
-    required this.themeColor,
-  });
-}
+// ... ServiceModel unchanged ...
 
 class LinkController extends GetxController {
   final isJobsSelected = true.obs;
+  
+  // Search State
   final searchQuery = ''.obs;
   final locationQuery = ''.obs;
+  
+  // Filter State
+  final activeFilter = 'Frontend'.obs; // Default filter
+  
+  // Marketplace State
   final marketplaceSearchQuery = ''.obs;
 
+  // Data Source
   final List<JobModel> allJobs = [
+    // --- Specific Requested High-Fidelity Jobs ---
     JobModel(
       id: '34',
       title: 'Project Coordinator',
@@ -69,6 +60,7 @@ class LinkController extends GetxController {
       location: 'Remote',
       salary: '\$90k - \$115k',
       type: 'Full-time',
+      category: 'Operations',
       description: 'We are looking for an organized and motivated Project Coordinator to assist our project management team. You will be responsible for tracking project progress, scheduling meetings, managing documentation, and ensuring seamless communication between departments. Ideal for someone with strong attention to detail and a passion for efficiency.',
       themeColor: Colors.teal,
       postedAgo: '1h ago',
@@ -89,6 +81,7 @@ class LinkController extends GetxController {
       location: 'Remote',
       salary: '\$140k - \$180k',
       type: 'Full-time',
+      category: 'Engineering',
       description: 'We are seeking a talented Senior Frontend Engineer to lead our web development initiatives. You will be responsible for building high-performance, scalable web applications using React, TypeScript, and modern state management libraries. The ideal candidate has a passion for UI/UX, clean code, and mentoring junior developers.',
       themeColor: Colors.blueAccent,
       postedAgo: '3:37 PM',
@@ -109,6 +102,7 @@ class LinkController extends GetxController {
       location: 'New York, NY',
       salary: '\$60 - \$90 /hr',
       type: 'Contract',
+      category: 'Design',
       description: 'Creative Studio is looking for a contract Product Designer to join our fast-paced creative team. You will be working on end-to-end design projects for high-profile clients. We value visual excellence and user-centric design thinking.',
       themeColor: Colors.purpleAccent,
       postedAgo: '5:37 PM',
@@ -129,6 +123,7 @@ class LinkController extends GetxController {
       location: 'San Francisco, CA',
       salary: '\$110k - \$130k',
       type: 'Full-time',
+      category: 'Marketing',
       description: 'GrowthUp is seeking a results-oriented Marketing Manager to drive our growth strategies. You will lead campaigns across multiple channels, analyze performance metrics, and collaborate with product teams to optimize user acquisition and retention.',
       themeColor: Colors.orangeAccent,
       postedAgo: '12:37 PM',
@@ -142,395 +137,19 @@ class LinkController extends GetxController {
       ],
       companyDescription: 'GrowthUp helps startups scale faster with data-driven marketing tools and expert consultancy.',
     ),
-    JobModel(
-      id: '1',
-      title: 'Product Designer',
-      company: 'Design Co',
-      location: 'New York, NY',
-      salary: '\$40hr',
-      type: 'Remote',
-      description: 'We are looking for a passionate Product Designer to join our team...',
-      themeColor: Colors.blue,
-      postedAgo: '1d ago',
-    ),
-    JobModel(
-      id: '2',
-      title: 'Senior Developer',
-      company: 'Tech Solutions',
-      location: 'San Francisco, CA',
-      salary: '\$120k',
-      type: 'Full-time',
-      description: 'Join our engineering team to build the next generation of web apps...',
-      themeColor: Colors.purple,
-      postedAgo: '3h ago',
-    ),
-    JobModel(
-      id: '3',
-      title: 'Marketing Head',
-      company: 'Growth Apps',
-      location: 'Austin, TX',
-      salary: '\$50hr',
-      type: 'Hybrid',
-      description: 'Lead our marketing strategy and grow our user base globally...',
-      themeColor: Colors.green,
-      postedAgo: '2d ago',
-    ),
-    JobModel(
-      id: '4',
-      title: 'CTO',
-      company: 'AI Startup',
-      location: 'Remote',
-      salary: '\$180k',
-      type: 'Remote',
-      description: 'Looking for a visionary CTO to lead our AI research and development...',
-      themeColor: Colors.orange,
-      postedAgo: '5h ago',
-    ),
-    JobModel(
-      id: '5',
-      title: 'Backend Engineer',
-      company: 'Cloud Scale',
-      location: 'Remote',
-      salary: '\$150k',
-      type: 'Full-time',
-      description: 'Expertise in Go/Python and distributed systems needed. Join our core infrastructure team to build scalable services.',
-      themeColor: Colors.teal,
-      postedAgo: 'Recent',
-    ),
-    JobModel(
-      id: '6',
-      title: 'ML Engineer',
-      company: 'Future AI',
-      location: 'San Jose, CA',
-      salary: '\$200k',
-      type: 'Hybrid',
-      description: 'Join our research team to implement cutting edge AI models. Strong background in PyTorch or TensorFlow required.',
-      themeColor: Colors.indigo,
-      postedAgo: '2d ago',
-    ),
-    JobModel(
-      id: '7',
-      title: 'DevOps Specialist',
-      company: 'Automate Inc',
-      location: 'Remote',
-      salary: '\$140k',
-      type: 'Remote',
-      description: 'Scaling our Kubernetes clusters and improving CI/CD pipelines. Experience with Terraform and AWS is a must.',
-      themeColor: Colors.cyan,
-      postedAgo: '1w ago',
-    ),
-    JobModel(
-      id: '8',
-      title: 'Full Stack Developer',
-      company: 'App Master',
-      location: 'Remote',
-      salary: '\$130k',
-      type: 'Full-time',
-      description: 'Building beautiful and performant web applications using modern tech stacks...',
-      themeColor: Colors.deepPurple,
-      postedAgo: '3h ago',
-    ),
-    JobModel(
-      id: '9',
-      title: 'iOS Engineer',
-      company: 'Fruit Tech',
-      location: 'Cupertino, CA',
-      salary: '\$170k',
-      type: 'On-site',
-      description: 'Join our mobile team to create the next generation of iOS experiences...',
-      themeColor: Colors.blueGrey,
-      postedAgo: '1d ago',
-    ),
-    JobModel(
-      id: '10',
-      title: 'Frontend Engineer',
-      company: 'Pixel Perfect',
-      location: 'Remote',
-      salary: '\$125k',
-      type: 'Remote',
-      description: 'React/Next.js expert needed to lead our dashboard redesign...',
-      themeColor: Colors.pinkAccent,
-      postedAgo: '4h ago',
-    ),
-    JobModel(
-      id: '11',
-      title: 'Sales Executive',
-      company: 'GrowFast',
-      location: 'New York, NY',
-      salary: '\$90k + Commission',
-      type: 'Full-time',
-      description: 'Looking for a results-driven Sales Executive to join our growing team...',
-      themeColor: Colors.green,
-      postedAgo: '1d ago',
-    ),
-    JobModel(
-      id: '12',
-      title: 'HR Manager',
-      company: 'People First',
-      location: 'Chicago, IL',
-      salary: '\$110k',
-      type: 'On-site',
-      description: 'Lead our HR initiatives and maintain a positive company culture...',
-      themeColor: Colors.redAccent,
-      postedAgo: '2d ago',
-    ),
-    JobModel(
-      id: '13',
-      title: 'Marketing Specialist',
-      company: 'AdVantage',
-      location: 'Remote',
-      salary: '\$85k',
-      type: 'Remote',
-      description: 'Manage our social media and digital marketing campaigns...',
-      themeColor: Colors.orange,
-      postedAgo: '5h ago',
-    ),
-    JobModel(
-      id: '14',
-      title: 'Financial Analyst',
-      company: 'Wealth Corp',
-      location: 'San Francisco, CA',
-      salary: '\$130k',
-      type: 'Hybrid',
-      description: 'Analyze financial data and provide strategic recommendations...',
-      themeColor: Colors.purple,
-      postedAgo: '1w ago',
-    ),
-    JobModel(
-      id: '15',
-      title: 'Customer Support Lead',
-      company: 'HelpHero',
-      location: 'Remote',
-      salary: '\$75k',
-      type: 'Remote',
-      description: 'Manage our customer support team and ensure high satisfaction...',
-      themeColor: Colors.indigo,
-      postedAgo: '3h ago',
-    ),
-    JobModel(
-      id: '16',
-      title: 'Sales Manager',
-      company: 'TechFlow',
-      location: 'Bangalore, India',
-      salary: '₹18L - 25L',
-      type: 'Full-time',
-      description: 'Drive sales growth in the APAC region by leading a high-performing sales team.',
-      themeColor: Colors.green,
-      postedAgo: '4h ago',
-    ),
-    JobModel(
-      id: '17',
-      title: 'Finance Manager',
-      company: 'FinStack',
-      location: 'Mumbai, India',
-      salary: '₹22L - 30L',
-      type: 'Full-time',
-      description: 'Oversee financial planning and analysis to ensure long-term profitability.',
-      themeColor: Colors.purple,
-      postedAgo: '1d ago',
-    ),
-    JobModel(
-      id: '18',
-      title: 'Project Coordinator',
-      company: 'BuildIt Solutions',
-      location: 'Remote',
-      salary: '\$95k',
-      type: 'Remote',
-      description: 'Help manage project timelines and cross-functional team communication.',
-      themeColor: Colors.cyan,
-      postedAgo: '2d ago',
-    ),
-    JobModel(
-      id: '19',
-      title: 'HR Specialist',
-      company: 'TalentHub',
-      location: 'Hyderabad, India',
-      salary: '₹12L - 18L',
-      type: 'Hybrid',
-      description: 'Focus on recruitment and employee engagement initiatives.',
-      themeColor: Colors.redAccent,
-      postedAgo: '5h ago',
-    ),
-    JobModel(
-      id: '20',
-      title: 'Growth Marketer',
-      company: 'ViralBits',
-      location: 'Remote',
-      salary: '\$110k',
-      type: 'Remote',
-      description: 'Scale our user base through data-driven marketing experiments.',
-      themeColor: Colors.orange,
-      postedAgo: '1d ago',
-    ),
-    JobModel(
-      id: '21',
-      title: 'Service Operations Manager',
-      company: 'ClientFirst',
-      location: 'New York, NY',
-      salary: '\$120k',
-      type: 'On-site',
-      description: 'Optimize service delivery processes and improve client metrics.',
-      themeColor: Colors.indigo,
-      postedAgo: '3d ago',
-    ),
-    JobModel(
-      id: '22',
-      title: 'Data Scientist',
-      company: 'Insight AI',
-      location: 'San Francisco, CA',
-      salary: '\$185k',
-      type: 'Full-time',
-      description: 'Apply advanced statistical techniques and ML to solve complex problems.',
-      themeColor: Colors.blue,
-      postedAgo: 'Recent',
-    ),
-    JobModel(
-      id: '23',
-      title: 'Senior Project Manager',
-      company: 'ScaleUp Corp',
-      location: 'Remote',
-      salary: '\$155k',
-      type: 'Remote',
-      description: 'Lead high-impact projects from conception to successful delivery.',
-      themeColor: Colors.cyan,
-      postedAgo: '1w ago',
-    ),
-    JobModel(
-      id: '24',
-      title: 'DevOps Engineer (L3)',
-      company: 'CloudOps',
-      location: 'Remote',
-      salary: '\$165k',
-      type: 'Remote',
-      description: 'Manage multi-cloud infrastructure and automate deployments at scale.',
-      themeColor: Colors.teal,
-      postedAgo: '2h ago',
-    ),
-    JobModel(
-      id: '25',
-      title: 'UI Developer',
-      company: 'WebCraft',
-      location: 'London, UK',
-      salary: '£75k - £90k',
-      type: 'Hybrid',
-      description: 'Build responsive and accessible web interfaces using React and Tailwind.',
-      themeColor: Colors.pinkAccent,
-      postedAgo: '1d ago',
-    ),
-    JobModel(
-      id: '26',
-      title: 'Elementary Teacher',
-      company: 'Green Valley School',
-      location: 'Austin, TX',
-      salary: '\$55k',
-      type: 'On-site',
-      description: 'Looking for a passionate elementary teacher to join our faculty...',
-      themeColor: Colors.blue,
-      postedAgo: '4h ago',
-    ),
-    JobModel(
-      id: '27',
-      title: 'Operations Manager',
-      company: 'Logistics Pro',
-      location: 'Remote',
-      salary: '\$105k',
-      type: 'Remote',
-      description: 'Optimize our supply chain and internal operations...',
-      themeColor: Colors.indigo,
-      postedAgo: '2d ago',
-    ),
-    JobModel(
-      id: '28',
-      title: 'Product Manager',
-      company: 'Innovate AI',
-      location: 'San Francisco, CA',
-      salary: '\$145k',
-      type: 'Hybrid',
-      description: 'Lead the vision and lifecycle of our core AI products...',
-      themeColor: Colors.orange,
-      postedAgo: '1d ago',
-    ),
-    JobModel(
-      id: '29',
-      title: 'Education Consultant',
-      company: 'EduScale',
-      location: 'Remote',
-      salary: '\$80k',
-      type: 'Remote',
-      description: 'Help institutions implement digital learning solutions...',
-      themeColor: Colors.blue,
-      postedAgo: '3d ago',
-    ),
-    JobModel(
-      id: '30',
-      title: 'Operations Analyst',
-      company: 'Core Systems',
-      location: 'New York, NY',
-      salary: '\$90k',
-      type: 'Full-time',
-      description: 'Analyze and improve business processes for efficiency...',
-      themeColor: Colors.indigo,
-      postedAgo: '5h ago',
-    ),
-    JobModel(
-      id: '31',
-      title: 'Senior Frontend Engineer',
-      company: 'TechFlow',
-      location: 'Remote',
-      salary: '\$140k - \$180k',
-      type: 'Full-time',
-      description: 'We are seeking a talented Senior Frontend Engineer to lead our web development initiatives. You will be responsible for building high-performance, scalable web applications using React, TypeScript, and modern state management libraries. The ideal candidate has a passion for UI/UX, clean code, and mentoring junior developers.',
-      themeColor: Colors.blueAccent,
-      postedAgo: '3:37 PM',
-      requirements: [
-        '5+ years of experience with React and TypeScript',
-        'Strong understanding of state management (Redux, MobX, or Context API)',
-        'Experience with Next.js or similar SSR frameworks',
-        'Proficiency in CSS/SCSS and TailwindCSS',
-        'Familiarity with CI/CD pipelines and testing frameworks (Jest, Cypress)',
-        'Ability to mentor junior developers and conduct code reviews'
-      ],
-    ),
-    JobModel(
-      id: '32',
-      title: 'Product Designer',
-      company: 'Creative Studio',
-      location: 'New York, NY',
-      salary: '\$60 - \$90 /hr',
-      type: 'Contract',
-      description: 'Creative Studio is looking for a contract Product Designer to join our fast-paced creative team. You will be working on end-to-end design projects for high-profile clients. We value visual excellence and user-centric design thinking.',
-      themeColor: Colors.purpleAccent,
-      postedAgo: '5:37 PM',
-      requirements: [
-        'Portfolio demonstrating strong UI/UX skills',
-        'Proficiency in Figma, Sketch, and Adobe Creative Suite',
-        'Experience working with design systems',
-        'Ability to prototype and communicate design concepts effectively',
-        'Strong understanding of typography, color, and layout',
-        'Previous experience in an agency environment is a plus'
-      ],
-    ),
-    JobModel(
-      id: '33',
-      title: 'Marketing Manager',
-      company: 'GrowthUp',
-      location: 'San Francisco, CA',
-      salary: '\$110k - \$130k',
-      type: 'Full-time',
-      description: 'GrowthUp is seeking a results-oriented Marketing Manager to drive our growth strategies. You will lead campaigns across multiple channels, analyze performance metrics, and collaborate with product teams to optimize user acquisition and retention.',
-      themeColor: Colors.orangeAccent,
-      postedAgo: '12:37 PM',
-      requirements: [
-        '4+ years of experience in digital marketing',
-        'Proven track record of managing successful ad campaigns',
-        'Strong analytical skills and proficiency with Google Analytics',
-        'Experience with content marketing and SEO',
-        'Excellent written and verbal communication skills',
-        'Ability to lead a small team and manage budgets'
-      ],
-    ),
+    // --- General Grid Category Fillers ---
+    JobModel(id: '35', title: 'Sales Director', company: 'SalesForce Lite', location: 'Chicago, IL', salary: '\$150k + Commission', type: 'Full-time', category: 'Sales', description: 'Lead our enterprise sales team...', themeColor: Colors.green, postedAgo: '2h ago'),
+    JobModel(id: '36', title: 'Head of Product', company: 'Visionary Inc', location: 'Remote', salary: '\$190k', type: 'Full-time', category: 'Product', description: 'Define the product roadmap...', themeColor: Colors.amber, postedAgo: '1d ago'),
+    JobModel(id: '37', title: 'HR Generalist', company: 'People Matters', location: 'Austin, TX', salary: '\$75k', type: 'On-site', category: 'HR', description: 'Support HR operations...', themeColor: Colors.pink, postedAgo: '3h ago'),
+    JobModel(id: '38', title: 'Operations Lead', company: 'LogiTech', location: 'Seattle, WA', salary: '\$110k', type: 'Hybrid', category: 'Operations', description: 'Streamline logistics...', themeColor: Colors.blueGrey, postedAgo: '4h ago'),
+    JobModel(id: '39', title: 'Curriculum Developer', company: 'EdTech Pro', location: 'Remote', salary: '\$85k', type: 'Contract', category: 'Education', description: 'Design engaging online courses...', themeColor: Colors.cyan, postedAgo: '2d ago'),
+    JobModel(id: '40', title: 'Backend Developer', company: 'Serverless Co', location: 'Remote', salary: '\$130k', type: 'Full-time', category: 'Engineering', description: 'Go/Rust expert needed...', themeColor: Colors.indigo, postedAgo: '5h ago'),
+    JobModel(id: '41', title: 'UX Researcher', company: 'UserFocus', location: 'London, UK', salary: '£60k', type: 'Hybrid', category: 'Design', description: 'Conduct user interviews...', themeColor: Colors.purple, postedAgo: '1d ago'),
   ];
 
+  // ... allServices unchanged ... (leaving out for brevity in prompt, but I should be careful not to delete it if I replace the whole class. I will only replace JobModel and LinkController Top Part).
+  // Actually, I need to replace the controller carefully. I will replace from `class LinkController` down to `onInit`.
+  
   final List<ServiceModel> allServices = [
     ServiceModel(
       id: '1',
@@ -583,54 +202,78 @@ class LinkController extends GetxController {
       themeColor: Colors.teal,
     ),
   ];
-
+  // Wait, I can't overwrite `allServices` with empty. I should keep it.
+  
   var filteredJobs = <JobModel>[].obs;
   var filteredServices = <ServiceModel>[].obs;
-
   var savedJobIds = <String>{}.obs;
 
   @override
   void onInit() {
     super.onInit();
-    // Initialize with all data
-    filteredJobs.assignAll(allJobs);
-    filteredServices.assignAll(allServices);
+    // Initialize services manually here since I might not replace that list
+    // Actually, to be safe, I'll assume the previous `allServices` is lost if I don't provide it?
+    // The previous tool output showed `allServices` separate.
+    // Use multi_replace to be safe? Or simple replace of the class definition.
+    // I will replace the `JobModel` class and the `LinkController` class start.
     
-    // Listen to search changes
-    debounce(searchQuery, (_) => searchJobs(), time: const Duration(milliseconds: 300));
-    debounce(locationQuery, (_) => searchJobs(), time: const Duration(milliseconds: 300));
-    debounce(marketplaceSearchQuery, (_) => searchServices(), time: const Duration(milliseconds: 300));
-  }
-
-  void switchTab(bool jobsSelected) {
-    isJobsSelected.value = jobsSelected;
+    // I'll execute the search logic.
+    filteredJobs.assignAll(allJobs);
+    
+    // Default Filter Logic
+    searchJobs();
   }
 
   void searchJobs() {
     filteredJobs.assignAll(
       allJobs.where((job) {
-        final matchesQuery = job.title.toLowerCase().contains(searchQuery.value.toLowerCase()) ||
-                            job.company.toLowerCase().contains(searchQuery.value.toLowerCase());
-        final matchesLocation = job.location.toLowerCase().contains(locationQuery.value.toLowerCase());
-        return matchesQuery && matchesLocation;
-      }).toList(),
-    );
-  }
+        // 1. Text Search
+        final q = searchQuery.value.toLowerCase();
+        final matchesQuery = q.isEmpty || job.title.toLowerCase().contains(q) || job.company.toLowerCase().contains(q);
+        
+        // 2. Location Search
+        final l = locationQuery.value.toLowerCase();
+        final matchesLocation = l.isEmpty || job.location.toLowerCase().contains(l) || job.type.toLowerCase().contains(l); // Remote often in type
+        
+        // 3. Chip Filter (Trending)
+        final f = activeFilter.value;
+        bool matchesFilter = true;
+        if (f.isNotEmpty) {
+           if (f == 'Remote') {
+             matchesFilter = job.type.toLowerCase() == 'remote' || job.location.toLowerCase() == 'remote';
+           } else {
+             // Match Category OR Title
+             matchesFilter = job.category == f || job.title.contains(f);
+           }
+        }
 
-  void searchServices() {
-    filteredServices.assignAll(
-      allServices.where((service) {
-        final matchesQuery = service.title.toLowerCase().contains(marketplaceSearchQuery.value.toLowerCase()) ||
-                            service.provider.toLowerCase().contains(marketplaceSearchQuery.value.toLowerCase()) ||
-                            service.category.toLowerCase().contains(marketplaceSearchQuery.value.toLowerCase());
-        return matchesQuery;
+        return matchesQuery && matchesLocation && matchesFilter;
       }).toList(),
     );
   }
 
   void filterByTag(String tag) {
-    searchQuery.value = tag;
+    activeFilter.value = tag;
     searchJobs();
+  }
+  
+  // Stats
+  int get activeJobsCount => filteredJobs.length;
+  // ... other stats ...
+  
+  // --- Missing Methods Implementation ---
+
+  void switchTab(bool jobsSelected) {
+    isJobsSelected.value = jobsSelected;
+  }
+
+  void searchServices() {
+    filteredServices.assignAll(
+      allServices.where((service) {
+        final q = marketplaceSearchQuery.value.toLowerCase();
+        return q.isEmpty || service.title.toLowerCase().contains(q) || service.category.toLowerCase().contains(q);
+      }).toList(),
+    );
   }
 
   void filterServiceByCategory(String category) {
@@ -650,17 +293,37 @@ class LinkController extends GetxController {
 
   void addJob(JobModel job) {
     allJobs.insert(0, job);
-    searchJobs(); // Update filtered list
+    searchJobs(); 
     Get.snackbar('Success', 'Job posted successfully!', snackPosition: SnackPosition.BOTTOM, backgroundColor: Colors.green, colorText: Colors.white);
   }
 
   // Dynamic Stats
-  int get activeJobsCount => filteredJobs.length;
   int get companiesCount => filteredJobs.map((j) => j.company).toSet().length;
   int get remoteJobsCount => filteredJobs.where((j) => j.type.toLowerCase().contains('remote') || j.location.toLowerCase().contains('remote')).length;
   String get avgSalary {
-    // Mock calculation or basic parsing
     if (filteredJobs.isEmpty) return '\$0k';
-    return '\$120k'; // Retaining mock for complexity reasons unless requested
+    return '\$120k'; 
   }
+}
+
+class ServiceModel {
+  final String id;
+  final String title;
+  final String provider;
+  final String price;
+  final String rating;
+  final String category;
+  final String description;
+  final Color themeColor;
+
+  ServiceModel({
+    required this.id,
+    required this.title,
+    required this.provider,
+    required this.price,
+    required this.rating,
+    required this.category,
+    required this.description,
+    required this.themeColor,
+  });
 }
