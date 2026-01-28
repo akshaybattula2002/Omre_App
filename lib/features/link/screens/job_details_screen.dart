@@ -62,22 +62,10 @@ class JobDetailsScreen extends StatelessWidget {
                           width: 80,
                           height: 80,
                           decoration: BoxDecoration(
-                            color: isDark ? const Color(0xFF1E1E1E) : Colors.white,
+                            color: job.themeColor.withOpacity(0.1),
                             borderRadius: BorderRadius.circular(16),
-                            boxShadow: [
-                              BoxShadow(
-                                color: Colors.black.withOpacity(0.05),
-                                blurRadius: 10,
-                                offset: const Offset(0, 4),
-                              ),
-                            ],
-                            image: const DecorationImage(
-                              image: NetworkImage(
-                                'https://api.dicebear.com/7.x/initials/svg?seed=Company',
-                              ),
-                              fit: BoxFit.cover,
-                            ),
                           ),
+                          child: Icon(Icons.business, size: 40, color: job.themeColor),
                         ),
                         const SizedBox(height: 16),
                         Text(

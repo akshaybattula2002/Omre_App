@@ -24,24 +24,18 @@ class CategoryJobsScreen extends StatelessWidget {
     final isDark = Theme.of(context).brightness == Brightness.dark;
     
     // Filter jobs based on category name or title related keywords
+    // Filter jobs based on category name
     final categoryJobs = controller.allJobs.where((job) {
+      if (job.category.toLowerCase() == category.toLowerCase()) {
+        return true;
+      }
+      
+      // Fallback to title matching if category field is generic or missing (robustness)
       final title = job.title.toLowerCase();
       final cat = category.toLowerCase();
       
-      if (cat == 'marketing') {
-        return title.contains('marketing') || title.contains('growth') || title.contains('seo');
-      } else if (cat == 'sales') {
-        return title.contains('sales') || title.contains('business development') || title.contains('account');
-      } else if (cat == 'hr') {
-        return title.contains('hr') || title.contains('human resources') || title.contains('recruitment');
-      } else if (cat == 'product') {
-        return title.contains('product') || title.contains('ui') || title.contains('ux') || title.contains('design');
-      } else if (cat == 'operations') {
-        return title.contains('operations') || title.contains('project') || title.contains('manager') || title.contains('coordinator');
-      } else if (cat == 'education') {
-        return title.contains('education') || title.contains('teacher') || title.contains('school') || title.contains('learning');
-      } else if (cat == 'eng' || cat == 'engineering') {
-        return title.contains('engineer') || title.contains('dev') || title.contains('developer') || title.contains('cto') || title.contains('backend') || title.contains('frontend') || title.contains('ios') || title.contains('ml');
+      if (cat == 'eng' || cat == 'engineering') {
+        return title.contains('engineer') || title.contains('dev') || title.contains('developer');
       }
       
       return title.contains(cat);
