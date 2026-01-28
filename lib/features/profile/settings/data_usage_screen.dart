@@ -1,30 +1,69 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import '../../../core/theme/palette.dart';
+import 'data_usage_controller.dart';
 
 class DataUsageScreen extends StatelessWidget {
   const DataUsageScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
+    final controller = Get.put(DataUsageController());
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+
+    final downloadOptions = ['Never', 'Wi-Fi only', 'Wi-Fi and Cellular'];
+    final autoplayOptions = ['Never', 'On Wi-Fi only', 'On Wi-Fi and Cellular'];
+
     return Scaffold(
       appBar: AppBar(
         title: const Text('Data Usage', style: TextStyle(fontWeight: FontWeight.bold)),
         elevation: 0,
+        backgroundColor: Colors.transparent,
       ),
       body: ListView(
         children: [
           _buildSection('Mobile Data', [
-            _buildToggle('Use Less Mobile Data', true, 'Lower resolution for videos and images when on cellular.'),
-            _buildToggle('High-Quality Uploads', false, 'Always upload photos and videos in highest quality.'),
+            Obx(() => _buildToggle(
+              'Use Less Mobile Data', 
+              controller.useLessMobileData.value, 
+              'Lower resolution for videos and images when on cellular.',
+              controller.toggleUseLessMobileData,
+            )),
+            Obx(() => _buildToggle(
+              'High-Quality Uploads', 
+              controller.highQualityUploads.value, 
+              'Always upload photos and videos in highest quality.',
+              controller.toggleHighQualityUploads,
+            )),
           ]),
           _buildSection('Media Auto-Download', [
-            _buildTile('Photos', 'Wi-Fi and Cellular'),
-            _buildTile('Audio', 'Wi-Fi only'),
-            _buildTile('Videos', 'Wi-Fi only'),
-            _buildTile('Documents', 'Wi-Fi only'),
+            Obx(() => _buildTile(
+              'Photos', 
+              controller.photosDownload.value,
+              () => controller.showSelectionDialog('Photos', controller.photosDownload, downloadOptions),
+            )),
+            Obx(() => _buildTile(
+              'Audio', 
+              controller.audioDownload.value,
+              () => controller.showSelectionDialog('Audio', controller.audioDownload, downloadOptions),
+            )),
+            Obx(() => _buildTile(
+              'Videos', 
+              controller.videosDownload.value,
+              () => controller.showSelectionDialog('Videos', controller.videosDownload, downloadOptions),
+            )),
+            Obx(() => _buildTile(
+              'Documents', 
+              controller.documentsDownload.value,
+              () => controller.showSelectionDialog('Documents', controller.documentsDownload, downloadOptions),
+            )),
           ]),
           _buildSection('Video Autoplay', [
-            _buildTile('Autoplay', 'On Wi-Fi only'),
+            Obx(() => _buildTile(
+              'Autoplay', 
+              controller.autoplay.value,
+              () => controller.showSelectionDialog('Autoplay', controller.autoplay, autoplayOptions),
+            )),
           ]),
         ],
       ),
@@ -44,29 +83,29 @@ class DataUsageScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildToggle(String title, bool value, String subtitle) {
+  Widget _buildToggle(String title, bool value, String subtitle, Function(bool) onChanged) {
     return ListTile(
       title: Text(title),
-      subtitle: Text(subtitle, style: const TextStyle(fontSize: 12)),
+      subtitle: Text(subtitle, style: const TextStyle(fontSize: 12, color: Colors.grey)),
       trailing: Switch(
         value: value,
-        onChanged: (val) {},
-        activeThumbColor: AppPalette.accentBlue,
+        onChanged: onChanged,
+        activeColor: AppPalette.accentBlue,
       ),
     );
   }
 
-  Widget _buildTile(String title, String value) {
+  Widget _buildTile(String title, String value, VoidCallback onTap) {
     return ListTile(
       title: Text(title),
       trailing: Row(
         mainAxisSize: MainAxisSize.min,
         children: [
-          Text(value, style: const TextStyle(color: Colors.grey)),
-          const Icon(Icons.chevron_right, size: 20),
+          Text(value, style: const TextStyle(color: Colors.grey, fontSize: 14)),
+          const Icon(Icons.chevron_right, size: 20, color: Colors.grey),
         ],
       ),
-      onTap: () {},
+      onTap: onTap,
     );
   }
 }

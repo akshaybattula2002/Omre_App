@@ -1,11 +1,22 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import '../../../../core/theme/palette.dart';
 
 class ExplorePostCard extends StatelessWidget {
   final Map<String, dynamic> post;
   final bool isDark;
+  final VoidCallback? onLike;
+  final VoidCallback? onComment;
+  final VoidCallback? onShare;
 
-  const ExplorePostCard({super.key, required this.post, required this.isDark});
+  const ExplorePostCard({
+    super.key, 
+    required this.post, 
+    required this.isDark,
+    this.onLike,
+    this.onComment,
+    this.onShare,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -73,26 +84,56 @@ class ExplorePostCard extends StatelessWidget {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Row(
-                children: [
-                  Icon(Icons.favorite_border, size: 20, color: isDark ? Colors.grey[400] : Colors.grey[600]),
-                  const SizedBox(width: 4),
-                  Text(post['likes'], style: TextStyle(fontSize: 12, color: isDark ? Colors.grey[400] : Colors.grey[600])),
-                ],
+              Obx(() {
+                 final isLiked = post['isLiked']?.value ?? false;
+                 final likes = post['likes']?.value ?? 0;
+                 return InkWell(
+                  onTap: onLike,
+                  borderRadius: BorderRadius.circular(20),
+                  child: Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Row(
+                      children: [
+                        Icon(
+                          isLiked ? Icons.favorite : Icons.favorite_border,
+                          size: 20,
+                          color: isLiked ? Colors.red : (isDark ? Colors.grey[400] : Colors.grey[600]),
+                        ),
+                        const SizedBox(width: 4),
+                        Text(
+                          '$likes', 
+                          style: TextStyle(fontSize: 12, color: isDark ? Colors.grey[400] : Colors.grey[600])
+                        ),
+                      ],
+                    ),
+                  ),
+                );
+              }),
+              InkWell(
+                onTap: onComment,
+                child: Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Row(
+                    children: [
+                      Icon(Icons.chat_bubble_outline, size: 20, color: isDark ? Colors.grey[400] : Colors.grey[600]),
+                      const SizedBox(width: 4),
+                      Obx(() => Text('${post['comments']}', style: TextStyle(fontSize: 12, color: isDark ? Colors.grey[400] : Colors.grey[600]))),
+                    ],
+                  ),
+                ),
               ),
-              Row(
-                children: [
-                  Icon(Icons.chat_bubble_outline, size: 20, color: isDark ? Colors.grey[400] : Colors.grey[600]),
-                  const SizedBox(width: 4),
-                  Text(post['comments'], style: TextStyle(fontSize: 12, color: isDark ? Colors.grey[400] : Colors.grey[600])),
-                ],
-              ),
-              Row(
-                children: [
-                  Icon(Icons.share_outlined, size: 20, color: isDark ? Colors.grey[400] : Colors.grey[600]),
-                  const SizedBox(width: 4),
-                  Text(post['shares'], style: TextStyle(fontSize: 12, color: isDark ? Colors.grey[400] : Colors.grey[600])),
-                ],
+              InkWell(
+                onTap: onShare,
+                child: Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Row(
+                    children: [
+                      Icon(Icons.share_outlined, size: 20, color: isDark ? Colors.grey[400] : Colors.grey[600]),
+                      const SizedBox(width: 4),
+                      Obx(() => Text('${post['shares']}', style: TextStyle(fontSize: 12, color: isDark ? Colors.grey[400] : Colors.grey[600]))),
+                    ],
+                  ),
+                ),
               ),
             ],
           ),

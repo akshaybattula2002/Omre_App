@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'controllers/orbit_controller.dart';
 import 'orbit_topic_detail_screen.dart';
+import 'orbit_create_topic_screen.dart';
 
 class OrbitHomeScreen extends StatelessWidget {
   const OrbitHomeScreen({super.key});
@@ -360,11 +361,7 @@ class OrbitHomeScreen extends StatelessWidget {
         child: InkWell(
           borderRadius: BorderRadius.circular(16),
           onTap: () {
-             Get.snackbar('Create Topic', 'Opening topic creation flow...', 
-                backgroundColor: const Color(0xFF1A1A1D), 
-                colorText: Colors.white,
-                snackPosition: SnackPosition.BOTTOM
-             );
+             Get.to(() => const OrbitCreateTopicScreen());
           },
           child: Center(
             child: Row(

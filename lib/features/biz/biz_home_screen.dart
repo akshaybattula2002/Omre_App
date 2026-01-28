@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import '../../core/constants/app_assets.dart';
 import 'controllers/biz_controller.dart';
 import 'product_screens.dart';
-import 'biz_management_screens.dart';
+import 'biz_management_screens.dart'; // Contains WalletScreen
 
 class BizHomeScreen extends StatelessWidget {
   const BizHomeScreen({super.key});
@@ -108,6 +109,7 @@ class BizHomeScreen extends StatelessWidget {
       ],
     );
   }
+
 
   Widget _buildStatsGrid(BizController controller, bool isDark) {
     return GridView.builder(

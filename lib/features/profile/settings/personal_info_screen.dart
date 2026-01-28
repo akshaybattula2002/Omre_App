@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'dart:io';
+import 'package:image_picker/image_picker.dart';
 import 'package:get/get.dart';
 import '../../../core/theme/palette.dart';
 import '../../../core/constants/app_assets.dart';
@@ -9,6 +11,20 @@ class ProfileController extends GetxController {
   final emailController = TextEditingController(text: 'alex.j@example.com');
   final phoneController = TextEditingController(text: '+1 (555) 123-4567');
   final bioController = TextEditingController(text: 'Digital Nomad | UI/UX Enthusiast');
+
+  final Rx<String?> profileImagePath = Rx<String?>(null);
+  final ImagePicker _picker = ImagePicker();
+
+  Future<void> pickImage() async {
+    try {
+      final XFile? image = await _picker.pickImage(source: ImageSource.gallery);
+      if (image != null) {
+        profileImagePath.value = image.path;
+      }
+    } catch (e) {
+      Get.snackbar('Error', 'Failed to pick image: $e', snackPosition: SnackPosition.BOTTOM);
+    }
+  }
 
   @override
   void onClose() {
@@ -43,16 +59,21 @@ class PersonalInfoScreen extends StatelessWidget {
           ),
         ],
       ),
-      body: SingleChildScrollView(
+      body: Obx(() => SingleChildScrollView(
         padding: const EdgeInsets.all(16),
         child: Column(
           children: [
-            const CircleAvatar(
-              radius: 50,
-              backgroundImage: AssetImage(AppAssets.avatar1),
+            GestureDetector(
+              onTap: controller.pickImage,
+              child: CircleAvatar(
+                radius: 50,
+                backgroundImage: controller.profileImagePath.value != null
+                    ? FileImage(File(controller.profileImagePath.value!)) as ImageProvider
+                    : const AssetImage(AppAssets.avatar1),
+              ),
             ),
             TextButton(
-              onPressed: () {},
+              onPressed: controller.pickImage,
               child: const Text('Change Profile Photo', style: TextStyle(color: AppPalette.accentBlue, fontWeight: FontWeight.bold)),
             ),
             const SizedBox(height: 24),
@@ -63,7 +84,7 @@ class PersonalInfoScreen extends StatelessWidget {
             _buildEditField('Bio', controller.bioController, isDark, maxLines: 3),
           ],
         ),
-      ),
+      )),
     );
   }
 

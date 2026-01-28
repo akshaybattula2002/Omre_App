@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
-
-import 'package:omre/core/constants/app_assets.dart';
 import 'package:get/get.dart';
+import 'package:webview_flutter/webview_flutter.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
@@ -10,51 +9,46 @@ class SplashScreen extends StatefulWidget {
   State<SplashScreen> createState() => _SplashScreenState();
 }
 
-class _SplashScreenState extends State<SplashScreen> with SingleTickerProviderStateMixin {
-  late AnimationController _controller;
-  late Animation<double> _animation;
+class _SplashScreenState extends State<SplashScreen> {
+  late final WebViewController _controller;
 
   @override
   void initState() {
     super.initState();
-    _controller = AnimationController(
-      vsync: this,
-      duration: const Duration(milliseconds: 1500),
-    );
-    _animation = CurvedAnimation(
-      parent: _controller,
-      curve: Curves.easeIn,
-    );
+    
+    _controller = WebViewController()
+      ..setJavaScriptMode(JavaScriptMode.unrestricted)
+      ..setBackgroundColor(const Color(0xFF020000))
+      ..setNavigationDelegate(
+        NavigationDelegate(
+          onPageFinished: (String url) {},
+        ),
+      )
+      ..addJavaScriptChannel(
+        'SplashComp',
+        onMessageReceived: (JavaScriptMessage message) {
+          if (message.message == 'completed') {
+            // Optional: Keep this if the video finishes early
+            Get.offAllNamed('/login');
+          }
+        },
+      )
+      ..loadFlutterAsset('assets/html/splash_animation.html');
 
-    _controller.forward();
-
-    Future.delayed(const Duration(seconds: 3), () {
-      Get.offAllNamed('/login');
+    // Force navigation after 7 seconds
+    Future.delayed(const Duration(seconds: 7), () {
+      if (Get.currentRoute == '/splash') {
+        Get.offAllNamed('/login');
+      }
     });
-  }
-
-  @override
-  void dispose() {
-    _controller.dispose();
-    super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
-      body: Center(
-        child: FadeTransition(
-          opacity: _animation,
-          child: ScaleTransition(
-            scale: _animation,
-            child: Image.asset(
-              AppAssets.logoLight,
-              width: 200,
-              height: 200,
-            ),
-          ),
-        ),
+      backgroundColor: const Color(0xFF020000),
+      body: SafeArea(
+        child: WebViewWidget(controller: _controller),
       ),
     );
   }

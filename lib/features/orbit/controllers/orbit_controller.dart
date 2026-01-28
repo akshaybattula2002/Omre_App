@@ -219,4 +219,8 @@ class OrbitController extends GetxController {
   void updateSearch(String query) {
     searchQuery.value = query;
   }
+
+  void addTopic(OrbitTopic topic) {
+    allTopics.insert(0, topic);
+  }
 }

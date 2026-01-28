@@ -3,8 +3,49 @@ import 'package:get/get.dart';
 import '../../../core/constants/app_assets.dart';
 import '../../../core/theme/palette.dart';
 
-class ShortsCommentsSheet extends StatelessWidget {
+class ShortsCommentsSheet extends StatefulWidget {
   const ShortsCommentsSheet({super.key});
+
+  @override
+  State<ShortsCommentsSheet> createState() => _ShortsCommentsSheetState();
+}
+
+class _ShortsCommentsSheetState extends State<ShortsCommentsSheet> {
+  final TextEditingController _commentController = TextEditingController();
+  final List<Map<String, dynamic>> _comments = List.generate(
+    15,
+    (index) => {
+      'username': '@user_$index',
+      'avatar': AppAssets.avatar1,
+      'time': '2h ago',
+      'text': 'This is an amazing short! Really enjoying the content quality from OMRE. 🔥✨',
+      'likes': 24,
+    },
+  );
+
+  void _addComment() {
+    if (_commentController.text.trim().isEmpty) return;
+
+    setState(() {
+      _comments.insert(0, {
+        'username': '@you',
+        'avatar': AppAssets.avatar2, // Utilizing a different avatar for 'you'
+        'time': 'Just now',
+        'text': _commentController.text.trim(),
+        'likes': 0,
+      });
+      _commentController.clear();
+    });
+    
+    // Dismiss keyboard
+    FocusScope.of(context).unfocus();
+  }
+
+  @override
+  void dispose() {
+    _commentController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -34,7 +75,7 @@ class ShortsCommentsSheet extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Text(
-                '852 Comments',
+                '${_comments.length} Comments',
                 style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: textColor),
               ),
               IconButton(
@@ -46,8 +87,9 @@ class ShortsCommentsSheet extends StatelessWidget {
           const Divider(),
           Expanded(
             child: ListView.builder(
-              itemCount: 15,
+              itemCount: _comments.length,
               itemBuilder: (context, index) {
+                final comment = _comments[index];
                 return Padding(
                   padding: const EdgeInsets.symmetric(vertical: 12.0),
                   child: Row(
@@ -55,7 +97,7 @@ class ShortsCommentsSheet extends StatelessWidget {
                     children: [
                       CircleAvatar(
                         radius: 18,
-                        backgroundImage: AssetImage(AppAssets.avatar1),
+                        backgroundImage: AssetImage(comment['avatar']),
                       ),
                       const SizedBox(width: 12),
                       Expanded(
@@ -65,19 +107,19 @@ class ShortsCommentsSheet extends StatelessWidget {
                             Row(
                               children: [
                                 Text(
-                                  '@user_$index',
+                                  comment['username'],
                                   style: TextStyle(color: Colors.grey[600], fontSize: 13, fontWeight: FontWeight.bold),
                                 ),
                                 const SizedBox(width: 8),
                                 Text(
-                                  '2h ago',
+                                  comment['time'],
                                   style: TextStyle(color: Colors.grey[500], fontSize: 11),
                                 ),
                               ],
                             ),
                             const SizedBox(height: 4),
                             Text(
-                              'This is an amazing short! Really enjoying the content quality from OMRE. 🔥✨',
+                              comment['text'],
                               style: TextStyle(color: textColor, fontSize: 14),
                             ),
                             const SizedBox(height: 8),
@@ -85,7 +127,7 @@ class ShortsCommentsSheet extends StatelessWidget {
                               children: [
                                 Icon(Icons.favorite_border, size: 16, color: Colors.grey[500]),
                                 const SizedBox(width: 4),
-                                Text('24', style: TextStyle(color: Colors.grey[500], fontSize: 12)),
+                                Text('${comment['likes']}', style: TextStyle(color: Colors.grey[500], fontSize: 12)),
                                 const SizedBox(width: 16),
                                 Text('Reply', style: TextStyle(color: Colors.grey[500], fontSize: 12, fontWeight: FontWeight.bold)),
                               ],
@@ -119,18 +161,20 @@ class ShortsCommentsSheet extends StatelessWidget {
                       borderRadius: BorderRadius.circular(24),
                     ),
                     child: TextField(
+                      controller: _commentController,
                       style: TextStyle(color: textColor),
                       decoration: const InputDecoration(
                         hintText: 'Add a comment...',
                         border: InputBorder.none,
                       ),
+                      onSubmitted: (_) => _addComment(),
                     ),
                   ),
                 ),
                 const SizedBox(width: 8),
                 IconButton(
                   icon: Icon(Icons.send, color: AppPalette.accentBlue),
-                  onPressed: () {},
+                  onPressed: _addComment,
                 ),
               ],
             ),

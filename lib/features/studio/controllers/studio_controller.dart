@@ -5,6 +5,8 @@ import '../studio_comments_screen.dart';
 import '../video_upload_screen.dart';
 import '../channel_content_screen.dart';
 
+import '../analytics_screen.dart';
+
 class StudioController extends GetxController {
   final subscribers = '12.4K'.obs;
   final totalViews = '45.2K'.obs;
@@ -25,8 +27,7 @@ class StudioController extends GetxController {
   }
 
   void openAnalytics() {
-     // Placeholder for Analytics
-     Get.snackbar('Coming Soon', 'Analytics feature is under development.', snackPosition: SnackPosition.BOTTOM);
+     Get.to(() => const AnalyticsScreen());
   }
 
   void openComments() {
