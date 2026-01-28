@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:share_plus/share_plus.dart';
 import '../../core/theme/palette.dart';
 import 'controllers/explore_controller.dart';
 import 'widgets/explore_post_card.dart';
@@ -7,6 +8,8 @@ import 'widgets/explore_video_card.dart';
 import 'widgets/explore_sound_tile.dart';
 import 'widgets/explore_channel_card.dart';
 import 'widgets/explore_user_card.dart';
+import '../video/video_player_screen.dart';
+import '../video/channel_profile_screen.dart';
 
 class ExploreScreen extends StatelessWidget {
   const ExploreScreen({super.key});
@@ -105,7 +108,51 @@ class ExploreScreen extends StatelessWidget {
       padding: const EdgeInsets.all(16),
       itemCount: controller.posts.length,
       itemBuilder: (context, index) {
-        return ExplorePostCard(post: controller.posts[index], isDark: isDark);
+        return ExplorePostCard(
+          post: controller.posts[index], 
+          isDark: isDark,
+          onLike: () => controller.toggleLike(index),
+          onShare: () {
+            controller.incrementShare(index);
+            Share.share("${controller.posts[index]['content']} \n\nCheck this out on OMRE!");
+          },
+          onComment: () {
+             // Simple bottom sheet for comments
+             Get.bottomSheet(
+                Container(
+                  decoration: BoxDecoration(
+                    color: isDark ? const Color(0xFF1E1E1E) : Colors.white,
+                    borderRadius: const BorderRadius.vertical(top: Radius.circular(20)),
+                  ),
+                  padding: const EdgeInsets.all(16),
+                  height: 400,
+                  child: Column(
+                    children: [
+                      Container(
+                        width: 40, height: 4,
+                        margin: const EdgeInsets.only(bottom: 20),
+                        decoration: BoxDecoration(
+                          color: isDark ? Colors.grey[700] : Colors.grey[300],
+                          borderRadius: BorderRadius.circular(2)
+                        ),
+                      ),
+                      Text("Comments", style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: isDark ? Colors.white : Colors.black)),
+                      const SizedBox(height: 16),
+                      Expanded(
+                        child: Center(
+                          child: Text(
+                            "No comments yet.\nBe the first to comment!", 
+                            textAlign: TextAlign.center,
+                            style: TextStyle(color: isDark ? Colors.grey[400] : Colors.grey[600])
+                          )
+                        )
+                      ),
+                    ],
+                  ),
+                )
+             );
+          },
+        );
       },
     );
   }
@@ -115,7 +162,26 @@ class ExploreScreen extends StatelessWidget {
       padding: const EdgeInsets.all(16),
       itemCount: controller.videos.length,
       itemBuilder: (context, index) {
-        return ExploreVideoCard(video: controller.videos[index], isDark: isDark);
+        return ExploreVideoCard(
+          video: controller.videos[index], 
+          isDark: isDark,
+          onSave: () => controller.toggleVideoSave(index),
+          onShare: () {
+             Share.share("${controller.videos[index]['title']} \n\nCheck this out on OMRE!");
+          },
+          onTap: () {
+            final video = controller.videos[index];
+            Get.to(() => VideoPlayerScreen(
+              title: video['title'],
+              channel: video['channel'],
+              views: video['views'],
+              time: video['time'],
+              thumbnailUrl: video['thumbnail'],
+              avatarColor: video['avatarColor'],
+              videoUrl: video['videoUrl'],
+            ));
+          },
+        );
       },
     );
   }
@@ -125,7 +191,12 @@ class ExploreScreen extends StatelessWidget {
       padding: const EdgeInsets.all(16),
       itemCount: controller.sounds.length,
       itemBuilder: (context, index) {
-        return ExploreSoundTile(sound: controller.sounds[index], isDark: isDark);
+        return ExploreSoundTile(
+          sound: controller.sounds[index], 
+          isDark: isDark,
+          onPlay: () => controller.toggleSoundPlay(index),
+          onSave: () => controller.toggleSoundSave(index),
+        );
       },
     );
   }
@@ -145,6 +216,13 @@ class ExploreScreen extends StatelessWidget {
           channel: controller.channels[index], 
           isDark: isDark,
           onSubscribe: () => controller.toggleSubscribe(index),
+          onTap: () {
+            final channel = controller.channels[index];
+            Get.to(() => ChannelProfileScreen(
+              channelName: channel['name'],
+              avatarColor: channel['avatarColor'] ?? Colors.blue[100]!,
+            ));
+          },
         );
       },
     );
@@ -179,7 +257,53 @@ class ExploreScreen extends StatelessWidget {
 
             Text('Popular Posts', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18, color: isDark ? Colors.white : Colors.black)),
             const SizedBox(height: 12),
-            ...controller.posts.take(2).map((p) => ExplorePostCard(post: p, isDark: isDark)),
+            ...controller.posts.take(2).map((p) {
+              int index = controller.posts.indexOf(p);
+              return ExplorePostCard(
+                post: p, 
+                isDark: isDark,
+                onLike: () => controller.toggleLike(index),
+                onShare: () {
+                  controller.incrementShare(index);
+                  Share.share("${p['content']} \n\nCheck this out on OMRE!");
+                },
+                onComment: () {
+                    Get.bottomSheet(
+                    Container(
+                      decoration: BoxDecoration(
+                        color: isDark ? const Color(0xFF1E1E1E) : Colors.white,
+                        borderRadius: const BorderRadius.vertical(top: Radius.circular(20)),
+                      ),
+                      padding: const EdgeInsets.all(16),
+                      height: 400,
+                      child: Column(
+                        children: [
+                          Container(
+                            width: 40, height: 4,
+                            margin: const EdgeInsets.only(bottom: 20),
+                            decoration: BoxDecoration(
+                              color: isDark ? Colors.grey[700] : Colors.grey[300],
+                              borderRadius: BorderRadius.circular(2)
+                            ),
+                          ),
+                          Text("Comments", style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: isDark ? Colors.white : Colors.black)),
+                          const SizedBox(height: 16),
+                          Expanded(
+                            child: Center(
+                              child: Text(
+                                "No comments yet.\nBe the first to comment!", 
+                                textAlign: TextAlign.center,
+                                style: TextStyle(color: isDark ? Colors.grey[400] : Colors.grey[600])
+                              )
+                            )
+                          ),
+                        ],
+                      ),
+                    )
+                  );
+                },
+              );
+            }),
         ],
       ),
     );

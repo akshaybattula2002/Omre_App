@@ -4,6 +4,7 @@ import '../../core/constants/app_assets.dart';
 import '../../core/theme/palette.dart';
 import 'controllers/biz_controller.dart';
 import 'create_campaign_screen.dart';
+import 'wallet_history_screen.dart';
 
 class OrdersScreen extends GetView<BizController> {
   const OrdersScreen({super.key});
@@ -270,7 +271,7 @@ class WalletScreen extends GetView<BizController> {
                 const SizedBox(width: 12),
                 _buildWalletAction(Icons.add, 'Add Funds', Colors.green, isDark, onTap: () => _showAddFundsDialog(context)),
                 const SizedBox(width: 12),
-                _buildWalletAction(Icons.history, 'History', Colors.orange, isDark, onTap: () {}),
+                _buildWalletAction(Icons.history, 'History', Colors.orange, isDark, onTap: () => Get.to(() => const WalletHistoryScreen())),
               ],
             ),
             const SizedBox(height: 24),

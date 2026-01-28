@@ -1,10 +1,19 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 class ExploreSoundTile extends StatelessWidget {
   final Map<String, dynamic> sound;
   final bool isDark;
+  final VoidCallback? onPlay;
+  final VoidCallback? onSave;
 
-  const ExploreSoundTile({super.key, required this.sound, required this.isDark});
+  const ExploreSoundTile({
+    super.key, 
+    required this.sound, 
+    required this.isDark,
+    this.onPlay,
+    this.onSave,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -16,14 +25,24 @@ class ExploreSoundTile extends StatelessWidget {
         border: Border.all(color: Colors.grey.withOpacity(0.1)),
       ),
       child: ListTile(
-        leading: Container(
-          width: 40,
-          height: 40,
-          decoration: BoxDecoration(
-            color: Colors.blueAccent.withOpacity(0.1),
-            shape: BoxShape.circle,
-          ),
-          child: const Icon(Icons.play_arrow, color: Colors.blueAccent),
+        leading: GestureDetector(
+          onTap: onPlay,
+          child: Obx(() {
+            final rxIsPlaying = sound['isPlaying'];
+            final isPlaying = rxIsPlaying is RxBool ? rxIsPlaying.value : false;
+             return Container(
+              width: 40,
+              height: 40,
+              decoration: BoxDecoration(
+                color: Colors.blueAccent.withOpacity(0.1),
+                shape: BoxShape.circle,
+              ),
+              child: Icon(
+                isPlaying ? Icons.pause : Icons.play_arrow, 
+                color: Colors.blueAccent
+              ),
+            );
+          }),
         ),
         title: Text(
           sound['title'],
@@ -40,10 +59,17 @@ class ExploreSoundTile extends StatelessWidget {
             color: isDark ? Colors.grey[400] : Colors.grey[600],
           ),
         ),
-        trailing: IconButton(
-          icon: Icon(Icons.bookmark_border, color: isDark ? Colors.grey[400] : Colors.grey[600]),
-          onPressed: () {},
-        ),
+        trailing: Obx(() {
+           final rxIsSaved = sound['isSaved'];
+           final isSaved = rxIsSaved is RxBool ? rxIsSaved.value : false;
+           return IconButton(
+            icon: Icon(
+              isSaved ? Icons.bookmark : Icons.bookmark_border,
+              color: isSaved ? Colors.blueAccent : (isDark ? Colors.grey[400] : Colors.grey[600]),
+            ),
+            onPressed: onSave,
+          );
+        }),
       ),
     );
   }

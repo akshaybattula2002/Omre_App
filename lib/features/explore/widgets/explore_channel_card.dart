@@ -5,12 +5,14 @@ class ExploreChannelCard extends StatelessWidget {
   final Map<String, dynamic> channel;
   final bool isDark;
   final VoidCallback onSubscribe;
+  final VoidCallback? onTap;
 
   const ExploreChannelCard({
     super.key,
     required this.channel,
     required this.isDark,
     required this.onSubscribe,
+    this.onTap,
   });
 
   @override
@@ -31,33 +33,41 @@ class ExploreChannelCard extends StatelessWidget {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          CircleAvatar(
-            radius: 30,
-            backgroundImage: AssetImage(channel['thumbnail']),
-          ),
-          const SizedBox(height: 12),
-          Text(
-            channel['name'],
-            textAlign: TextAlign.center,
-            style: TextStyle(
-              fontWeight: FontWeight.bold,
-              fontSize: 16,
-              color: isDark ? Colors.white : Colors.black,
-            ),
-            maxLines: 1,
-            overflow: TextOverflow.ellipsis,
-          ),
-          const SizedBox(height: 4),
-          Text(
-            '${channel['subscribers']} Subs',
-            style: TextStyle(
-              fontSize: 12,
-              color: isDark ? Colors.grey[400] : Colors.grey[600],
+          GestureDetector(
+            onTap: onTap,
+            child: Column(
+              children: [
+                CircleAvatar(
+                  radius: 30,
+                  backgroundImage: AssetImage(channel['thumbnail']),
+                ),
+                const SizedBox(height: 12),
+                Text(
+                  channel['name'],
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                    fontSize: 16,
+                    color: isDark ? Colors.white : Colors.black,
+                  ),
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                ),
+                const SizedBox(height: 4),
+                Text(
+                  '${channel['subscribers']} Subs',
+                  style: TextStyle(
+                    fontSize: 12,
+                    color: isDark ? Colors.grey[400] : Colors.grey[600],
+                  ),
+                ),
+              ],
             ),
           ),
           const SizedBox(height: 12),
           Obx(() {
-            final isSubscribed = channel['isSubscribed'].value;
+            final rxIsSubscribed = channel['isSubscribed'];
+            final isSubscribed = rxIsSubscribed is RxBool ? rxIsSubscribed.value : false;
             return SizedBox(
               width: double.infinity,
               height: 36,

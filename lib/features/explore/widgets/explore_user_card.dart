@@ -43,7 +43,8 @@ class ExploreUserCard extends StatelessWidget {
           ),
         ),
         trailing: Obx(() {
-          final isFollowing = user['isFollowing'].value;
+          final rxIsFollowing = user['isFollowing'];
+          final isFollowing = rxIsFollowing is RxBool ? rxIsFollowing.value : false;
           return SizedBox(
             height: 32,
             child: ElevatedButton(

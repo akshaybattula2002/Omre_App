@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'video_player_screen.dart';
+import 'playlist_details_screen.dart';
+import '../shorts/shorts_screen.dart';
 import '../../core/constants/app_assets.dart';
 
 class ChannelProfileScreen extends StatefulWidget {
@@ -203,28 +205,31 @@ class _ChannelProfileScreenState extends State<ChannelProfileScreen> with Single
       ),
       itemCount: 12,
       itemBuilder: (context, index) {
-        return Stack(
-          fit: StackFit.expand,
-          children: [
-            ClipRRect(
-              borderRadius: BorderRadius.circular(8),
-              child: Image.asset(
-                AppAssets.getRandomPost(),
-                fit: BoxFit.cover,
+        return GestureDetector(
+          onTap: () => Get.to(() => const ShortsScreen()),
+          child: Stack(
+            fit: StackFit.expand,
+            children: [
+              ClipRRect(
+                borderRadius: BorderRadius.circular(8),
+                child: Image.asset(
+                  AppAssets.getRandomPost(),
+                  fit: BoxFit.cover,
+                ),
               ),
-            ),
-            Positioned(
-              bottom: 8,
-              left: 8,
-              child: Row(
-                children: [
-                  const Icon(Icons.play_arrow, color: Colors.white, size: 16),
-                  const SizedBox(width: 4),
-                  Text('${(index + 1) * 12}K', style: const TextStyle(color: Colors.white, fontSize: 12, fontWeight: FontWeight.bold)),
-                ],
+              Positioned(
+                bottom: 8,
+                left: 8,
+                child: Row(
+                  children: [
+                    const Icon(Icons.play_arrow, color: Colors.white, size: 16),
+                    const SizedBox(width: 4),
+                    Text('${(index + 1) * 12}K', style: const TextStyle(color: Colors.white, fontSize: 12, fontWeight: FontWeight.bold)),
+                  ],
+                ),
               ),
-            ),
-          ],
+            ],
+          ),
         );
       },
     );
@@ -243,47 +248,50 @@ class _ChannelProfileScreenState extends State<ChannelProfileScreen> with Single
       itemCount: playlists.length,
       itemBuilder: (context, index) {
         final playlist = playlists[index];
-        return Padding(
-          padding: const EdgeInsets.only(bottom: 20),
-          child: Row(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Stack(
-                alignment: Alignment.centerRight,
-                children: [
-                  ClipRRect(
-                    borderRadius: BorderRadius.circular(8),
-                    child: Image.asset(playlist['thumbnail'] as String, width: 140, height: 80, fit: BoxFit.cover),
-                  ),
-                  Container(
-                    width: 50,
-                    height: 80,
-                    decoration: BoxDecoration(
-                      color: Colors.black.withOpacity(0.6),
-                      borderRadius: const BorderRadius.only(topRight: Radius.circular(8), bottomRight: Radius.circular(8)),
-                    ),
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Text('${playlist['count']}', style: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold)),
-                        const Icon(Icons.playlist_play, color: Colors.white),
-                      ],
-                    ),
-                  ),
-                ],
-              ),
-              const SizedBox(width: 16),
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
+        return GestureDetector(
+          onTap: () => Get.to(() => PlaylistDetailsScreen(playlist: playlist)),
+          child: Padding(
+            padding: const EdgeInsets.only(bottom: 20),
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Stack(
+                  alignment: Alignment.centerRight,
                   children: [
-                    Text(playlist['name'] as String, style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 15)),
-                    const SizedBox(height: 4),
-                    Text('View full playlist', style: TextStyle(color: theme.hintColor, fontSize: 13)),
+                    ClipRRect(
+                      borderRadius: BorderRadius.circular(8),
+                      child: Image.asset(playlist['thumbnail'] as String, width: 140, height: 80, fit: BoxFit.cover),
+                    ),
+                    Container(
+                      width: 50,
+                      height: 80,
+                      decoration: BoxDecoration(
+                        color: Colors.black.withOpacity(0.6),
+                        borderRadius: const BorderRadius.only(topRight: Radius.circular(8), bottomRight: Radius.circular(8)),
+                      ),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Text('${playlist['count']}', style: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold)),
+                          const Icon(Icons.playlist_play, color: Colors.white),
+                        ],
+                      ),
+                    ),
                   ],
                 ),
-              ),
-            ],
+                const SizedBox(width: 16),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(playlist['name'] as String, style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 15)),
+                      const SizedBox(height: 4),
+                      Text('View full playlist', style: TextStyle(color: theme.hintColor, fontSize: 13)),
+                    ],
+                  ),
+                ),
+              ],
+            ),
           ),
         );
       },

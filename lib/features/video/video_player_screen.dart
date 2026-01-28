@@ -35,6 +35,7 @@ class _VideoPlayerScreenState extends State<VideoPlayerScreen> {
   bool _isLiked = false;
   bool _isDisliked = false;
   bool _isSubscribed = false;
+  bool _isSaved = false;
   
   late VideoPlayerController _videoPlayerController;
   ChewieController? _chewieController;
@@ -51,24 +52,39 @@ class _VideoPlayerScreenState extends State<VideoPlayerScreen> {
     } else {
       _videoPlayerController = VideoPlayerController.asset(widget.videoUrl);
     }
-    await _videoPlayerController.initialize();
     
-    setState(() {
-      _chewieController = ChewieController(
-        videoPlayerController: _videoPlayerController,
-        autoPlay: true,
-        looping: false,
-        aspectRatio: _videoPlayerController.value.aspectRatio,
-        errorBuilder: (context, errorMessage) {
-          return Center(
-            child: Text(
-              errorMessage,
-              style: const TextStyle(color: Colors.white),
-            ),
-          );
-        },
-      );
-    });
+    try {
+      await _videoPlayerController.initialize();
+      setState(() {
+        _chewieController = ChewieController(
+          videoPlayerController: _videoPlayerController,
+          autoPlay: true,
+          looping: false,
+          aspectRatio: _videoPlayerController.value.aspectRatio,
+          showControls: true,
+          allowFullScreen: true,
+          allowMuting: true,
+          allowPlaybackSpeedChanging: true,
+          materialProgressColors: ChewieProgressColors(
+            playedColor: Colors.red,
+            handleColor: Colors.red,
+            backgroundColor: Colors.grey,
+            bufferedColor: Colors.white.withOpacity(0.5),
+          ),
+          placeholder: Image.asset(widget.thumbnailUrl, fit: BoxFit.cover),
+          errorBuilder: (context, errorMessage) {
+            return Center(
+              child: Text(
+                errorMessage,
+                style: const TextStyle(color: Colors.white),
+              ),
+            );
+          },
+        );
+      });
+    } catch (e) {
+      debugPrint("Error initializing video: $e");
+    }
   }
 
   @override
@@ -102,19 +118,29 @@ class _VideoPlayerScreenState extends State<VideoPlayerScreen> {
             // Video Player
             Stack(
               children: [
-                Container(
-                  height: 240,
-                  width: double.infinity,
-                  color: Colors.black,
-                  child: _chewieController != null && _chewieController!.videoPlayerController.value.isInitialized
-                      ? Chewie(controller: _chewieController!)
-                      : const Center(child: CircularProgressIndicator()),
+                GestureDetector(
+                  onDoubleTap: () => _chewieController?.enterFullScreen(),
+                  child: Container(
+                    height: 240,
+                    width: double.infinity,
+                    color: Colors.black,
+                    child: _chewieController != null && _chewieController!.videoPlayerController.value.isInitialized
+                        ? Chewie(controller: _chewieController!)
+                        : const Center(child: CircularProgressIndicator()),
+                  ),
                 ),
+                if (_chewieController != null)
+                  Positioned(
+                    bottom: 10,
+                    right: 10,
+                    child: IconButton(
+                      icon: const Icon(Icons.fullscreen, color: Colors.white, size: 28),
+                      onPressed: () => _chewieController?.enterFullScreen(),
+                    ),
+                  ),
               ],
             ),
             
-            // Info & Recommendations
-
             // Info & Recommendations
             Expanded(
               child: SingleChildScrollView(
@@ -136,7 +162,6 @@ class _VideoPlayerScreenState extends State<VideoPlayerScreen> {
                               height: 1.3,
                             ),
                           ),
-                          const SizedBox(height: 8),
                           const SizedBox(height: 8),
                           Row(
                             children: [
@@ -171,18 +196,25 @@ class _VideoPlayerScreenState extends State<VideoPlayerScreen> {
                                     ],
                                   ),
                                 ),
-                                Container(
-                                  decoration: BoxDecoration(
-                                    color: isDark ? Colors.white : Colors.black,
-                                    borderRadius: BorderRadius.circular(20),
-                                  ),
-                                  padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-                                  child: Text(
-                                    _isSubscribed ? 'Subscribed' : 'Subscribe',
-                                    style: TextStyle(
-                                      color: isDark ? Colors.black : Colors.white,
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: 14,
+                                GestureDetector(
+                                  onTap: () => setState(() => _isSubscribed = !_isSubscribed),
+                                  child: Container(
+                                    decoration: BoxDecoration(
+                                      color: _isSubscribed 
+                                          ? (isDark ? Colors.grey[800] : Colors.grey[300]) 
+                                          : (isDark ? Colors.white : Colors.black),
+                                      borderRadius: BorderRadius.circular(20),
+                                    ),
+                                    padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                                    child: Text(
+                                      _isSubscribed ? 'Subscribed' : 'Subscribe',
+                                      style: TextStyle(
+                                        color: _isSubscribed 
+                                            ? (isDark ? Colors.white : Colors.black) 
+                                            : (isDark ? Colors.black : Colors.white),
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 14,
+                                      ),
                                     ),
                                   ),
                                 ),
@@ -221,7 +253,6 @@ class _VideoPlayerScreenState extends State<VideoPlayerScreen> {
                     
                     const Divider(),
                     
-                    // Comments Preview
                     // Comments Preview
                     GestureDetector(
                       onTap: () {
@@ -275,13 +306,13 @@ class _VideoPlayerScreenState extends State<VideoPlayerScreen> {
                         children: [
                            Text('Up Next', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: textColor)),
                            const SizedBox(height: 16),
-                           _buildRecommendedVideo('Advance Flutter Animations', 'Flutter Dev', '45K views', '1 day ago', AppAssets.thumbnail1, isDark, textColor),
-                           _buildRecommendedVideo('Dart Macros: Everything You Need to Know', 'Dart Side', '22K views', '3 days ago', AppAssets.thumbnail2, isDark, textColor),
-                           _buildRecommendedVideo('State Management Showdown 2026', 'Code With Me', '110K views', '1 week ago', AppAssets.thumbnail3, isDark, textColor),
-                           _buildRecommendedVideo('System Design Interview Guide', 'TechLead', '500K views', '1 month ago', AppAssets.thumbnail1, isDark, textColor),
-                           _buildRecommendedVideo('Mastering Impeller: The New Renderer', 'Flutter Team', '89K views', '2 weeks ago', AppAssets.thumbnail2, isDark, textColor),
-                           _buildRecommendedVideo('Server Driven UI in Flutter', 'Dev Hub', '34K views', '4 days ago', AppAssets.thumbnail3, isDark, textColor),
-                           _buildRecommendedVideo('Effective GetX Patterns', 'State Masters', '67K views', '1 week ago', AppAssets.thumbnail1, isDark, textColor),
+                           _buildRecommendedVideo('Advance Flutter Animations', 'Flutter Dev', '45K views', '1 day ago', AppAssets.thumbnail1, isDark, textColor, AppAssets.sampleVideo2),
+                           _buildRecommendedVideo('Dart Macros: Everything You Need to Know', 'Dart Side', '22K views', '3 days ago', AppAssets.thumbnail2, isDark, textColor, AppAssets.sampleVideo3),
+                           _buildRecommendedVideo('State Management Showdown 2026', 'Code With Me', '110K views', '1 week ago', AppAssets.thumbnail3, isDark, textColor, AppAssets.sampleVideo),
+                           _buildRecommendedVideo('System Design Interview Guide', 'TechLead', '500K views', '1 month ago', AppAssets.thumbnail1, isDark, textColor, AppAssets.sampleVideo2),
+                           _buildRecommendedVideo('Mastering Impeller: The New Renderer', 'Flutter Team', '89K views', '2 weeks ago', AppAssets.thumbnail2, isDark, textColor, AppAssets.sampleVideo3),
+                           _buildRecommendedVideo('Server Driven UI in Flutter', 'Dev Hub', '34K views', '4 days ago', AppAssets.thumbnail3, isDark, textColor, AppAssets.sampleVideo),
+                           _buildRecommendedVideo('Effective GetX Patterns', 'State Masters', '67K views', '1 week ago', AppAssets.thumbnail1, isDark, textColor, AppAssets.sampleVideo2),
                         ],
                       ),
                     ),
@@ -294,12 +325,6 @@ class _VideoPlayerScreenState extends State<VideoPlayerScreen> {
       ),
     );
   }
-
-  bool _isSaved = false;
-  
-  // ... existing state variables ...
-
-  // ... (keep existing methods: initState, dispose, etc.)
 
   void _handleShare() {
     Get.bottomSheet(
@@ -355,7 +380,6 @@ class _VideoPlayerScreenState extends State<VideoPlayerScreen> {
       duration: const Duration(seconds: 2),
     );
     
-    // Simulate completion
     Future.delayed(const Duration(seconds: 2), () {
       Get.snackbar(
         'Downloaded',
@@ -399,28 +423,28 @@ class _VideoPlayerScreenState extends State<VideoPlayerScreen> {
     );
   }
 
-  Widget _buildRecommendedVideo(String title, String channel, String views, String time, String url, bool isDark, Color? textColor) {
-    return GestureDetector(
+  Widget _buildRecommendedVideo(String title, String channel, String views, String time, String tUrl, bool isDark, Color? textColor, String videoUrl) {
+    return InkWell(
       onTap: () {
         Get.off(() => VideoPlayerScreen(
           title: title,
           channel: channel,
           views: views,
           time: time,
-          thumbnailUrl: url,
-          avatarColor: Colors.blue[100]!, // Defaulting avatar color for recommendation
-          videoUrl: AppAssets.sampleVideo,
+          thumbnailUrl: tUrl,
+          avatarColor: Colors.blue[100]!, 
+          videoUrl: videoUrl,
         ));
       },
       child: Container(
-        margin: const EdgeInsets.only(bottom: 16),
+        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             ClipRRect(
               borderRadius: BorderRadius.circular(8),
               child: Image.asset(
-                url,
+                tUrl,
                 width: 140,
                 height: 80,
                 fit: BoxFit.cover,
@@ -443,7 +467,49 @@ class _VideoPlayerScreenState extends State<VideoPlayerScreen> {
                 ],
               ),
             ),
-            const Icon(Icons.more_vert, size: 16, color: Colors.grey),
+            IconButton(
+              icon: const Icon(Icons.more_vert, size: 18),
+              color: Colors.grey,
+              onPressed: () {
+                 Get.bottomSheet(
+                    Container(
+                      padding: const EdgeInsets.all(16),
+                      decoration: BoxDecoration(
+                        color: isDark ? const Color(0xFF1E1E1E) : Colors.white,
+                        borderRadius: const BorderRadius.vertical(top: Radius.circular(20)),
+                      ),
+                      child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          ListTile(
+                            leading: const Icon(Icons.watch_later_outlined),
+                            title: const Text('Save to Watch Later'),
+                            onTap: () {
+                              Get.back();
+                              Get.snackbar('Saved', 'Added to Watch Later');
+                            },
+                          ),
+                          ListTile(
+                            leading: const Icon(Icons.share_outlined),
+                            title: const Text('Share'),
+                            onTap: () {
+                              Get.back();
+                              _handleShare();
+                            },
+                          ),
+                          ListTile(
+                            leading: const Icon(Icons.not_interested),
+                            title: const Text('Not interested'),
+                            onTap: () {
+                              Get.back();
+                            },
+                          ),
+                        ],
+                      ),
+                    )
+                 );
+              },
+            ),
           ],
         ),
       ),
