@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import '../../core/theme/palette.dart';
+import 'live_streaming_screen.dart';
 
 class GoLiveScreen extends StatefulWidget {
   const GoLiveScreen({super.key});
@@ -14,6 +15,11 @@ class _GoLiveScreenState extends State<GoLiveScreen> with SingleTickerProviderSt
   final TextEditingController _titleController = TextEditingController();
   String _selectedGame = 'Neon Vanguard';
   String _selectedCategory = 'Gaming';
+  
+  // Camera Preview State
+  bool _isMicOn = true;
+  bool _isFlashOn = false;
+  bool _isFrontCamera = true;
 
   @override
   void initState() {
@@ -63,7 +69,13 @@ class _GoLiveScreenState extends State<GoLiveScreen> with SingleTickerProviderSt
                   child: Center(
                     child: FadeTransition(
                       opacity: _controller,
-                      child: const Icon(Icons.videocam_off, color: Colors.white38, size: 48),
+                      child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Icon(_isFrontCamera ? Icons.camera_front : Icons.camera_rear, color: Colors.white38, size: 48),
+                           if (!_isMicOn) const Icon(Icons.mic_off, color: Colors.redAccent, size: 24),
+                        ],
+                      ),
                     ),
                   ),
                 ),
@@ -87,11 +99,22 @@ class _GoLiveScreenState extends State<GoLiveScreen> with SingleTickerProviderSt
                   right: 16,
                   child: Row(
                     children: [
-                      _buildCameraAction(Icons.flip_camera_ios, isDark),
+                      _buildCameraAction(
+                        icon: Icons.flip_camera_ios,
+                        onTap: () => setState(() => _isFrontCamera = !_isFrontCamera),
+                      ),
                       const SizedBox(width: 12),
-                      _buildCameraAction(Icons.mic, isDark),
+                      _buildCameraAction(
+                        icon: _isMicOn ? Icons.mic : Icons.mic_off,
+                        color: _isMicOn ? Colors.white : Colors.redAccent,
+                         onTap: () => setState(() => _isMicOn = !_isMicOn),
+                      ),
                       const SizedBox(width: 12),
-                      _buildCameraAction(Icons.flash_on, isDark),
+                      _buildCameraAction(
+                        icon: _isFlashOn ? Icons.flash_on : Icons.flash_off,
+                        color: _isFlashOn ? Colors.yellow : Colors.white,
+                         onTap: () => setState(() => _isFlashOn = !_isFlashOn),
+                      ),
                     ],
                   ),
                 ),
@@ -166,7 +189,10 @@ class _GoLiveScreenState extends State<GoLiveScreen> with SingleTickerProviderSt
                      height: 56,
                      child: ElevatedButton(
                        onPressed: () {
-                         Get.snackbar('Coming Soon', 'Streaming services are being integrated!', backgroundColor: Colors.redAccent, colorText: Colors.white);
+                         Get.to(() => LiveStreamingScreen(
+                           streamTitle: _titleController.text,
+                           gameName: _selectedGame,
+                         ));
                        },
                        style: ElevatedButton.styleFrom(
                          backgroundColor: Colors.red,
@@ -187,11 +213,14 @@ class _GoLiveScreenState extends State<GoLiveScreen> with SingleTickerProviderSt
     );
   }
 
-  Widget _buildCameraAction(IconData icon, bool isDark) {
-    return Container(
-      padding: const EdgeInsets.all(10),
-      decoration: BoxDecoration(color: Colors.black54, shape: BoxShape.circle),
-      child: Icon(icon, color: Colors.white, size: 20),
+  Widget _buildCameraAction({required IconData icon, required VoidCallback onTap, Color color = Colors.white}) {
+    return GestureDetector(
+      onTap: onTap,
+      child: Container(
+        padding: const EdgeInsets.all(10),
+        decoration: const BoxDecoration(color: Colors.black54, shape: BoxShape.circle),
+        child: Icon(icon, color: color, size: 20),
+      ),
     );
   }
 }

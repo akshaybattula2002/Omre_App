@@ -215,7 +215,7 @@ class StoryViewerScreen extends GetView<StoryViewerController> {
                           );
                         }),
                         IconButton(
-                          icon: const Icon(Icons.send_outlined,
+                          icon: const Icon(Icons.share,
                               color: Colors.white),
                           onPressed: controller.shareStory,
                         ),

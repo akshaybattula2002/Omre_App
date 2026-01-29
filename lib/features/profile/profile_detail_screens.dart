@@ -1046,3 +1046,135 @@ class PolicyDetailScreen extends StatelessWidget {
     );
   }
 }
+
+class UserPostsScreen extends StatelessWidget {
+  const UserPostsScreen({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(title: const Text('Posts')),
+      body: GridView.builder(
+        padding: const EdgeInsets.all(1),
+        gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+          crossAxisCount: 3,
+          crossAxisSpacing: 1,
+          mainAxisSpacing: 1,
+        ),
+        itemCount: 20, // Mock count
+        itemBuilder: (context, index) {
+          return Image.asset(
+            AppAssets.getRandomPost(),
+            fit: BoxFit.cover,
+          );
+        },
+      ),
+    );
+  }
+}
+
+class FollowersScreen extends StatelessWidget {
+  const FollowersScreen({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(title: const Text('Followers')),
+      body: ListView.builder(
+        itemCount: 15,
+        itemBuilder: (context, index) {
+          return _UserListTile(
+            name: 'User $index',
+            subtitle: 'Started following you',
+            avatar: AppAssets.avatar1,
+            initiallyFollowing: false, // Prompt to follow back
+          );
+        },
+      ),
+    );
+  }
+}
+
+class FollowingScreen extends StatelessWidget {
+  const FollowingScreen({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(title: const Text('Following')),
+      body: ListView.builder(
+        itemCount: 12,
+        itemBuilder: (context, index) {
+           return _UserListTile(
+            name: 'Creator $index',
+            subtitle: 'Graphic Designer',
+            avatar: AppAssets.avatar2,
+            initiallyFollowing: true, // Already following
+          );
+        },
+      ),
+    );
+  }
+}
+
+class _UserListTile extends StatefulWidget {
+  final String name;
+  final String subtitle;
+  final String avatar;
+  final bool initiallyFollowing;
+
+  const _UserListTile({
+    required this.name,
+    required this.subtitle,
+    required this.avatar,
+    required this.initiallyFollowing,
+  });
+
+  @override
+  State<_UserListTile> createState() => _UserListTileState();
+}
+
+class _UserListTileState extends State<_UserListTile> {
+  late bool isFollowing;
+
+  @override
+  void initState() {
+    super.initState();
+    isFollowing = widget.initiallyFollowing;
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return ListTile(
+      leading: CircleAvatar(backgroundImage: AssetImage(widget.avatar)),
+      title: Text(widget.name, style: const TextStyle(fontWeight: FontWeight.bold)),
+      subtitle: Text(widget.subtitle),
+      trailing: isFollowing
+          ? OutlinedButton(
+              onPressed: () {
+                setState(() => isFollowing = false);
+                // Optional: Show snackbar "Unfollowed"
+              },
+              style: OutlinedButton.styleFrom(
+                fixedSize: const Size(90, 30),
+                padding: EdgeInsets.zero,
+                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+              ),
+              child: const Text('Following', style: TextStyle(fontSize: 12)),
+            )
+          : ElevatedButton(
+              onPressed: () {
+                setState(() => isFollowing = true);
+                // Optional: Show snackbar "Followed"
+              },
+              style: ElevatedButton.styleFrom(
+                backgroundColor: AppPalette.accentBlue,
+                fixedSize: const Size(90, 30),
+                padding: EdgeInsets.zero,
+                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+              ),
+              child: const Text('Follow', style: TextStyle(fontSize: 12, color: Colors.white)),
+            ),
+    );
+  }
+}

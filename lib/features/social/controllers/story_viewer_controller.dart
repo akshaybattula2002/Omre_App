@@ -2,6 +2,8 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import '../models/social_models.dart';
+import 'package:share_plus/share_plus.dart';
+import 'package:omre/core/theme/palette.dart';
 import './home_controller.dart';
 
 class StoryViewerController extends GetxController {
@@ -132,17 +134,190 @@ class StoryViewerController extends GetxController {
 
 
   void shareStory() {
-    // paused logic can be added here if needed
-    Get.showSnackbar(const GetSnackBar(
-      messageText: Text(
-        '🔗 Custom Share Dialog / Sheet',
-        textAlign: TextAlign.center,
-        style: TextStyle(color: Colors.white, fontSize: 16),
+    pauseTimer();
+    
+    // Collect unique users from posts to mock "friends"
+    final friends = homeController.posts.map((p) => {'name': p.username, 'avatar': p.avatarUrl}).toSet().toList();
+    // Track sent status for this specific session
+    final Set<String> sentUsers = {};
+
+    Get.bottomSheet(
+      DraggableScrollableSheet(
+        initialChildSize: 0.6,
+        minChildSize: 0.5,
+        maxChildSize: 0.9,
+        builder: (context, scrollController) {
+          return StatefulBuilder(
+            builder: (context, setState) {
+              return Container(
+                decoration: BoxDecoration(
+                  color: Get.theme.scaffoldBackgroundColor,
+                  borderRadius: const BorderRadius.vertical(top: Radius.circular(20)),
+                ),
+                child: Column(
+                  children: [
+                    // Handle
+                    Container(
+                      margin: const EdgeInsets.symmetric(vertical: 12),
+                      width: 40,
+                      height: 4,
+                      decoration: BoxDecoration(
+                        color: Colors.grey[600],
+                        borderRadius: BorderRadius.circular(2),
+                      ),
+                    ),
+                    // Search Bar
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                      child: TextField(
+                        decoration: InputDecoration(
+                          hintText: 'Search',
+                          prefixIcon: const Icon(Icons.search, color: Colors.grey),
+                          filled: true,
+                          fillColor: Get.isDarkMode ? Colors.grey[900] : Colors.grey[200],
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(12),
+                            borderSide: BorderSide.none,
+                          ),
+                          contentPadding: const EdgeInsets.symmetric(vertical: 0),
+                        ),
+                      ),
+                    ),
+                    const SizedBox(height: 16),
+                    // Friends Grid
+                    Expanded(
+                      child: GridView.builder(
+                        controller: scrollController,
+                        padding: const EdgeInsets.symmetric(horizontal: 16),
+                        gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                          crossAxisCount: 4,
+                          childAspectRatio: 0.6, // Taller for name + button
+                          crossAxisSpacing: 16,
+                          mainAxisSpacing: 16,
+                        ),
+                        itemCount: friends.length,
+                        itemBuilder: (context, index) {
+                          final friend = friends[index];
+                          final username = friend['name']!;
+                          final isSent = sentUsers.contains(username);
+  
+                          return Column(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              Stack(
+                                children: [
+                                  CircleAvatar(
+                                    radius: 30,
+                                    backgroundImage: AssetImage(friend['avatar']!),
+                                  ),
+                                  if (!isSent) // Show online indicator only if not sent involved? actually keep it
+                                  Positioned(
+                                    right: 0,
+                                    bottom: 0,
+                                    child: Container(
+                                      padding: const EdgeInsets.all(4),
+                                      decoration: const BoxDecoration(
+                                        color: Colors.green, // Online indicator mock
+                                        shape: BoxShape.circle,
+                                        border: Border(), 
+                                      ),
+                                      child: const SizedBox(width: 4, height: 4), 
+                                    ),
+                                  ),
+                                ],
+                              ),
+                              const SizedBox(height: 8),
+                              Text(
+                                username,
+                                style: const TextStyle(fontSize: 12, fontWeight: FontWeight.w500),
+                                maxLines: 1,
+                                overflow: TextOverflow.ellipsis,
+                              ),
+                              const SizedBox(height: 8),
+                              SizedBox(
+                                height: 28,
+                                width: 70,
+                                child: ElevatedButton(
+                                  onPressed: isSent ? null : () {
+                                    setState(() {
+                                      sentUsers.add(username);
+                                    });
+                                    // Optional toast/snackbar
+                                  },
+                                  style: ElevatedButton.styleFrom(
+                                    padding: EdgeInsets.zero,
+                                    backgroundColor: isSent ? Colors.grey[800] : AppPalette.accentBlue,
+                                    disabledBackgroundColor: Colors.grey.withOpacity(0.2),
+                                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+                                    elevation: 0,
+                                  ),
+                                  child: Text(
+                                    isSent ? 'Sent' : 'Send',
+                                    style: TextStyle(
+                                      fontSize: 11, 
+                                      color: isSent ? Colors.grey : Colors.white,
+                                      fontWeight: FontWeight.bold
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ],
+                          );
+                        },
+                      ),
+                    ),
+                    // Bottom Actions Divider
+                    const Divider(height: 1),
+                    // Bottom Actions
+                    Padding(
+                      padding: const EdgeInsets.all(16.0),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceAround,
+                        children: [
+                          _buildShareOption(Icons.share, 'Share to...', () {
+                            Get.back(); 
+                            Share.share('Check out this story by ${currentGroup.username}: ${currentStory.imageUrl}');
+                          }),
+                          _buildShareOption(Icons.copy, 'Copy link', () {
+                            Get.back();
+                            Get.snackbar('Copied', 'Link copied to clipboard');
+                          }),
+                          _buildShareOption(Icons.message_outlined, 'SMS', () {
+                             Get.back();
+                             Get.snackbar('SMS', 'Opening Messages...');
+                          }),
+                          _buildShareOption(Icons.more_horiz, 'More', () {}),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+              );
+            }
+          );
+        },
       ),
+      isScrollControlled: true,
       backgroundColor: Colors.transparent,
-      duration: Duration(seconds: 2),
-      animationDuration: Duration(milliseconds: 300),
-    ));
+    ).whenComplete(() => resumeTimer());
+  }
+
+  Widget _buildShareOption(IconData icon, String label, VoidCallback onTap) {
+    return GestureDetector(
+      onTap: onTap,
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          CircleAvatar(
+            radius: 24,
+            backgroundColor: Get.isDarkMode ? Colors.grey[800] : Colors.grey[200],
+            child: Icon(icon, color: Get.isDarkMode ? Colors.white : Colors.black, size: 24),
+          ),
+          const SizedBox(height: 8),
+          Text(label, style: const TextStyle(fontSize: 11)),
+        ],
+      ),
+    );
   }
 
   void _startTimer() {
