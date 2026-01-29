@@ -1,5 +1,6 @@
 import 'package:get/get.dart';
 import 'package:flutter/material.dart';
+import '../../../core/constants/app_assets.dart';
 
 class OrbitTopic {
   final String title;
@@ -111,6 +112,8 @@ class OrbitController extends GetxController {
     }).toList();
   }
 
+
+
   // Dynamic Post Data
   List<Map<String, dynamic>> getPostsForTopic(String title) {
     switch (title) {
@@ -125,7 +128,7 @@ class OrbitController extends GetxController {
             'content': "We need to distinguish between 'AGI alignment' and 'short-term bias mitigation'. Focusing only on the apocalypse scenario distracts from current algorithmic discrimination issues.",
             'reputation': 42,
             'agreements': 15,
-            'avatar': 'assets/images/avatar1.png',
+            'avatar': AppAssets.avatar1,
           },
           {
             'type': 'contributor',
@@ -135,7 +138,7 @@ class OrbitController extends GetxController {
             'tag': 'QUESTION',
             'content': "Has anyone read the latest EU AI Act draft? It seems to heavily penalize open-source models.",
             'hearts': 8,
-            'avatar': 'assets/images/avatar2.png',
+            'avatar': AppAssets.avatar2,
           },
           {
             'type': 'source',
@@ -145,7 +148,7 @@ class OrbitController extends GetxController {
             'tag': 'SOURCE',
             'content': "New paper published: 'Scalable Oversight for Large Language Models' by Anthropic.",
             'link': 'arxiv.org/abs/2211.03540',
-            'avatar': 'assets/images/avatar3.png',
+            'avatar': AppAssets.avatar3,
           },
         ];
       case 'Global Climate Action':
@@ -159,7 +162,7 @@ class OrbitController extends GetxController {
             'content': "Recent satellite data confirms accelerated ice sheet loss in Greenland. We are approaching a tipping point faster than predicted.",
             'reputation': 89,
             'agreements': 120,
-            'avatar': 'assets/images/avatar2.png',
+            'avatar': AppAssets.avatar2,
           },
           {
             'type': 'contributor',
@@ -169,7 +172,7 @@ class OrbitController extends GetxController {
             'tag': 'ACTION',
             'content': "Organizing a beach cleanup this Saturday in Santa Monica. Who's in?",
             'hearts': 45,
-            'avatar': 'assets/images/avatar1.png',
+            'avatar': AppAssets.avatar1,
           },
         ];
       case 'Premier League Tactics':
@@ -183,7 +186,7 @@ class OrbitController extends GetxController {
             'content': "The inverted full-back role completely dismantled the low block today. Creating overloads in midfield was key.",
             'reputation': 210,
             'agreements': 56,
-            'avatar': 'assets/images/avatar3.png',
+            'avatar': AppAssets.avatar3,
           },
           {
             'type': 'contributor',
@@ -193,7 +196,7 @@ class OrbitController extends GetxController {
             'tag': 'OPINION',
             'content': "VAR is ruining the flow of the game. That offside call was marginal at best.",
             'hearts': 12,
-            'avatar': 'assets/images/avatar2.png',
+            'avatar': AppAssets.avatar2,
           },
         ];
       default:
@@ -206,7 +209,7 @@ class OrbitController extends GetxController {
             'tag': 'HELLO',
             'content': "This topic is heating up! What are everyone's thoughts on the latest developments?",
             'hearts': 0,
-            'avatar': 'assets/images/avatar1.png',
+            'avatar': AppAssets.avatar1,
           },
         ];
     }

@@ -32,9 +32,21 @@ class ProfileScreen extends StatelessWidget {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
-              _StatItem(label: 'Posts', value: '128'),
-              _StatItem(label: 'Followers', value: '12.4k'),
-              _StatItem(label: 'Following', value: '450'),
+              _StatItem(
+                label: 'Posts', 
+                value: '128',
+                onTap: () => Get.to(() => const UserPostsScreen()),
+              ),
+              _StatItem(
+                label: 'Followers', 
+                value: '12.4k',
+                onTap: () => Get.to(() => const FollowersScreen()),
+              ),
+              _StatItem(
+                label: 'Following', 
+                value: '450',
+                onTap: () => Get.to(() => const FollowingScreen()),
+              ),
             ],
           ),
           const SizedBox(height: 32),
@@ -56,15 +68,24 @@ class ProfileScreen extends StatelessWidget {
 class _StatItem extends StatelessWidget {
   final String label;
   final String value;
-  const _StatItem({required this.label, required this.value});
+  final VoidCallback? onTap;
+  
+  const _StatItem({
+    required this.label, 
+    required this.value,
+    this.onTap,
+  });
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        Text(value, style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 18)),
-        Text(label, style: TextStyle(color: Colors.grey[500], fontSize: 12)),
-      ],
+    return GestureDetector(
+      onTap: onTap,
+      child: Column(
+        children: [
+          Text(value, style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 18)),
+          Text(label, style: TextStyle(color: Colors.grey[500], fontSize: 12)),
+        ],
+      ),
     );
   }
 }

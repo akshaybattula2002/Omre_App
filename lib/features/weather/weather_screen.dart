@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'screens/location_search_screen.dart';
 
 class WeatherScreen extends StatelessWidget {
   const WeatherScreen({super.key});
@@ -9,11 +10,25 @@ class WeatherScreen extends StatelessWidget {
     final theme = Theme.of(context);
     final isDark = theme.brightness == Brightness.dark;
 
+    // Premium Gradients for Weather
+    final gradientColors = isDark 
+        ? [const Color(0xFF1A2344), const Color(0xFF0F1216)] // Deep Midnight Blue to Black
+        : [const Color(0xFF2193b0), const Color(0xFF6dd5ed)]; // Cool Blue to Light Blue
+
     return Scaffold(
-      backgroundColor: theme.scaffoldBackgroundColor,
       extendBodyBehindAppBar: true,
       appBar: AppBar(
-        title: const Text('Weather', style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold)),
+        title: GestureDetector(
+          onTap: () => Get.to(() => const LocationSearchScreen()),
+          child: Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              const Text('San Francisco', style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold)),
+              const SizedBox(width: 4),
+              const Icon(Icons.keyboard_arrow_down, color: Colors.white),
+            ],
+          ),
+        ),
         backgroundColor: Colors.transparent,
         elevation: 0,
         leading: IconButton(
@@ -21,152 +36,94 @@ class WeatherScreen extends StatelessWidget {
           onPressed: () => Get.back(),
         ),
         actions: [
-          IconButton(icon: const Icon(Icons.add_location_alt_outlined, color: Colors.white), onPressed: () {}),
+          IconButton(
+            icon: const Icon(Icons.search, color: Colors.white), 
+            onPressed: () => Get.to(() => const LocationSearchScreen())
+          ),
         ],
       ),
       body: Container(
         decoration: BoxDecoration(
           gradient: LinearGradient(
-            colors: isDark 
-                ? [const Color(0xFF1A237E), const Color(0xFF311B92)] // Deep Blue/Purple
-                : [const Color(0xFF4FC3F7), const Color(0xFF2196F3)], // Light Blue
-            begin: Alignment.topCenter,
-            end: Alignment.bottomCenter,
+            begin: Alignment.topLeft,
+            end: Alignment.bottomRight,
+            colors: gradientColors,
           ),
         ),
-        child: ListView(
-          padding: const EdgeInsets.only(top: 100, left: 24, right: 24, bottom: 24),
-          children: [
-            const Center(
-              child: Text(
-                'San Francisco',
-                style: TextStyle(color: Colors.white, fontSize: 32, fontWeight: FontWeight.w500),
-              ),
-            ),
-            const SizedBox(height: 8),
-            Center(
-              child: Text(
-                'Partly Cloudy',
-                style: TextStyle(color: Colors.white.withOpacity(0.8), fontSize: 18),
-              ),
-            ),
-            const SizedBox(height: 24),
-            const Center(
-              child: Text(
-                '72°',
-                style: TextStyle(color: Colors.white, fontSize: 96, fontWeight: FontWeight.w200),
-              ),
-            ),
-            const SizedBox(height: 24),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                _buildWeatherStat('Bio', '74°', Icons.thermostat),
-                const SizedBox(width: 32),
-                _buildWeatherStat('Wind', '12 km/h', Icons.air),
-                const SizedBox(width: 32),
-                _buildWeatherStat('Humidity', '45%', Icons.water_drop),
-              ],
-            ),
-            const SizedBox(height: 48),
-            const Text(
-              'Forecast',
-              style: TextStyle(color: Colors.white, fontSize: 18, fontWeight: FontWeight.bold),
-            ),
-            const SizedBox(height: 16),
-            SizedBox(
-              height: 160,
-              child: ListView(
-                scrollDirection: Axis.horizontal,
+        child: SingleChildScrollView(
+          padding: const EdgeInsets.fromLTRB(20, 100, 20, 20),
+          child: Column(
+            children: [
+              const Icon(Icons.cloud, size: 100, color: Colors.white),
+              const SizedBox(height: 20),
+              const Text('22°', style: TextStyle(fontSize: 80, color: Colors.white, fontWeight: FontWeight.w200)),
+              const Text('Cloudy', style: TextStyle(fontSize: 24, color: Colors.white70)),
+              const SizedBox(height: 20),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: [
-                  _buildForecastCard('Now', '72°', Icons.wb_sunny, true),
-                  _buildForecastCard('2 PM', '74°', Icons.wb_sunny, false),
-                  _buildForecastCard('4 PM', '71°', Icons.cloud, false),
-                  _buildForecastCard('6 PM', '68°', Icons.wb_cloudy, false),
-                  _buildForecastCard('8 PM', '64°', Icons.bedtime, false),
+                  _buildWeatherStat('Wind', '12 km/h'),
+                  _buildWeatherStat('Humidity', '45%'),
+                  _buildWeatherStat('Rain', '10%'),
                 ],
               ),
-            ),
-             const SizedBox(height: 40),
-            Container(
-              padding: const EdgeInsets.all(20),
-              decoration: BoxDecoration(
-                color: Colors.white.withOpacity(0.1),
-                borderRadius: BorderRadius.circular(20),
+              const SizedBox(height: 40),
+              Container(
+                padding: const EdgeInsets.all(20),
+                decoration: BoxDecoration(
+                  color: Colors.white.withOpacity(0.15),
+                  borderRadius: BorderRadius.circular(20),
+                  border: Border.all(color: Colors.white.withOpacity(0.2)),
+                ),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const Text('Today', style: TextStyle(color: Colors.white, fontSize: 18, fontWeight: FontWeight.bold)),
+                    const SizedBox(height: 16),
+                    SizedBox(
+                      height: 100,
+                      child: ListView(
+                        scrollDirection: Axis.horizontal,
+                        children: [
+                          _buildForecastItem('Now', Icons.cloud, '22°'),
+                          _buildForecastItem('1 PM', Icons.wb_sunny, '24°'),
+                           _buildForecastItem('2 PM', Icons.wb_sunny, '25°'),
+                          _buildForecastItem('3 PM', Icons.wb_cloudy, '23°'),
+                          _buildForecastItem('4 PM', Icons.cloud, '21°'),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
               ),
-              child: Row(
-                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                 children: [
-                   const Column(
-                     crossAxisAlignment: CrossAxisAlignment.start,
-                     children: [
-                       Text('Air Quality', style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold)),
-                       SizedBox(height: 4),
-                       Text('Good (34 AQI)', style: TextStyle(color: Colors.white70)),
-                     ],
-                   ),
-                   Container(
-                     padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
-                     decoration: BoxDecoration(
-                       color: Colors.greenAccent.withOpacity(0.2),
-                       borderRadius: BorderRadius.circular(12),
-                       border: Border.all(color: Colors.greenAccent),
-                     ),
-                     child: const Text('SAFE', style: TextStyle(color: Colors.greenAccent, fontWeight: FontWeight.bold, fontSize: 12)),
-                   ),
-                 ],
-              ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );
   }
 
-  Widget _buildWeatherStat(String label, String value, IconData icon) {
+  Widget _buildWeatherStat(String label, String value) {
     return Column(
       children: [
-        Icon(icon, color: Colors.white70, size: 24),
-        const SizedBox(height: 8),
-        Text(value, style: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 16)),
-        const SizedBox(height: 4),
-        Text(label, style: const TextStyle(color: Colors.white60, fontSize: 12)),
+        Text(value, style: const TextStyle(color: Colors.white, fontSize: 18, fontWeight: FontWeight.bold)),
+        Text(label, style: const TextStyle(color: Colors.white70)),
       ],
     );
   }
 
-  Widget _buildForecastCard(String time, String temp, IconData icon, bool isCurrent) {
+  Widget _buildForecastItem(String time, IconData icon, String temp) {
     return Container(
-      width: 70,
-      margin: const EdgeInsets.only(right: 12),
-      padding: const EdgeInsets.symmetric(vertical: 20),
-      decoration: BoxDecoration(
-        color: isCurrent ? Colors.white : Colors.white.withOpacity(0.1),
-        borderRadius: BorderRadius.circular(35),
-      ),
+      width: 60,
+      margin: const EdgeInsets.only(right: 16),
       child: Column(
-        mainAxisAlignment: MainAxisAlignment.spaceAround,
+        mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Text(
-            time,
-            style: TextStyle(
-              color: isCurrent ? Colors.black : Colors.white,
-              fontWeight: FontWeight.bold,
-            ),
-          ),
-          Icon(
-            icon,
-            color: isCurrent ? Colors.orange : Colors.white,
-            size: 28,
-          ),
-          Text(
-            temp,
-            style: TextStyle(
-              color: isCurrent ? Colors.black : Colors.white,
-              fontSize: 16,
-              fontWeight: FontWeight.w500,
-            ),
-          ),
+          Text(time, style: const TextStyle(color: Colors.white70)),
+          const SizedBox(height: 8),
+          Icon(icon, color: Colors.white),
+          const SizedBox(height: 8),
+          Text(temp, style: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold)),
         ],
       ),
     );

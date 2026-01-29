@@ -58,7 +58,11 @@ class PostModel {
     bool isLiked = false,
     bool isSaved = false,
     required this.timestamp,
+    List<String>? comments,
   })  : likes = likes.obs,
         isLiked = isLiked.obs,
-        isSaved = isSaved.obs;
+        isSaved = isSaved.obs,
+        comments = (comments ?? []).obs;
+
+  final RxList<String> comments;
 }

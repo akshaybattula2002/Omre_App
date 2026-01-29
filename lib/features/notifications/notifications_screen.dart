@@ -15,65 +15,92 @@ class NotificationsScreen extends StatelessWidget {
 
     return Scaffold(
       backgroundColor: theme.scaffoldBackgroundColor,
-      appBar: AppBar(
-        title: Text(
-          'Notifications', 
-          style: TextStyle(fontWeight: FontWeight.bold, color: theme.textTheme.titleLarge?.color)
-        ),
-        backgroundColor: theme.scaffoldBackgroundColor,
-        elevation: 0,
-        leading: IconButton(
-          icon: Icon(Icons.arrow_back, color: theme.iconTheme.color),
-          onPressed: () => Get.back(),
-        ),
-        actions: [
-          TextButton(
-            onPressed: controller.markAllAsRead,
-            child: const Text('Mark all as read', style: TextStyle(color: AppPalette.accentBlue)),
-          ),
-        ],
-      ),
-      body: Obx(() {
-        if (controller.notifications.isEmpty) {
-          return Center(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Icon(Icons.notifications_off_outlined, size: 64, color: isDark ? Colors.white24 : Colors.grey[300]),
-                const SizedBox(height: 16),
-                Text(
-                  'No notifications yet',
-                   style: TextStyle(color: theme.hintColor, fontSize: 16),
-                ),
-              ],
+      body: SafeArea(
+        child: Column(
+          children: [
+            // Custom Facebook-style Header
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 8),
+              child: Row(
+                children: [
+                  IconButton(
+                    icon: Icon(Icons.arrow_back, color: theme.iconTheme.color),
+                    onPressed: () => Get.back(),
+                  ),
+                  Text(
+                    'Notifications',
+                    style: TextStyle(
+                      fontSize: 28,
+                      fontWeight: FontWeight.bold,
+                      color: theme.textTheme.titleLarge?.color,
+                    ),
+                  ),
+                  const Spacer(),
+                  _buildHeaderButton(Icons.search, isDark),
+                  const SizedBox(width: 12),
+                  _buildHeaderButton(Icons.settings, isDark),
+                ],
+              ),
             ),
-          );
-        }
+            
+            // Notification List
+            Expanded(
+              child: Obx(() {
+                if (controller.notifications.isEmpty) {
+                  return _buildEmptyState(isDark, theme);
+                }
 
-        return ListView.builder(
-          itemCount: controller.notifications.length,
-          itemBuilder: (context, index) {
-            final notification = controller.notifications[index];
-            return Dismissible(
-              key: Key(notification.id),
-              direction: DismissDirection.endToStart,
-              onDismissed: (_) => controller.removeNotification(notification.id),
-              background: Container(
-                color: Colors.red,
-                alignment: Alignment.centerRight,
-                padding: const EdgeInsets.only(right: 20),
-                child: const Icon(Icons.delete, color: Colors.white),
-              ),
-              child: _buildNotificationItem(
-                context,
-                notification,
-                controller,
-                isDark,
-              ),
-            );
-          },
-        );
-      }),
+                final newNotifications = controller.notifications.where((n) => !n.isRead).toList();
+                final earlierNotifications = controller.notifications.where((n) => n.isRead).toList();
+
+                return ListView(
+                  physics: const BouncingScrollPhysics(),
+                  children: [
+                    if (newNotifications.isNotEmpty) ...[
+                      _buildSectionHeader('New', theme),
+                      ...newNotifications.map((n) => _buildNotificationItem(context, n, controller, isDark)),
+                    ],
+                    if (earlierNotifications.isNotEmpty) ...[
+                      _buildSectionHeader('Earlier', theme),
+                      ...earlierNotifications.map((n) => _buildNotificationItem(context, n, controller, isDark)),
+                    ],
+                    const SizedBox(height: 100), // Bottom padding
+                  ],
+                );
+              }),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildHeaderButton(IconData icon, bool isDark) {
+    return Container(
+      decoration: BoxDecoration(
+        color: isDark ? Colors.grey[850] : Colors.grey[200],
+        shape: BoxShape.circle,
+      ),
+      child: IconButton(
+        icon: Icon(icon, color: isDark ? Colors.white : Colors.black, size: 20),
+        onPressed: () {},
+        padding: EdgeInsets.zero,
+        constraints: const BoxConstraints(minWidth: 36, minHeight: 36),
+      ),
+    );
+  }
+
+  Widget _buildSectionHeader(String title, ThemeData theme) {
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(16, 16, 16, 8),
+      child: Text(
+        title,
+        style: TextStyle(
+          fontSize: 18,
+          fontWeight: FontWeight.bold,
+          color: theme.textTheme.bodyLarge?.color,
+        ),
+      ),
     );
   }
 
@@ -84,25 +111,25 @@ class NotificationsScreen extends StatelessWidget {
     bool isDark,
   ) {
     final theme = Theme.of(context);
+    final bool isUnread = !notification.isRead;
     
     return InkWell(
       onTap: () {
         controller.markAsRead(notification.id);
-        // Navigate or show details
       },
       child: Container(
-        color: notification.isRead 
-            ? Colors.transparent 
-            : (isDark ? AppPalette.accentBlue.withOpacity(0.1) : AppPalette.accentBlue.withOpacity(0.05)),
+        color: isUnread 
+            ? (isDark ? Colors.blue.withOpacity(0.1) : Colors.blue.withOpacity(0.05))
+            : Colors.transparent,
         padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            // Avatar
+            // Avatar with Type Icon Badge
             Stack(
               children: [
                 CircleAvatar(
-                  radius: 24,
+                  radius: 30,
                   backgroundImage: AssetImage(notification.avatarUrl),
                   backgroundColor: Colors.grey[800],
                 ),
@@ -114,9 +141,9 @@ class NotificationsScreen extends StatelessWidget {
                     decoration: BoxDecoration(
                       color: _getIconColor(notification.type),
                       shape: BoxShape.circle,
-                      border: Border.all(color: isDark ? Colors.black : Colors.white, width: 2),
+                      border: Border.all(color: isDark ? const Color(0xFF121212) : Colors.white, width: 2),
                     ),
-                    child: Icon(_getIcon(notification.type), size: 10, color: Colors.white),
+                    child: Icon(_getIcon(notification.type), size: 12, color: Colors.white),
                   ),
                 ),
               ],
@@ -130,87 +157,97 @@ class NotificationsScreen extends StatelessWidget {
                 children: [
                   RichText(
                     text: TextSpan(
-                      style: TextStyle(fontSize: 14, color: theme.textTheme.bodyLarge?.color),
+                      style: TextStyle(
+                        fontSize: 15, 
+                        color: theme.textTheme.bodyLarge?.color,
+                        height: 1.3,
+                      ),
                       children: [
                         TextSpan(
                           text: notification.username,
                           style: const TextStyle(fontWeight: FontWeight.bold),
                         ),
                         const TextSpan(text: ' '),
-                        TextSpan(text: notification.message),
-                      ],
-                    ),
-                  ),
-                  const SizedBox(height: 4),
-                  Row(
-                    children: [
-                      Text(
-                        notification.time,
-                        style: TextStyle(fontSize: 12, color: theme.hintColor),
-                      ),
-                      if (!notification.isRead) ...[
-                        const SizedBox(width: 8),
-                        Container(
-                          width: 6,
-                          height: 6,
-                          decoration: const BoxDecoration(
-                            color: AppPalette.accentBlue,
-                            shape: BoxShape.circle,
-                          ),
+                        TextSpan(
+                          text: notification.message,
+                          style: TextStyle(fontWeight: isUnread ? FontWeight.w500 : FontWeight.normal),
                         ),
                       ],
-                    ],
+                    ),
+                    maxLines: 3,
+                    overflow: TextOverflow.ellipsis,
                   ),
-                  if (notification.type == NotificationType.friendRequest) ...[
+                  const SizedBox(height: 4),
+                  Text(
+                    notification.time,
+                    style: TextStyle(
+                      fontSize: 13, 
+                      color: isUnread ? Colors.blue[400] : theme.hintColor,
+                      fontWeight: isUnread ? FontWeight.w600 : FontWeight.normal,
+                    ),
+                  ),
+                  
+                  // Action Buttons for Friend Requests
+                  if (notification.type == NotificationType.friendRequest && !notification.isRead) ...[
                     const SizedBox(height: 12),
                     Row(
                       children: [
-                        ElevatedButton(
-                          onPressed: () => controller.acceptRequest(notification.id, notification.username),
-                          style: ElevatedButton.styleFrom(
-                            backgroundColor: AppPalette.accentBlue,
-                            foregroundColor: Colors.white,
-                            elevation: 0,
-                            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
-                            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 0),
-                            minimumSize: const Size(0, 32),
+                        Expanded(
+                          child: ElevatedButton(
+                            onPressed: () => controller.acceptRequest(notification.id, notification.username),
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor: Colors.blue,
+                              foregroundColor: Colors.white,
+                              elevation: 0,
+                              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+                              padding: const EdgeInsets.symmetric(vertical: 0),
+                              minimumSize: const Size(0, 36),
+                            ),
+                            child: const Text('Confirm', style: TextStyle(fontWeight: FontWeight.bold)),
                           ),
-                          child: const Text('Accept', style: TextStyle(fontSize: 13)),
                         ),
                         const SizedBox(width: 8),
-                        OutlinedButton(
-                          onPressed: () => controller.declineRequest(notification.id, notification.username),
-                          style: OutlinedButton.styleFrom(
-                            foregroundColor: theme.textTheme.bodyMedium?.color,
-                            side: BorderSide(color: isDark ? Colors.white24 : Colors.grey[300]!),
-                            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
-                            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 0),
-                            minimumSize: const Size(0, 32),
+                        Expanded(
+                          child: ElevatedButton(
+                            onPressed: () => controller.declineRequest(notification.id, notification.username),
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor: isDark ? Colors.grey[800] : Colors.grey[300],
+                              foregroundColor: isDark ? Colors.white : Colors.black,
+                              elevation: 0,
+                              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+                              padding: const EdgeInsets.symmetric(vertical: 0),
+                              minimumSize: const Size(0, 36),
+                            ),
+                            child: const Text('Delete', style: TextStyle(fontWeight: FontWeight.bold)),
                           ),
-                          child: const Text('Decline', style: TextStyle(fontSize: 13)),
                         ),
                       ],
-                    ),
-                  ],
-                  if (notification.contentPreview != null) ...[
-                    const SizedBox(height: 8),
-                    Container(
-                      padding: const EdgeInsets.all(8),
-                      decoration: BoxDecoration(
-                        color: isDark ? Colors.grey[800] : Colors.grey[100],
-                        borderRadius: BorderRadius.circular(8),
-                        border: Border.all(color: isDark ? Colors.grey[700]! : Colors.grey[300]!),
-                      ),
-                      child: Text(
-                        notification.contentPreview!,
-                        style: TextStyle(fontSize: 12, color: theme.textTheme.bodyMedium?.color?.withOpacity(0.8), fontStyle: FontStyle.italic),
-                        maxLines: 1,
-                        overflow: TextOverflow.ellipsis,
-                      ),
                     ),
                   ],
                 ],
               ),
+            ),
+            
+            // Three dot menu & Unread indicator
+            Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                IconButton(
+                  icon: Icon(Icons.more_horiz, color: theme.hintColor, size: 20),
+                  onPressed: () => _buildOptionsModal(context, notification, controller, isDark),
+                  padding: EdgeInsets.zero,
+                  constraints: const BoxConstraints(minWidth: 24),
+                ),
+                if (isUnread)
+                  Container(
+                    width: 8,
+                    height: 8,
+                    decoration: const BoxDecoration(
+                      color: Colors.blue,
+                      shape: BoxShape.circle,
+                    ),
+                  ),
+              ],
             ),
           ],
         ),
@@ -218,11 +255,79 @@ class NotificationsScreen extends StatelessWidget {
     );
   }
 
+  void _buildOptionsModal(BuildContext context, NotificationItem n, NotificationsController c, bool isDark) {
+    showModalBottomSheet(
+      context: context,
+      backgroundColor: isDark ? const Color(0xFF1E1E1E) : Colors.white,
+      shape: const RoundedRectangleBorder(borderRadius: BorderRadius.vertical(top: Radius.circular(20))),
+      builder: (context) {
+        return Container(
+          padding: const EdgeInsets.symmetric(vertical: 20),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              _buildOptionTile(Icons.delete_outline, 'Remove this notification', () {
+                c.removeNotification(n.id);
+                Get.back();
+              }, isDark),
+              _buildOptionTile(Icons.notifications_off_outlined, 'Turn off notifications from ${n.username}', () {
+                Get.back();
+              }, isDark),
+              _buildOptionTile(Icons.report_problem_outlined, 'Report issue to notification team', () {
+                Get.back();
+              }, isDark),
+            ],
+          ),
+        );
+      },
+    );
+  }
+
+  Widget _buildOptionTile(IconData icon, String label, VoidCallback onTap, bool isDark) {
+    return ListTile(
+      leading: Container(
+        padding: const EdgeInsets.all(8),
+        decoration: BoxDecoration(
+          color: isDark ? Colors.grey[850] : Colors.grey[200],
+          shape: BoxShape.circle,
+        ),
+        child: Icon(icon, size: 20, color: isDark ? Colors.white : Colors.black),
+      ),
+      title: Text(label, style: const TextStyle(fontWeight: FontWeight.w500)),
+      onTap: onTap,
+    );
+  }
+
+  Widget _buildEmptyState(bool isDark, ThemeData theme) {
+    return Center(
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Icon(Icons.notifications_none_outlined, size: 100, color: isDark ? Colors.white10 : Colors.grey[300]),
+          const SizedBox(height: 20),
+          Text(
+            'You have no notifications',
+            style: TextStyle(
+              fontSize: 18, 
+              fontWeight: FontWeight.bold,
+              color: theme.textTheme.displayLarge?.color,
+            ),
+          ),
+          const SizedBox(height: 8),
+          Text(
+            'Check back later for updates!',
+            style: TextStyle(color: theme.hintColor),
+          ),
+        ],
+      ),
+    );
+  }
+
   IconData _getIcon(NotificationType type) {
     switch (type) {
-      case NotificationType.like: return Icons.favorite;
+      case NotificationType.like: return Icons.thumb_up_alt;
       case NotificationType.comment: return Icons.chat_bubble;
-      case NotificationType.friendRequest: return Icons.person_add;
+      case NotificationType.friendRequest: return Icons.person_add_alt_1;
       case NotificationType.mention: return Icons.alternate_email;
       case NotificationType.groupInvite: return Icons.group_add;
     }
@@ -230,11 +335,11 @@ class NotificationsScreen extends StatelessWidget {
 
   Color _getIconColor(NotificationType type) {
     switch (type) {
-      case NotificationType.like: return Colors.red;
-      case NotificationType.comment: return Colors.blue;
-      case NotificationType.friendRequest: return Colors.green;
+      case NotificationType.like: return Colors.blue;
+      case NotificationType.comment: return Colors.green;
+      case NotificationType.friendRequest: return Colors.blue;
       case NotificationType.mention: return Colors.orange;
-      case NotificationType.groupInvite: return Colors.purple;
+      case NotificationType.groupInvite: return Colors.blue;
     }
   }
 }

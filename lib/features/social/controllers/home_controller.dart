@@ -1,6 +1,8 @@
 import 'package:get/get.dart';
 import 'package:flutter/material.dart';
 import 'package:omre/core/constants/app_assets.dart';
+import 'package:share_plus/share_plus.dart';
+import 'package:omre/core/theme/palette.dart';
 import '../models/social_models.dart';
 import 'package:image_picker/image_picker.dart';
 import 'dart:io';
@@ -319,95 +321,341 @@ class HomeController extends GetxController {
   }
 
   void commentOnPost(String postId) {
+    final post = posts.firstWhere((p) => p.id == postId);
+    final commentController = TextEditingController();
+
     Get.bottomSheet(
-      Container(
-        height: 600,
-        decoration: BoxDecoration(
-          color: Get.theme.scaffoldBackgroundColor,
-          borderRadius: const BorderRadius.vertical(top: Radius.circular(20)),
-        ),
-        child: Column(
-          children: [
-            const Padding(
-              padding: EdgeInsets.all(16),
-              child: Text(
-                'Comments',
-                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-              ),
+      DraggableScrollableSheet(
+        initialChildSize: 0.7, // Taller default for comments
+        minChildSize: 0.5,
+        maxChildSize: 0.95,
+        builder: (context, scrollController) {
+          return Container(
+            decoration: BoxDecoration(
+              color: Get.theme.scaffoldBackgroundColor,
+              borderRadius: const BorderRadius.vertical(top: Radius.circular(20)),
             ),
-            const Divider(),
-            Expanded(
-              child: Center(
-                child: Text('No comments yet.',
-                    style: TextStyle(color: Colors.grey[600])),
-              ),
-            ),
-            Padding(
-              padding: EdgeInsets.only(
-                  bottom: MediaQuery.of(Get.context!).viewInsets.bottom + 16,
-                  left: 16,
-                  right: 16,
-                  top: 16),
-              child: TextField(
-                decoration: InputDecoration(
-                  hintText: 'Add a comment...',
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(30),
+            child: Column(
+              children: [
+                // Handle
+                Container(
+                  margin: const EdgeInsets.symmetric(vertical: 12),
+                  width: 40,
+                  height: 4,
+                  decoration: BoxDecoration(
+                    color: Colors.grey[600],
+                    borderRadius: BorderRadius.circular(2),
                   ),
-                  filled: true,
-                  contentPadding:
-                      const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
                 ),
-              ),
+                const Text(
+                  'Comments',
+                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                ),
+                const Divider(),
+                // Comments List
+                Expanded(
+                  child: Obx(() {
+                    if (post.comments.isEmpty) {
+                      return Center(
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            const Icon(Icons.chat_bubble_outline, size: 48, color: Colors.grey),
+                            const SizedBox(height: 16),
+                            Text('No comments yet.', style: TextStyle(color: Colors.grey[600])),
+                            const Text('Start the conversation.', style: TextStyle(fontSize: 12, color: Colors.grey)),
+                          ],
+                        ),
+                      );
+                    }
+                    return ListView.builder(
+                      controller: scrollController,
+                      itemCount: post.comments.length,
+                      padding: const EdgeInsets.fromLTRB(16, 0, 16, 16),
+                      itemBuilder: (context, index) {
+                        final comment = post.comments[index];
+                        // Parsing "username: comment" format or just showing text
+                        // For this simple string list, we'll assume it's just the comment text and mock a user
+                        return Padding(
+                          padding: const EdgeInsets.symmetric(vertical: 12.0),
+                          child: Row(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              CircleAvatar(
+                                radius: 18,
+                                backgroundImage: AssetImage(AppAssets.avatar1), // Current user avatar
+                              ),
+                              const SizedBox(width: 12),
+                              Expanded(
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Row(
+                                      children: [
+                                        const Text('omre_user', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 13)),
+                                        const SizedBox(width: 8),
+                                        Text('now', style: TextStyle(color: Colors.grey[600], fontSize: 11)),
+                                      ],
+                                    ),
+                                    const SizedBox(height: 4),
+                                    Text(comment),
+                                  ],
+                                ),
+                              ),
+                              Icon(Icons.favorite_border, size: 16, color: Colors.grey[600]),
+                            ],
+                          ),
+                        );
+                      },
+                    );
+                  }),
+                ),
+                // Input Area
+                Container(
+                  padding: EdgeInsets.only(
+                    bottom: MediaQuery.of(Get.context!).viewInsets.bottom + 16,
+                    left: 16,
+                    right: 16,
+                    top: 12
+                  ),
+                  decoration: BoxDecoration(
+                    border: Border(top: BorderSide(color: Colors.grey.withOpacity(0.2))),
+                    color: Get.theme.scaffoldBackgroundColor,
+                  ),
+                  child: Row(
+                    children: [
+                      CircleAvatar(
+                        radius: 18,
+                        backgroundImage: AssetImage(AppAssets.avatar1),
+                      ),
+                      const SizedBox(width: 12),
+                      Expanded(
+                        child: TextField(
+                          controller: commentController,
+                          decoration: InputDecoration(
+                            hintText: 'Add a comment...',
+                            border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(24),
+                              borderSide: BorderSide.none,
+                            ),
+                            filled: true,
+                            contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+                            isDense: true,
+                          ),
+                          textCapitalization: TextCapitalization.sentences,
+                        ),
+                      ),
+                      const SizedBox(width: 8),
+                      IconButton(
+                        onPressed: () {
+                          if (commentController.text.trim().isNotEmpty) {
+                            post.comments.add(commentController.text.trim());
+                            commentController.clear();
+                            // Scroll to bottom logic could be added here
+                          }
+                        },
+                        icon: const Icon(Icons.arrow_upward, color: AppPalette.accentBlue),
+                      ),
+                    ],
+                  ),
+                ),
+              ],
             ),
-          ],
-        ),
+          );
+        },
       ),
       isScrollControlled: true,
+      backgroundColor: Colors.transparent,
     );
   }
 
   void sharePost(String postId) {
+    // Collect unique users from posts to mock "friends"
+    final friends = posts.map((p) => {'name': p.username, 'avatar': p.avatarUrl}).toSet().toList();
+    // Track sent status for this specific session
+    final Set<String> sentUsers = {};
+
     Get.bottomSheet(
-      Container(
-        height: 200,
-        decoration: BoxDecoration(
-          color: Get.theme.scaffoldBackgroundColor,
-          borderRadius: const BorderRadius.vertical(top: Radius.circular(20)),
-        ),
-        padding: const EdgeInsets.all(16),
-        child: Column(
-          children: [
-            const Text(
-              'Share to',
-              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-            ),
-            const SizedBox(height: 20),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
-              children: [
-                _buildShareOption(Icons.copy, 'Copy Link'),
-                _buildShareOption(Icons.message, 'Message'),
-                _buildShareOption(Icons.share, 'Share via'),
-              ],
-            ),
-          ],
-        ),
+      DraggableScrollableSheet(
+        initialChildSize: 0.6,
+        minChildSize: 0.5,
+        maxChildSize: 0.9,
+        builder: (context, scrollController) {
+          return StatefulBuilder(
+            builder: (context, setState) {
+              return Container(
+                decoration: BoxDecoration(
+                  color: Get.theme.scaffoldBackgroundColor,
+                  borderRadius: const BorderRadius.vertical(top: Radius.circular(20)),
+                ),
+                child: Column(
+                  children: [
+                    // Handle
+                    Container(
+                      margin: const EdgeInsets.symmetric(vertical: 12),
+                      width: 40,
+                      height: 4,
+                      decoration: BoxDecoration(
+                        color: Colors.grey[600],
+                        borderRadius: BorderRadius.circular(2),
+                      ),
+                    ),
+                    // Search Bar
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                      child: TextField(
+                        decoration: InputDecoration(
+                          hintText: 'Search',
+                          prefixIcon: const Icon(Icons.search, color: Colors.grey),
+                          filled: true,
+                          fillColor: Get.isDarkMode ? Colors.grey[900] : Colors.grey[200],
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(12),
+                            borderSide: BorderSide.none,
+                          ),
+                          contentPadding: const EdgeInsets.symmetric(vertical: 0),
+                        ),
+                      ),
+                    ),
+                    const SizedBox(height: 16),
+                    // Friends Grid
+                    Expanded(
+                      child: GridView.builder(
+                        controller: scrollController,
+                        padding: const EdgeInsets.symmetric(horizontal: 16),
+                        gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                          crossAxisCount: 4,
+                          childAspectRatio: 0.6, // Taller for name + button
+                          crossAxisSpacing: 16,
+                          mainAxisSpacing: 16,
+                        ),
+                        itemCount: friends.length,
+                        itemBuilder: (context, index) {
+                          final friend = friends[index];
+                          final username = friend['name']!;
+                          final isSent = sentUsers.contains(username);
+  
+                          return Column(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              Stack(
+                                children: [
+                                  CircleAvatar(
+                                    radius: 30,
+                                    backgroundImage: AssetImage(friend['avatar']!),
+                                  ),
+                                  if (!isSent) // Show online indicator only if not sent involved? actually keep it
+                                  Positioned(
+                                    right: 0,
+                                    bottom: 0,
+                                    child: Container(
+                                      padding: const EdgeInsets.all(4),
+                                      decoration: const BoxDecoration(
+                                        color: Colors.green, // Online indicator mock
+                                        shape: BoxShape.circle,
+                                        border: Border(), 
+                                      ),
+                                      child: const SizedBox(width: 4, height: 4), 
+                                    ),
+                                  ),
+                                ],
+                              ),
+                              const SizedBox(height: 8),
+                              Text(
+                                username,
+                                style: const TextStyle(fontSize: 12, fontWeight: FontWeight.w500),
+                                maxLines: 1,
+                                overflow: TextOverflow.ellipsis,
+                              ),
+                              const SizedBox(height: 8),
+                              SizedBox(
+                                height: 28,
+                                width: 70,
+                                child: ElevatedButton(
+                                  onPressed: isSent ? null : () {
+                                    setState(() {
+                                      sentUsers.add(username);
+                                    });
+                                    // Optional toast/snackbar could go here but UI update is sufficient
+                                  },
+                                  style: ElevatedButton.styleFrom(
+                                    padding: EdgeInsets.zero,
+                                    backgroundColor: isSent ? Colors.grey[800] : AppPalette.accentBlue,
+                                    disabledBackgroundColor: Colors.grey.withOpacity(0.2),
+                                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+                                    elevation: 0,
+                                  ),
+                                  child: Text(
+                                    isSent ? 'Sent' : 'Send',
+                                    style: TextStyle(
+                                      fontSize: 11, 
+                                      color: isSent ? Colors.grey : Colors.white,
+                                      fontWeight: FontWeight.bold
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ],
+                          );
+                        },
+                      ),
+                    ),
+                    // Bottom Actions Divider
+                    const Divider(height: 1),
+                    // Bottom Actions
+                    Padding(
+                      padding: const EdgeInsets.all(16.0),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceAround,
+                        children: [
+                          _buildShareOption(Icons.share, 'Share to...', () {
+                            // Don't close sheet immediately to allow system share over it, or close then share
+                             Get.back(); 
+                             // Using a slight delay to allow sheet close animation
+                             Future.delayed(const Duration(milliseconds: 200), () {
+                                Share.share('Check out this post on OMRE!');
+                             });
+                          }),
+                          _buildShareOption(Icons.copy, 'Copy link', () {
+                            Get.back();
+                            Get.snackbar('Copied', 'Link copied to clipboard');
+                          }),
+                          _buildShareOption(Icons.message_outlined, 'SMS', () {
+                             Get.back();
+                             // Use url_launcher for actual SMS if willing, but mock is fine
+                             Get.snackbar('SMS', 'Opening Messages...');
+                          }),
+                          _buildShareOption(Icons.more_horiz, 'More', () {}),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+              );
+            }
+          );
+        },
       ),
+      isScrollControlled: true,
+      backgroundColor: Colors.transparent,
     );
   }
 
-  Widget _buildShareOption(IconData icon, String label) {
-    return Column(
-      children: [
-        CircleAvatar(
-          radius: 25,
-          backgroundColor: Colors.grey[200],
-          child: Icon(icon, color: Colors.black),
-        ),
-        const SizedBox(height: 8),
-        Text(label, style: const TextStyle(fontSize: 12)),
-      ],
+  Widget _buildShareOption(IconData icon, String label, VoidCallback onTap) {
+    return GestureDetector(
+      onTap: onTap,
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          CircleAvatar(
+            radius: 24,
+            backgroundColor: Get.isDarkMode ? Colors.grey[800] : Colors.grey[200],
+            child: Icon(icon, color: Get.isDarkMode ? Colors.white : Colors.black, size: 24),
+          ),
+          const SizedBox(height: 8),
+          Text(label, style: const TextStyle(fontSize: 11)),
+        ],
+      ),
     );
   }
 
@@ -418,24 +666,57 @@ class HomeController extends GetxController {
           color: Get.theme.scaffoldBackgroundColor,
           borderRadius: const BorderRadius.vertical(top: Radius.circular(20)),
         ),
+        padding: const EdgeInsets.symmetric(vertical: 8),
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
+            Container(
+              margin: const EdgeInsets.only(bottom: 8),
+              width: 40,
+              height: 4,
+              decoration: BoxDecoration(
+                color: Colors.grey[600],
+                borderRadius: BorderRadius.circular(2),
+              ),
+            ),
             ListTile(
               leading: const Icon(Icons.report_gmailerrorred, color: Colors.red),
-              title:
-                  const Text('Report', style: TextStyle(color: Colors.red)),
-              onTap: () => Get.back(),
+              title: const Text('Report', style: TextStyle(color: Colors.red)),
+              onTap: () {
+                Get.back();
+                Get.defaultDialog(
+                  title: 'Report Post',
+                  middleText: 'Are you sure you want to report this post?',
+                  textCancel: 'Cancel',
+                  textConfirm: 'Report',
+                  confirmTextColor: Colors.white,
+                  onConfirm: () {
+                    Get.back(); // Close dialog
+                    Get.snackbar('Reported', 'Thanks for letting us know. We will review this post.',
+                        snackPosition: SnackPosition.BOTTOM, duration: const Duration(seconds: 2));
+                  },
+                );
+              },
             ),
             ListTile(
               leading: const Icon(Icons.visibility_off_outlined),
               title: const Text('Not interested'),
-              onTap: () => Get.back(),
+              onTap: () {
+                Get.back();
+                // Remove post locally
+                posts.removeWhere((p) => p.id == postId);
+                Get.snackbar('Hidden', 'We will show fewer posts like this.',
+                    snackPosition: SnackPosition.BOTTOM, duration: const Duration(seconds: 2));
+              },
             ),
             ListTile(
               leading: const Icon(Icons.link),
               title: const Text('Copy link'),
-              onTap: () => Get.back(),
+              onTap: () {
+                Get.back();
+                Get.snackbar('Copied', 'Link copied to clipboard.', 
+                    snackPosition: SnackPosition.BOTTOM, duration: const Duration(seconds: 1));
+              },
             ),
           ],
         ),

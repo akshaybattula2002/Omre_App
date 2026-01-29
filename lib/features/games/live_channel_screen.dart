@@ -20,11 +20,106 @@ class _LiveChannelScreenState extends State<LiveChannelScreen> {
   ChewieController? _chewieController;
   final TextEditingController _chatController = TextEditingController();
   bool _isFollowing = false;
+  final List<Map<String, dynamic>> _messages = [];
 
   @override
   void initState() {
     super.initState();
     _initializePlayer();
+    _loadDummyMessages();
+  }
+
+  void _loadDummyMessages() {
+    for (int i = 0; i < 20; i++) {
+        _messages.add({
+          'user': 'User${i + 100}',
+          'message': i % 3 == 0 ? 'GGWP! WHAT A PLAY! 🔥' : 'Is this 4k?',
+          'isGift': false,
+        });
+    }
+  }
+
+  void _showGiftSheet() {
+    final gifts = [
+      {'name': 'Rose', 'icon': '🌹', 'cost': 10},
+      {'name': 'GG', 'icon': '🎮', 'cost': 50},
+      {'name': 'Heart', 'icon': '❤️', 'cost': 100},
+      {'name': 'Fire', 'icon': '🔥', 'cost': 200},
+      {'name': 'Crown', 'icon': '👑', 'cost': 500},
+      {'name': 'Dragon', 'icon': '🐲', 'cost': 1000},
+    ];
+
+    Get.bottomSheet(
+      Container(
+        padding: const EdgeInsets.all(16),
+        decoration: const BoxDecoration(
+          color: Color(0xFF1E1E1E),
+          borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+        ),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            const Text('Send a Gift', style: TextStyle(color: Colors.white, fontSize: 18, fontWeight: FontWeight.bold)),
+            const SizedBox(height: 16),
+            SizedBox(
+              height: 200,
+              child: GridView.builder(
+                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                  crossAxisCount: 3,
+                  crossAxisSpacing: 12,
+                  mainAxisSpacing: 12,
+                  childAspectRatio: 0.8,
+                ),
+                itemCount: gifts.length,
+                itemBuilder: (context, index) {
+                  final gift = gifts[index];
+                  return GestureDetector(
+                    onTap: () => _sendGift(gift),
+                    child: Container(
+                      decoration: BoxDecoration(
+                        color: Colors.white.withOpacity(0.05),
+                        borderRadius: BorderRadius.circular(12),
+                        border: Border.all(color: Colors.white.withOpacity(0.1)),
+                      ),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Text(gift['icon'] as String, style: const TextStyle(fontSize: 32)),
+                          const SizedBox(height: 8),
+                          Text(gift['name'] as String, style: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold)),
+                          Text('${gift['cost']} Coins', style: const TextStyle(color: Colors.amber, fontSize: 12)),
+                        ],
+                      ),
+                    ),
+                  );
+                },
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  void _sendGift(Map<String, dynamic> gift) {
+    Get.back();
+    setState(() {
+      _messages.add({
+        'user': 'You',
+        'message': 'Sent a ${gift['name']} ${gift['icon']}',
+        'isGift': true,
+        'giftColor': Colors.pinkAccent,
+      });
+    });
+    Get.snackbar(
+      'Gift Sent!', 
+      'You sent a ${gift['name']} to ${widget.channel['streamer']}',
+      backgroundColor: Colors.pinkAccent,
+      colorText: Colors.white,
+      snackPosition: SnackPosition.TOP,
+      margin: const EdgeInsets.all(16),
+    );
   }
 
   Future<void> _initializePlayer() async {
@@ -162,24 +257,50 @@ class _LiveChannelScreenState extends State<LiveChannelScreen> {
                     Expanded(
                       child: ListView.builder(
                         padding: const EdgeInsets.all(16),
-                        itemCount: 20,
+                        itemCount: _messages.length,
                         itemBuilder: (context, index) {
+                          final msg = _messages[index];
+                          final isGift = msg['isGift'] == true;
+                          
                           return Padding(
                             padding: const EdgeInsets.only(bottom: 12),
-                            child: RichText(
-                              text: TextSpan(
-                                children: [
-                                  TextSpan(
-                                    text: 'User${index + 100}: ',
-                                    style: const TextStyle(fontWeight: FontWeight.bold, color: Colors.purpleAccent, fontSize: 13),
+                            child: isGift 
+                            ? Container(
+                                padding: const EdgeInsets.all(8),
+                                decoration: BoxDecoration(
+                                  color: (msg['giftColor'] as Color? ?? Colors.pinkAccent).withOpacity(0.2),
+                                  borderRadius: BorderRadius.circular(8),
+                                  border: Border.all(color: msg['giftColor'] as Color? ?? Colors.pinkAccent),
+                                ),
+                                child: RichText(
+                                  text: TextSpan(
+                                    children: [
+                                      TextSpan(
+                                        text: '${msg['user']}: ',
+                                        style: const TextStyle(fontWeight: FontWeight.bold, color: Colors.white, fontSize: 13),
+                                      ),
+                                      TextSpan(
+                                        text: msg['message'],
+                                        style: const TextStyle(color: Colors.amber, fontWeight: FontWeight.bold, fontSize: 13),
+                                      ),
+                                    ],
                                   ),
-                                  TextSpan(
-                                    text: index % 3 == 0 ? 'GGWP! WHAT A PLAY! 🔥' : 'Is this 4k?',
-                                    style: TextStyle(color: isDark ? Colors.white70 : Colors.black87, fontSize: 13),
-                                  ),
-                                ],
+                                ),
+                              )
+                            : RichText(
+                                text: TextSpan(
+                                  children: [
+                                    TextSpan(
+                                      text: '${msg['user']}: ',
+                                      style: const TextStyle(fontWeight: FontWeight.bold, color: Colors.purpleAccent, fontSize: 13),
+                                    ),
+                                    TextSpan(
+                                      text: msg['message'],
+                                      style: TextStyle(color: isDark ? Colors.white70 : Colors.black87, fontSize: 13),
+                                    ),
+                                  ],
+                                ),
                               ),
-                            ),
                           );
                         },
                       ),
@@ -199,6 +320,10 @@ class _LiveChannelScreenState extends State<LiveChannelScreen> {
                       ),
                       child: Row(
                         children: [
+                           IconButton(
+                             icon: const Icon(Icons.card_giftcard, color: Colors.pinkAccent),
+                             onPressed: _showGiftSheet,
+                           ),
                           Expanded(
                             child: TextField(
                               controller: _chatController,
@@ -213,7 +338,18 @@ class _LiveChannelScreenState extends State<LiveChannelScreen> {
                           ),
                           IconButton(
                             icon: const Icon(Icons.send, color: Colors.purple),
-                            onPressed: () => _chatController.clear(),
+                            onPressed: () {
+                              if (_chatController.text.isNotEmpty) {
+                                setState(() {
+                                  _messages.add({
+                                    'user': 'You',
+                                    'message': _chatController.text,
+                                    'isGift': false,
+                                  });
+                                  _chatController.clear();
+                                });
+                              }
+                            },
                           ),
                         ],
                       ),

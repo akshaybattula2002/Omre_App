@@ -339,9 +339,21 @@ class SocialMarketplaceScreen extends StatelessWidget {
       margin: const EdgeInsets.only(right: 16),
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
-        gradient: const LinearGradient(colors: [Color(0xFF6A11CB), Color(0xFF2575FC)], begin: Alignment.topLeft, end: Alignment.bottomRight),
+        gradient: LinearGradient(
+          colors: isDark 
+            ? [const Color(0xFF6A11CB), const Color(0xFF2575FC)] 
+            : [AppPalette.accentBlue, Colors.blueAccent], 
+          begin: Alignment.topLeft, 
+          end: Alignment.bottomRight
+        ),
         borderRadius: BorderRadius.circular(20),
-        boxShadow: [BoxShadow(color: const Color(0xFF2575FC).withOpacity(0.3), blurRadius: 10, offset: const Offset(0, 5))],
+        boxShadow: [
+          BoxShadow(
+            color: (isDark ? const Color(0xFF2575FC) : AppPalette.accentBlue).withOpacity(0.3), 
+            blurRadius: 10, 
+            offset: const Offset(0, 5)
+          )
+        ],
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -360,7 +372,7 @@ class SocialMarketplaceScreen extends StatelessWidget {
             onPressed: () => controller.grabOffer(deal.title),
             style: ElevatedButton.styleFrom(
                 backgroundColor: Colors.white,
-                foregroundColor: Colors.blue,
+                foregroundColor: AppPalette.accentBlue,
                 shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
             ),
             child: const Text('Grab Offer'),

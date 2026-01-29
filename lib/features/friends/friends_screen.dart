@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:omre/core/constants/app_assets.dart';
 import 'package:get/get.dart';
-
+import 'package:omre/core/constants/app_assets.dart';
+import 'screens/friend_profile_screen.dart';
 
 class FriendsScreen extends StatelessWidget {
   const FriendsScreen({super.key});
@@ -23,7 +23,7 @@ class FriendsScreen extends StatelessWidget {
         ),
         actions: [
           IconButton(icon: Icon(Icons.search, color: theme.iconTheme.color), onPressed: () {}),
-          IconButton(icon: Icon(Icons.person_add_alt_1, color: theme.iconTheme.color), onPressed: () {}),
+          IconButton(icon: Icon(Icons.person_add, color: theme.iconTheme.color), onPressed: () {}),
         ],
       ),
       body: ListView(
@@ -31,17 +31,25 @@ class FriendsScreen extends StatelessWidget {
         children: [
           _buildRequestSection(theme, isDark),
           const SizedBox(height: 24),
-          Text(
-            'All Friends (248)',
-            style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: theme.textTheme.bodyLarge?.color),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text(
+                'All Friends',
+                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: theme.textTheme.bodyLarge?.color),
+              ),
+              Text(
+                '245 Friends',
+                style: TextStyle(fontSize: 14, color: Colors.grey[600]),
+              ),
+            ],
           ),
           const SizedBox(height: 16),
-          _buildFriendItem('Alice Cooper', 'Online', AppAssets.avatar1, isDark, isOnline: true),
-          _buildFriendItem('Bob Smith', 'Last seen 2h ago', AppAssets.avatar2, isDark),
-          _buildFriendItem('Charlie Brown', 'Online', AppAssets.avatar3, isDark, isOnline: true),
-          _buildFriendItem('Diana Prince', 'Last seen yesterday', AppAssets.avatar4, isDark),
-          _buildFriendItem('Evan Wright', 'Online', AppAssets.avatar5, isDark, isOnline: true),
-          _buildFriendItem('Fiona Gallagher', 'Last seen 4h ago', AppAssets.avatar1, isDark),
+          _buildFriendItem('Sarah Williams', true, AppAssets.avatar1, AppAssets.cover1, isDark),
+          _buildFriendItem('Mike Chen', false, AppAssets.avatar2, AppAssets.cover2, isDark),
+          _buildFriendItem('Emma Wilson', true, AppAssets.avatar3, AppAssets.cover3, isDark),
+          _buildFriendItem('David Brown', false, AppAssets.avatar1, AppAssets.cover1, isDark),
+          _buildFriendItem('Lisa Wang', true, AppAssets.avatar2, AppAssets.cover2, isDark),
         ],
       ),
     );
@@ -49,93 +57,96 @@ class FriendsScreen extends StatelessWidget {
 
   Widget _buildRequestSection(ThemeData theme, bool isDark) {
     return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Text('Friend Requests', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: theme.textTheme.bodyLarge?.color)),
-            Text('See all', style: TextStyle(color: Colors.blue, fontSize: 14)),
-          ],
+           mainAxisAlignment: MainAxisAlignment.spaceBetween,
+           children: [
+             Text('Friend Requests', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: theme.textTheme.bodyLarge?.color)),
+             Text('See All', style: TextStyle(color: Colors.blue)),
+           ],
         ),
-        const SizedBox(height: 16),
-        Container(
-          padding: const EdgeInsets.all(12),
-          decoration: BoxDecoration(
-             color: isDark ? Colors.grey[900] : Colors.white,
-             borderRadius: BorderRadius.circular(16),
-             border: Border.all(color: Colors.grey.withOpacity(0.1)),
-             boxShadow: [
-               BoxShadow(
-                 color: Colors.black.withOpacity(0.05),
-                 blurRadius: 10,
-                 offset: const Offset(0, 4),
-               ),
-             ],
-          ),
-          child: Row(
-            children: [
-              CircleAvatar(radius: 24, backgroundImage: AssetImage(AppAssets.avatar2)),
-              const SizedBox(width: 12),
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    const Text('Kevin Hart', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16)),
-                    const Text('12 mutual friends', style: TextStyle(color: Colors.grey, fontSize: 12)),
-                  ],
-                ),
-              ),
-              Row(
-                children: [
-                  IconButton(
-                    icon: const Icon(Icons.check_circle, color: Colors.blue, size: 32),
-                    onPressed: () {},
-                  ),
-                  IconButton(
-                    icon: const Icon(Icons.cancel, color: Colors.grey, size: 32),
-                    onPressed: () {},
-                  ),
-                ],
-              ),
-            ],
-          ),
-        ),
+        const SizedBox(height: 12),
+        _buildRequestItem('John Doe', '2 mutual friends', AppAssets.avatar1, isDark),
+        _buildRequestItem('Jane Smith', '1 mutual friend', AppAssets.avatar2, isDark),
       ],
     );
   }
 
-  Widget _buildFriendItem(String name, String status, String imageUrl, bool isDark, {bool isOnline = false}) {
-    return ListTile(
-      contentPadding: const EdgeInsets.symmetric(horizontal: 0, vertical: 4),
-      leading: Stack(
+  Widget _buildRequestItem(String name, String mutual, String img, bool isDark) {
+    return Container(
+      margin: const EdgeInsets.only(bottom: 12),
+      padding: const EdgeInsets.all(12),
+      decoration: BoxDecoration(
+        color: isDark ? Colors.grey[900] : Colors.grey[100],
+        borderRadius: BorderRadius.circular(12),
+      ),
+      child: Row(
         children: [
-          CircleAvatar(
-            radius: 24,
-            backgroundImage: AssetImage(imageUrl),
-          ),
-          if (isOnline)
-            Positioned(
-              bottom: 0,
-              right: 0,
-              child: Container(
-                width: 14,
-                height: 14,
-                decoration: BoxDecoration(
-                  color: Colors.green,
-                  shape: BoxShape.circle,
-                  border: Border.all(color: isDark ? Colors.black : Colors.white, width: 2),
+          CircleAvatar(radius: 30, backgroundImage: AssetImage(img)),
+          const SizedBox(width: 12),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(name, style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16, color: isDark ? Colors.white : Colors.black)),
+                Text(mutual, style: const TextStyle(color: Colors.grey, fontSize: 13)),
+                const SizedBox(height: 8),
+                Row(
+                  children: [
+                    Expanded(
+                      child: ElevatedButton(
+                        onPressed: () { Get.snackbar('Confirmed', 'You are now friends with $name', snackPosition: SnackPosition.BOTTOM, backgroundColor: Colors.green, colorText: Colors.white); },
+                        style: ElevatedButton.styleFrom(backgroundColor: Colors.blue, foregroundColor: Colors.white, padding: const EdgeInsets.symmetric(vertical: 0)),
+                        child: const Text('Confirm'),
+                      ),
+                    ),
+                    const SizedBox(width: 8),
+                    Expanded(
+                      child: ElevatedButton(
+                        onPressed: () { Get.snackbar('Deleted', 'Request removed', snackPosition: SnackPosition.BOTTOM); },
+                        style: ElevatedButton.styleFrom(backgroundColor: Colors.grey[300], foregroundColor: Colors.black, padding: const EdgeInsets.symmetric(vertical: 0)),
+                        child: const Text('Delete'),
+                      ),
+                    ),
+                  ],
                 ),
-              ),
+              ],
             ),
+          ),
         ],
       ),
-      title: Text(name, style: const TextStyle(fontWeight: FontWeight.bold)),
-      subtitle: Text(status, style: TextStyle(color: isOnline ? Colors.green : Colors.grey, fontSize: 13)),
+    );
+  }
+
+  Widget _buildFriendItem(String name, bool isOnline, String img, String cover, bool isDark) {
+    return ListTile(
+      contentPadding: const EdgeInsets.symmetric(vertical: 4),
+      leading: GestureDetector(
+        onTap: () => Get.to(() => FriendProfileScreen(name: name, image: img, cover: cover, isFriend: true)),
+        child: Stack(
+          children: [
+            CircleAvatar(radius: 24, backgroundImage: AssetImage(img)),
+            if (isOnline)
+              Positioned(
+                right: 0, bottom: 0,
+                child: Container(
+                  width: 12, height: 12,
+                  decoration: BoxDecoration(
+                    color: Colors.green,
+                    shape: BoxShape.circle,
+                    border: Border.all(color: isDark ? Colors.black : Colors.white, width: 2),
+                  ),
+                ),
+              ),
+          ],
+        ),
+      ),
+      title: Text(name, style: TextStyle(fontWeight: FontWeight.bold, color: isDark ? Colors.white : Colors.black)),
       trailing: IconButton(
-        icon: Icon(Icons.chat_bubble_outline, color: Colors.grey[400]),
+        icon: Icon(Icons.chat_bubble_outline, color: Colors.grey[600]),
         onPressed: () {},
       ),
+      onTap: () => Get.to(() => FriendProfileScreen(name: name, image: img, cover: cover, isFriend: true)),
     );
   }
 }

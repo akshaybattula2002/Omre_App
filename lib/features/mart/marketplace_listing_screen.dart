@@ -299,19 +299,24 @@ class MarketplaceListingScreen extends StatelessWidget {
   }
 
   void _showCardMenu(BuildContext context, String name, MarketplaceCategoryController controller) {
+     final theme = Theme.of(context);
+     final isDark = theme.brightness == Brightness.dark;
+     final sheetBg = isDark ? const Color(0xFF1E1E1E) : Colors.white;
+     final textColor = isDark ? Colors.white : Colors.black;
+
      Get.bottomSheet(
       Container(
         padding: const EdgeInsets.symmetric(vertical: 16),
-        decoration: const BoxDecoration(
-          color: Color(0xFF1E1E1E),
-          borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+        decoration: BoxDecoration(
+          color: sheetBg,
+          borderRadius: const BorderRadius.vertical(top: Radius.circular(20)),
         ),
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
             ListTile(
-              leading: const Icon(Icons.bookmark_border, color: Colors.white),
-              title: const Text('Save provider', style: TextStyle(color: Colors.white)),
+              leading: Icon(Icons.bookmark_border, color: textColor),
+              title: Text('Save provider', style: TextStyle(color: textColor)),
               onTap: () { controller.saveProvider(name); Get.back(); },
             ),
             ListTile(
@@ -320,8 +325,8 @@ class MarketplaceListingScreen extends StatelessWidget {
               onTap: () { controller.reportProvider(name); Get.back(); },
             ),
             ListTile(
-              leading: const Icon(Icons.share_outlined, color: Colors.white),
-              title: const Text('Share', style: TextStyle(color: Colors.white)),
+              leading: Icon(Icons.share_outlined, color: textColor),
+              title: Text('Share', style: TextStyle(color: textColor)),
               onTap: () { controller.shareProvider(name); Get.back(); },
             ),
           ],

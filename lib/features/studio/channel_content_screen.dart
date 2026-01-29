@@ -240,19 +240,29 @@ class _ChannelContentScreenState extends State<ChannelContentScreen> {
                                       const SizedBox(width: 4),
                                       Text(item['visibility'], style: const TextStyle(color: Colors.grey, fontSize: 12)),
                                       const SizedBox(width: 12),
-                                      Text(isPlaylist ? 'Updated ${item['updatedDate']}' : item['date'], style: const TextStyle(color: Colors.grey, fontSize: 12)),
+                                      Expanded(
+                                        child: Text(
+                                          isPlaylist ? 'Updated ${item['updatedDate']}' : item['date'], 
+                                          style: const TextStyle(color: Colors.grey, fontSize: 12),
+                                          maxLines: 1,
+                                          overflow: TextOverflow.ellipsis,
+                                        ),
+                                      ),
                                     ],
                                   ),
                                   if (!isPlaylist) ...[
                                     const SizedBox(height: 8),
-                                    Row(
-                                      children: [
-                                        _buildMiniStat(Icons.visibility_outlined, item['views']),
-                                        const SizedBox(width: 16),
-                                        _buildMiniStat(Icons.thumb_up_outlined, item['likes']),
-                                        const SizedBox(width: 16),
-                                        _buildMiniStat(Icons.comment_outlined, item['comments']),
-                                      ],
+                                    SingleChildScrollView(
+                                      scrollDirection: Axis.horizontal,
+                                      child: Row(
+                                        children: [
+                                          _buildMiniStat(Icons.visibility_outlined, item['views']),
+                                          const SizedBox(width: 16),
+                                          _buildMiniStat(Icons.thumb_up_outlined, item['likes']),
+                                          const SizedBox(width: 16),
+                                          _buildMiniStat(Icons.comment_outlined, item['comments']),
+                                        ],
+                                      ),
                                     ),
                                   ],
                                 ],
@@ -285,7 +295,18 @@ class _ChannelContentScreenState extends State<ChannelContentScreen> {
                                           TextButton(onPressed: () => Get.back(), child: const Text('CANCEL')),
                                           TextButton(
                                             onPressed: () {
-                                              Get.back();
+                                              Get.back(); // Close dialog
+                                              setState(() {
+                                                if (selectedFilter == 'Videos') {
+                                                  allVideos.remove(item);
+                                                } else if (selectedFilter == 'Shorts') {
+                                                  allShorts.remove(item);
+                                                } else if (selectedFilter == 'Live') {
+                                                  allLive.remove(item);
+                                                } else if (selectedFilter == 'Playlists') {
+                                                  allPlaylists.remove(item);
+                                                }
+                                              });
                                               Get.snackbar('Deleted', 'Content has been removed.', snackPosition: SnackPosition.BOTTOM);
                                             },
                                             child: const Text('DELETE', style: TextStyle(color: Colors.red)),

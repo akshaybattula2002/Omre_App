@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import '../../core/constants/app_assets.dart';
+import 'package:omre/core/constants/app_assets.dart';
+import 'screens/create_blog_screen.dart';
+import 'screens/blog_detail_screen.dart';
 
 class BlogsScreen extends StatelessWidget {
   const BlogsScreen({super.key});
@@ -20,43 +22,48 @@ class BlogsScreen extends StatelessWidget {
           icon: Icon(Icons.arrow_back, color: theme.iconTheme.color),
           onPressed: () => Get.back(),
         ),
+        actions: [
+          IconButton(icon: Icon(Icons.search, color: theme.iconTheme.color), onPressed: () {}),
+          IconButton(icon: Icon(Icons.bookmark_border, color: theme.iconTheme.color), onPressed: () {}),
+        ],
+      ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () => Get.to(() => const CreateBlogScreen()),
+        backgroundColor: Colors.blue,
+        child: const Icon(Icons.edit, color: Colors.white),
       ),
       body: ListView(
         padding: const EdgeInsets.all(16),
         children: [
-          _buildFeaturedBlog(theme, isDark),
-          const SizedBox(height: 32),
-          Text(
-            'Latest Articles',
-            style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: theme.textTheme.bodyLarge?.color),
+          _buildFeaturedBlog(isDark),
+          const SizedBox(height: 24),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text(
+                'Latest Articles',
+                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: theme.textTheme.bodyLarge?.color),
+              ),
+              TextButton(onPressed: () {}, child: const Text('View All')),
+            ],
           ),
-          const SizedBox(height: 16),
+          const SizedBox(height: 12),
           _buildBlogItem(
-            'The Future of Flutter in 2026',
-            'Technology',
-            '5 min read',
-            AppAssets.thumbnail1,
-            isDark,
-          ),
-          _buildBlogItem(
-            'Sustainable Living: A Weekly Guide',
-            'Lifestyle',
-            '8 min read',
-            AppAssets.thumbnail2,
-            isDark,
-          ),
-          _buildBlogItem(
-            'Portrait Photography Masterclass',
-            'Photography',
-            '12 min read',
-            AppAssets.thumbnail3,
+            'The Future of Flutter Development',
+            'Technology • 5 min read',
+            AppAssets.post1,
             isDark,
           ),
            _buildBlogItem(
-            'Top 10 Hidden Gems in Japan',
-            'Travel',
-            '6 min read',
-            AppAssets.thumbnail1,
+            'Healthy Habits for Remote Workers',
+            'Lifestyle • 8 min read',
+            AppAssets.post2,
+            isDark,
+          ),
+           _buildBlogItem(
+            'Travel Guide: exploring Tokyo',
+            'Travel • 12 min read',
+            AppAssets.post3,
             isDark,
           ),
         ],
@@ -64,122 +71,111 @@ class BlogsScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildFeaturedBlog(ThemeData theme, bool isDark) {
-    return Container(
-      decoration: BoxDecoration(
-        color: isDark ? Colors.grey[900] : Colors.white,
-        borderRadius: BorderRadius.circular(20),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withOpacity(0.05),
-            blurRadius: 15,
-            offset: const Offset(0, 5),
-          ),
-        ],
-      ),
-      clipBehavior: Clip.antiAlias,
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Image.asset(
-            AppAssets.thumbnail3, // Assuming this is the asset path for the featured blog
-            height: 200,
-            width: double.infinity,
+  Widget _buildFeaturedBlog(bool isDark) {
+    return GestureDetector(
+      onTap: () {
+        Get.to(() => const BlogDetailScreen(
+          title: 'Mastering State Management',
+          category: 'Development',
+          author: 'John Doe',
+          time: '10 min read',
+          image: AppAssets.cover1,
+        ));
+      },
+      child: Container(
+        height: 250,
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(16),
+          image: DecorationImage(
+            image: AssetImage(AppAssets.cover1),
             fit: BoxFit.cover,
           ),
-          Padding(
-            padding: const EdgeInsets.all(20),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
-                  decoration: BoxDecoration(
-                    color: Colors.blue.withOpacity(0.1),
-                    borderRadius: BorderRadius.circular(8),
-                  ),
-                  child: const Text('Featured', style: TextStyle(color: Colors.blue, fontWeight: FontWeight.bold, fontSize: 12)),
-                ),
-                const SizedBox(height: 12),
-                const Text(
-                  '10 Habits of Highly Productive Developers',
-                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-                ),
-                const SizedBox(height: 8),
-                Text(
-                  'Unlocking peak performance requires more than just coding skills. Here is a breakdown of...',
-                  style: TextStyle(color: Colors.grey[600], fontSize: 14),
-                ),
-                const SizedBox(height: 16),
-                Row(
-                  children: [
-                    const CircleAvatar(
-                      backgroundImage: AssetImage(AppAssets.avatar2), // Assuming AppAssets.avatar2 resolves to this path
-                    ),
-                    const SizedBox(width: 8),
-                    const Text('Alex Johnson', style: TextStyle(fontSize: 12, fontWeight: FontWeight.w500)),
-                    const Spacer(),
-                    Text('Oct 24 • 4 min read', style: TextStyle(color: Colors.grey[500], fontSize: 12)),
-                  ],
-                ),
-              ],
+        ),
+        child: Container(
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(16),
+            gradient: LinearGradient(
+              begin: Alignment.topCenter,
+              end: Alignment.bottomCenter,
+              colors: [Colors.transparent, Colors.black.withOpacity(0.8)],
             ),
           ),
-        ],
+          padding: const EdgeInsets.all(16),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.end,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Container(
+                padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+                decoration: BoxDecoration(
+                  color: Colors.blue,
+                  borderRadius: BorderRadius.circular(8),
+                ),
+                child: const Text('Featured', style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 12)),
+              ),
+              const SizedBox(height: 8),
+              const Text(
+                'Mastering State Management',
+                style: TextStyle(color: Colors.white, fontSize: 20, fontWeight: FontWeight.bold),
+              ),
+              const SizedBox(height: 4),
+              const Text(
+                'A comprehensive guide to GetX, Provider, and Bloc.',
+                style: TextStyle(color: Colors.white70, fontSize: 14),
+              ),
+            ],
+          ),
+        ),
       ),
     );
   }
 
-  Widget _buildBlogItem(String title, String category, String readTime, String imageUrl, bool isDark) {
-    return Container(
-      margin: const EdgeInsets.only(bottom: 20),
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          ClipRRect(
-            borderRadius: BorderRadius.circular(12),
-            child: Image.asset(
-              imageUrl, // Assuming imageUrl now points to an asset path
-              width: 100,
-              height: 100,
-              fit: BoxFit.cover,
+  Widget _buildBlogItem(String title, String subtitle, String imageUrl, bool isDark) {
+    return GestureDetector(
+      onTap: () {
+        Get.to(() => BlogDetailScreen(
+          title: title,
+          category: subtitle.split('•')[0].trim(),
+          author: 'Jane Smith',
+          time: subtitle.split('•')[1].trim(),
+          image: imageUrl,
+        ));
+      },
+      child: Container(
+        margin: const EdgeInsets.only(bottom: 16),
+        child: Row(
+          children: [
+            ClipRRect(
+              borderRadius: BorderRadius.circular(12),
+              child: Image.asset(
+                imageUrl,
+                width: 100,
+                height: 80,
+                fit: BoxFit.cover,
+              ),
             ),
-          ),
-          const SizedBox(width: 16),
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  category.toUpperCase(),
-                  style: const TextStyle(
-                    color: Colors.grey,
-                    fontSize: 10,
-                    fontWeight: FontWeight.bold,
-                    letterSpacing: 1.0,
+            const SizedBox(width: 16),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    title,
+                    maxLines: 2,
+                    overflow: TextOverflow.ellipsis,
+                    style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
                   ),
-                ),
-                const SizedBox(height: 8),
-                Text(
-                  title,
-                  style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
-                  maxLines: 2,
-                  overflow: TextOverflow.ellipsis,
-                ),
-                const SizedBox(height: 8),
-                Row(
-                  children: [
-                    Icon(Icons.access_time, size: 12, color: Colors.grey[400]),
-                    const SizedBox(width: 4),
-                    Text(readTime, style: TextStyle(color: Colors.grey[500], fontSize: 12)),
-                    const Spacer(),
-                    Icon(Icons.bookmark_border, size: 20, color: Colors.grey[400]),
-                  ],
-                ),
-              ],
+                  const SizedBox(height: 4),
+                  Text(
+                    subtitle,
+                    style: TextStyle(color: Colors.grey[600], fontSize: 12),
+                  ),
+                ],
+              ),
             ),
-          ),
-        ],
+            IconButton(icon: const Icon(Icons.bookmark_border), onPressed: () {}),
+          ],
+        ),
       ),
     );
   }

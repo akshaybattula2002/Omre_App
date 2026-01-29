@@ -185,12 +185,6 @@ class StoryViewerScreen extends GetView<StoryViewerController> {
                                 horizontal: 20,
                                 vertical: 12,
                               ),
-                              suffixIcon: IconButton(
-                                icon: const Icon(Icons.send,
-                                    color: Colors.white),
-                                onPressed: () => controller.sendMessage(
-                                    controller.messageController.text),
-                              ),
                             ),
                             onTap: controller.pauseTimer,
                            onEditingComplete: () {
@@ -215,7 +209,7 @@ class StoryViewerScreen extends GetView<StoryViewerController> {
                           );
                         }),
                         IconButton(
-                          icon: const Icon(Icons.send_outlined,
+                          icon: const Icon(Icons.send,
                               color: Colors.white),
                           onPressed: controller.shareStory,
                         ),

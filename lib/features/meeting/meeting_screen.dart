@@ -10,6 +10,10 @@ class MeetingScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     final controller = Get.put(MeetingController());
     final isDark = Theme.of(context).brightness == Brightness.dark;
+    final textColor = isDark ? Colors.white : Colors.black;
+    final secondaryTextColor = isDark ? Colors.white70 : Colors.black87;
+    final cardBg = isDark ? const Color(0xFF13161D) : Colors.grey[100];
+    final borderColor = isDark ? Colors.white.withAlpha(13) : Colors.black.withAlpha(13);
 
     return Scaffold(
       backgroundColor: isDark ? const Color(0xFF0A0C10) : Colors.white,
@@ -25,9 +29,9 @@ class MeetingScreen extends StatelessWidget {
               Container(
                 padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
                 decoration: BoxDecoration(
-                  color: Colors.blue.withValues(alpha: 0.1),
+                  color: Colors.blue.withAlpha(25),
                   borderRadius: BorderRadius.circular(20),
-                  border: Border.all(color: Colors.blue.withValues(alpha: 0.2)),
+                  border: Border.all(color: Colors.blue.withAlpha(51)),
                 ),
                 child: Row(
                   mainAxisSize: MainAxisSize.min,
@@ -37,7 +41,7 @@ class MeetingScreen extends StatelessWidget {
                     Text(
                       'SECURE & ENCRYPTED',
                       style: TextStyle(
-                        color: Colors.blue.withValues(alpha: 0.8),
+                        color: Colors.blue.withAlpha(204),
                         fontSize: 10,
                         fontWeight: FontWeight.bold,
                         letterSpacing: 1.2,
@@ -49,22 +53,22 @@ class MeetingScreen extends StatelessWidget {
 
               const SizedBox(height: 24),
 
-              const Text(
+              Text(
                 'Premium Video',
                 textAlign: TextAlign.center,
                 style: TextStyle(
                   fontSize: 32,
                   fontWeight: FontWeight.w900,
-                  color: Colors.white, // Using Color manually if theme not providing white
+                  color: textColor,
                 ),
               ),
-              const Text(
+              Text(
                 'Conferencing for Everyone.',
                 textAlign: TextAlign.center,
                 style: TextStyle(
                   fontSize: 32,
                   fontWeight: FontWeight.w900,
-                  color: Colors.white,
+                  color: textColor,
                   height: 1.1,
                 ),
               ),
@@ -139,9 +143,9 @@ class MeetingScreen extends StatelessWidget {
                Container(
                 padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
                 decoration: BoxDecoration(
-                  color: const Color(0xFF13161D),
+                  color: cardBg,
                   borderRadius: BorderRadius.circular(16),
-                  border: Border.all(color: Colors.white.withValues(alpha: 0.05)),
+                  border: Border.all(color: borderColor),
                 ),
                 child: Row(
                   children: [
@@ -149,7 +153,7 @@ class MeetingScreen extends StatelessWidget {
                     const SizedBox(width: 16),
                     Expanded(
                       child: TextField(
-                        style: const TextStyle(color: Colors.white),
+                        style: TextStyle(color: textColor),
                         onSubmitted: (val) => controller.joinMeeting(val),
                         decoration: const InputDecoration(
                           hintText: 'Enter meeting code or link',
@@ -180,25 +184,25 @@ class MeetingScreen extends StatelessWidget {
               Container(
                 padding: const EdgeInsets.all(16),
                 decoration: BoxDecoration(
-                  color: const Color(0xFF13161D),
+                  color: cardBg,
                   borderRadius: BorderRadius.circular(20),
-                  border: Border.all(color: Colors.white.withValues(alpha: 0.05)),
+                  border: Border.all(color: borderColor),
                 ),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: const [
+                      children: [
                         Text(
                           'System Check',
                           style: TextStyle(
-                            color: Colors.white,
+                            color: textColor,
                             fontSize: 16,
                             fontWeight: FontWeight.bold,
                           ),
                         ),
-                        Icon(Icons.settings, color: Colors.grey),
+                        const Icon(Icons.settings, color: Colors.grey),
                       ],
                     ),
                     const SizedBox(height: 16),
@@ -229,6 +233,7 @@ class MeetingScreen extends StatelessWidget {
                           title: 'FaceTime HD',
                           status: statusText,
                           statusColor: color,
+                          isDark: isDark,
                         ),
                       );
                     }),
@@ -259,6 +264,7 @@ class MeetingScreen extends StatelessWidget {
                           title: 'MacBook Pro Mic',
                           status: statusText,
                           statusColor: color,
+                          isDark: isDark,
                         ),
                       );
                     }),
@@ -271,16 +277,16 @@ class MeetingScreen extends StatelessWidget {
 
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: const [
+                children: [
                   Text(
                     'Next Up',
                     style: TextStyle(
-                      color: Colors.white,
+                      color: textColor,
                       fontSize: 18,
                       fontWeight: FontWeight.bold,
                     ),
                   ),
-                  Text(
+                  const Text(
                     'See full schedule',
                     style: TextStyle(
                       color: Color(0xFF2575FC),
@@ -319,7 +325,7 @@ class MeetingScreen extends StatelessWidget {
                     Expanded(
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
-                        children: const [
+                        children: [
                           Row(
                             children: [
                               Text(
@@ -329,8 +335,8 @@ class MeetingScreen extends StatelessWidget {
                                   fontWeight: FontWeight.bold,
                                 ),
                               ),
-                              SizedBox(width: 8),
-                              _NewBadge(),
+                              const SizedBox(width: 8),
+                              const _NewBadge(),
                             ],
                           ),
                           SizedBox(height: 6),
@@ -360,14 +366,18 @@ class MeetingScreen extends StatelessWidget {
     );
   }
   
-  void _onNewMeeting(BuildContext context, MeetingController controller) {
+   void _onNewMeeting(BuildContext context, MeetingController controller) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+    final cardBg = isDark ? const Color(0xFF13161D) : Colors.white;
+    final textColor = isDark ? Colors.white : Colors.black;
+
     showModalBottomSheet(
       context: context,
       backgroundColor: Colors.transparent,
       builder: (context) => Container(
-        decoration: const BoxDecoration(
-          color: Color(0xFF13161D),
-          borderRadius: BorderRadius.vertical(top: Radius.circular(32)),
+        decoration: BoxDecoration(
+          color: cardBg,
+          borderRadius: const BorderRadius.vertical(top: Radius.circular(32)),
         ),
         padding: const EdgeInsets.symmetric(vertical: 32, horizontal: 24),
         child: Column(
@@ -375,15 +385,16 @@ class MeetingScreen extends StatelessWidget {
           children: [
             Container(
                width: 40, height: 4, 
-               decoration: BoxDecoration(color: Colors.white30, borderRadius: BorderRadius.circular(2))
+               decoration: BoxDecoration(color: isDark ? Colors.white30 : Colors.black12, borderRadius: BorderRadius.circular(2))
             ),
             const SizedBox(height: 32),
-            _buildModalOption(Icons.link, 'Get a meeting link to share', 'Send this to people you want to meet with'),
+            _buildModalOption(Icons.link, 'Get a meeting link to share', 'Send this to people you want to meet with', isDark),
             const SizedBox(height: 24),
             _buildModalOption(
               Icons.videocam_outlined, 
               'Start an instant meeting', 
               'Join the meeting immediately', 
+              isDark,
               onTap: () => controller.startInstantMeeting()
             ),
             const SizedBox(height: 24),
@@ -391,6 +402,7 @@ class MeetingScreen extends StatelessWidget {
               Icons.calendar_month_outlined, 
               'Schedule in Google Calendar', 
               'Plan your meeting for later',
+              isDark,
               onTap: () => controller.scheduleMeeting(),
             ),
           ],
@@ -401,26 +413,30 @@ class MeetingScreen extends StatelessWidget {
 
   void _onJoinMeeting(BuildContext context, MeetingController controller) {
     final textCtrl = TextEditingController();
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+    final cardBg = isDark ? const Color(0xFF13161D) : Colors.white;
+    final textColor = isDark ? Colors.white : Colors.black;
+
     showDialog(
       context: context,
       builder: (context) => Dialog(
-        backgroundColor: const Color(0xFF13161D),
+        backgroundColor: cardBg,
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(24)),
         child: Padding(
           padding: const EdgeInsets.all(24),
           child: Column(
              mainAxisSize: MainAxisSize.min,
              children: [
-               const Text('Join a Meeting', style: TextStyle(color: Colors.white, fontSize: 20, fontWeight: FontWeight.bold)),
+               Text('Join a Meeting', style: TextStyle(color: textColor, fontSize: 20, fontWeight: FontWeight.bold)),
                const SizedBox(height: 24),
                TextField(
                 controller: textCtrl,
-                 style: const TextStyle(color: Colors.white),
+                 style: TextStyle(color: textColor),
                  decoration: InputDecoration(
                    hintText: 'Example: abc-defg-hij',
-                   hintStyle: TextStyle(color: Colors.grey.withOpacity(0.5)),
+                   hintStyle: TextStyle(color: Colors.grey.withAlpha(128)),
                    filled: true,
-                   fillColor: Colors.black.withOpacity(0.2),
+                   fillColor: isDark ? Colors.black.withAlpha(51) : Colors.grey.withAlpha(25),
                    border: OutlineInputBorder(borderRadius: BorderRadius.circular(12), borderSide: BorderSide.none),
                  ),
                ),
@@ -443,11 +459,15 @@ class MeetingScreen extends StatelessWidget {
     );
   }
 
-  void _onShareScreen(BuildContext context, MeetingController controller) {
+   void _onShareScreen(BuildContext context, MeetingController controller) {
+     final isDark = Theme.of(context).brightness == Brightness.dark;
+     final cardBg = isDark ? const Color(0xFF13161D) : Colors.white;
+     final textColor = isDark ? Colors.white : Colors.black;
+
      showDialog(
       context: context,
       builder: (context) => Dialog(
-        backgroundColor: const Color(0xFF13161D),
+        backgroundColor: cardBg,
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(24)),
         child: Padding(
           padding: const EdgeInsets.all(32),
@@ -456,7 +476,7 @@ class MeetingScreen extends StatelessWidget {
             children: [
               const Icon(Icons.present_to_all, color: Color(0xFF2575FC), size: 48),
               const SizedBox(height: 16),
-              const Text('Share your screen?', style: TextStyle(color: Colors.white, fontSize: 20, fontWeight: FontWeight.bold)),
+              Text('Share your screen?', style: TextStyle(color: textColor, fontSize: 20, fontWeight: FontWeight.bold)),
               const SizedBox(height: 24),
               ElevatedButton(
                 onPressed: () => controller.shareScreen(),
@@ -520,7 +540,10 @@ class MeetingScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildModalOption(IconData icon, String title, String subtitle, {VoidCallback? onTap}) {
+   Widget _buildModalOption(IconData icon, String title, String subtitle, bool isDark, {VoidCallback? onTap}) {
+    final textColor = isDark ? Colors.white : Colors.black;
+    final subTextColor = isDark ? Colors.grey : Colors.grey[700];
+
     return InkWell(
       onTap: onTap,
       borderRadius: BorderRadius.circular(12),
@@ -529,19 +552,19 @@ class MeetingScreen extends StatelessWidget {
           Container(
             padding: const EdgeInsets.all(12),
             decoration: BoxDecoration(
-              color: Colors.white.withOpacity(0.05),
+              color: isDark ? Colors.white.withAlpha(13) : Colors.black.withAlpha(13),
               shape: BoxShape.circle,
             ),
-            child: Icon(icon, color: Colors.white, size: 24),
+            child: Icon(icon, color: isDark ? Colors.white : Colors.black, size: 24),
           ),
           const SizedBox(width: 20),
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(title, style: const TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.w600)),
+                Text(title, style: TextStyle(color: textColor, fontSize: 16, fontWeight: FontWeight.w600)),
                 const SizedBox(height: 4),
-                Text(subtitle, style: const TextStyle(color: Colors.grey, fontSize: 13)),
+                Text(subtitle, style: TextStyle(color: subTextColor, fontSize: 13)),
               ],
             ),
           ),
@@ -577,22 +600,23 @@ class MeetingScreen extends StatelessWidget {
     required String title,
     required String status,
     required Color statusColor,
+    required bool isDark,
   }) {
     return Row(
       children: [
         Container(
           padding: const EdgeInsets.all(10),
           decoration: BoxDecoration(
-            color: Colors.white.withOpacity(0.05),
+            color: isDark ? Colors.white.withAlpha(13) : Colors.black.withAlpha(13),
             borderRadius: BorderRadius.circular(12),
           ),
-          child: Icon(icon, color: Colors.white),
+          child: Icon(icon, color: isDark ? Colors.white : Colors.black),
         ),
         const SizedBox(width: 16),
         Expanded(
           child: Text(
             title,
-            style: const TextStyle(color: Colors.white),
+            style: TextStyle(color: isDark ? Colors.white : Colors.black),
           ),
         ),
         Row(

@@ -137,6 +137,22 @@ class PostCard extends StatelessWidget {
                     ),
                   ),
                   const SizedBox(height: 8),
+                  Obx(() {
+                    if (post.comments.isNotEmpty) {
+                      return GestureDetector(
+                        onTap: () => controller.commentOnPost(post.id),
+                        child: Padding(
+                          padding: const EdgeInsets.only(top: 4),
+                          child: Text(
+                            'View all ${post.comments.length} comments',
+                            style: TextStyle(color: Colors.grey[600], fontSize: 13),
+                          ),
+                        ),
+                      );
+                    }
+                    return const SizedBox.shrink();
+                  }),
+                  const SizedBox(height: 4),
                 ],
               ),
             ),

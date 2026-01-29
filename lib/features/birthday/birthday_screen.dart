@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import '../../core/constants/app_assets.dart';
+import 'screens/gift_shop_screen.dart';
+import '../friends/screens/friend_profile_screen.dart';
 
 class BirthdayScreen extends StatelessWidget {
   const BirthdayScreen({super.key});
@@ -24,141 +26,113 @@ class BirthdayScreen extends StatelessWidget {
       body: ListView(
         padding: const EdgeInsets.all(16),
         children: [
-          _buildTodaySection(theme, isDark),
-          const SizedBox(height: 24),
-          Text(
-            'Upcoming',
-            style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: theme.textTheme.bodyLarge?.color),
-          ),
-          const SizedBox(height: 16),
-          _buildBirthdayItem(
-            'Michael Chen',
-            'Turning 28 tomorrow',
-            AppAssets.post1,
-            isDark,
-          ),
-          _buildBirthdayItem(
-            'Mike',
-            'Turning 28 Tomorrow',
-             AppAssets.post2,
-            isDark,
-          ),
-          _buildBirthdayItem(
-            'Emma',
-            'Turning 31 on Sunday',
-            AppAssets.post3,
-            isDark,
-          ),
-          
-          const SizedBox(height: 24),
-          Container(
-            padding: const EdgeInsets.all(16),
-            decoration: BoxDecoration(
-              color: isDark ? Colors.purple.withOpacity(0.1) : Colors.purple[50],
-              borderRadius: BorderRadius.circular(16),
-              border: Border.all(color: Colors.purple.withOpacity(0.2)),
-            ),
-            child: Row(
-              children: [
-                const Icon(Icons.card_giftcard, color: Colors.purple, size: 32),
-                const SizedBox(width: 16),
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      const Text('Send a Gift', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16)),
-                      Text(
-                        'Browse our gift shop for meaningful digital presents.',
-                        style: TextStyle(color: isDark ? Colors.grey[400] : Colors.grey[600], fontSize: 13),
-                      ),
-                    ],
-                  ),
-                ),
-                Icon(Icons.chevron_right, color: Colors.purple.withOpacity(0.5)),
-              ],
-            ),
-          ),
+           Container(
+             padding: const EdgeInsets.all(16),
+             decoration: BoxDecoration(
+               gradient: const LinearGradient(colors: [Color(0xFF6A11CB), Color(0xFF2575FC)]),
+               borderRadius: BorderRadius.circular(16),
+             ),
+             child: Row(
+               children: [
+                 const Icon(Icons.cake, color: Colors.white, size: 40),
+                 const SizedBox(width: 16),
+                 const Expanded(
+                   child: Column(
+                     crossAxisAlignment: CrossAxisAlignment.start,
+                     children: [
+                       Text("Today's Birthdays", style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 18)),
+                       Text("3 friends are celebrating today!", style: TextStyle(color: Colors.white70)),
+                     ],
+                   ),
+                 ),
+               ],
+             ),
+           ),
+           const SizedBox(height: 24),
+           Text('Recent & Upcoming', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: theme.textTheme.bodyLarge?.color)),
+           const SizedBox(height: 16),
+           _buildBirthdayItem('Sarah Williams', 'Turning 25 today', AppAssets.avatar1, AppAssets.cover1, isDark),
+           _buildBirthdayItem('Mike Chen', 'Tomorrow', AppAssets.avatar2, AppAssets.cover2, isDark),
+           _buildBirthdayItem('Emma Wilson', 'In 3 days', AppAssets.avatar3, AppAssets.cover3, isDark),
+           
+           const SizedBox(height: 32),
+           _buildGiftCard(isDark),
         ],
       ),
     );
   }
 
-  Widget _buildTodaySection(ThemeData theme, bool isDark) {
-    return Container(
-      padding: const EdgeInsets.all(24),
-      decoration: BoxDecoration(
-        gradient: const LinearGradient(
-          colors: [Color(0xFFFF4081), Color(0xFFFF80AB)],
-          begin: Alignment.topLeft,
-          end: Alignment.bottomRight,
+  Widget _buildBirthdayItem(String name, String date, String img, String cover, bool isDark) {
+    return ListTile(
+      contentPadding: const EdgeInsets.symmetric(vertical: 8),
+      leading: GestureDetector(
+        onTap: () => Get.to(() => FriendProfileScreen(name: name, image: img, cover: cover, isFriend: true)),
+        child: CircleAvatar(radius: 28, backgroundImage: AssetImage(img)),
+      ),
+      title: Text(name, style: TextStyle(fontWeight: FontWeight.bold, color: isDark ? Colors.white : Colors.black)),
+      subtitle: Text(date, style: const TextStyle(color: Colors.grey)),
+      trailing: ElevatedButton(
+        onPressed: () {
+           Get.bottomSheet(
+             Container(
+               padding: const EdgeInsets.all(16),
+               color: isDark ? const Color(0xFF242526) : Colors.white,
+               child: Column(
+                 mainAxisSize: MainAxisSize.min,
+                 children: [
+                   const Text('Write a birthday wish', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+                   const SizedBox(height: 16),
+                   TextField(
+                     decoration: const InputDecoration(border: OutlineInputBorder(), hintText: 'Happy Birthday!'),
+                     maxLines: 3,
+                   ),
+                   const SizedBox(height: 16),
+                   ElevatedButton(onPressed: () => Get.back(), child: const Text('Post'))
+                 ],
+               ),
+             )
+           );
+        },
+        style: ElevatedButton.styleFrom(
+          backgroundColor: Colors.pinkAccent,
+          foregroundColor: Colors.white,
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
         ),
-        borderRadius: BorderRadius.circular(20),
-        boxShadow: [
-          BoxShadow(
-            color: const Color(0xFFFF4081).withOpacity(0.3),
-            blurRadius: 15,
-            offset: const Offset(0, 8),
-          ),
-        ],
+        child: const Text('Wish'),
+      ),
+    );
+  }
+
+  Widget _buildGiftCard(bool isDark) {
+    return Container(
+      padding: const EdgeInsets.all(16),
+      decoration: BoxDecoration(
+        color: isDark ? Colors.grey[900] : Colors.grey[100],
+        borderRadius: BorderRadius.circular(16),
       ),
       child: Column(
         children: [
-          const Icon(Icons.cake, color: Colors.white, size: 48),
-          const SizedBox(height: 16),
-          const Text(
-            'It\'s Jessica\'s Birthday!',
-            style: TextStyle(color: Colors.white, fontSize: 22, fontWeight: FontWeight.bold),
-          ),
+          Icon(Icons.card_giftcard, size: 40, color: Colors.pinkAccent),
+          const SizedBox(height: 12),
+          Text('Send a Digital Gift', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16, color: isDark ? Colors.white : Colors.black)),
           const SizedBox(height: 8),
-          const Text(
-            'Turned 25 today. Send her some love!',
-            style: TextStyle(color: Colors.white70, fontSize: 14),
-          ),
-          const SizedBox(height: 24),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              ElevatedButton.icon(
-                onPressed: () {},
-                icon: const Icon(Icons.edit, size: 18),
-                label: const Text('Write Post'),
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.white,
-                  foregroundColor: const Color(0xFFFF4081),
-                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
-                ),
+          const Text('Make their day special with a virtual gift card or surprise.', textAlign: TextAlign.center, style: TextStyle(color: Colors.grey)),
+          const SizedBox(height: 16),
+          SizedBox(
+            width: double.infinity,
+            child: ElevatedButton(
+              onPressed: () {
+                Get.to(() => const GiftShopScreen());
+              },
+              style: ElevatedButton.styleFrom(
+                backgroundColor: Colors.white,
+                foregroundColor: Colors.pinkAccent,
+                side: const BorderSide(color: Colors.pinkAccent),
               ),
-              const SizedBox(width: 12),
-              ElevatedButton.icon(
-                onPressed: () {},
-                icon: const Icon(Icons.card_giftcard, size: 18),
-                label: const Text('Send Gift'),
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.white.withOpacity(0.2),
-                  foregroundColor: Colors.white,
-                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
-                  elevation: 0,
-                ),
-              ),
-            ],
+              child: const Text('Visit Gift Shop'),
+            ),
           ),
         ],
-      ),
-    );
-  }
-
-  Widget _buildBirthdayItem(String name, String subtitle, String imageUrl, bool isDark) {
-    return ListTile(
-      contentPadding: const EdgeInsets.symmetric(horizontal: 0, vertical: 8),
-      leading: CircleAvatar(
-        radius: 24,
-        backgroundImage: AssetImage(imageUrl),
-      ),
-      title: Text(name, style: const TextStyle(fontWeight: FontWeight.bold)),
-      subtitle: Text(subtitle, style: TextStyle(color: Colors.grey[600], fontSize: 13)),
-      trailing: IconButton(
-        icon: Icon(Icons.send_outlined, color: Colors.grey[400]),
-        onPressed: () {},
       ),
     );
   }

@@ -151,72 +151,115 @@ class JobsController extends GetxController {
 
   void applyForJob(JobModel job) {
     Get.bottomSheet(
-      Container(
-        padding: const EdgeInsets.all(24),
-            decoration: BoxDecoration(
-              color: Colors.black,
-              borderRadius: const BorderRadius.only(topLeft: Radius.circular(24), topRight: Radius.circular(24)),
+      Builder(builder: (context) {
+        final isDark = Theme.of(context).brightness == Brightness.dark;
+        return Container(
+          padding: const EdgeInsets.all(24),
+          decoration: BoxDecoration(
+            color: isDark ? const Color(0xFF1A1A1A) : Colors.white,
+            borderRadius: const BorderRadius.only(
+              topLeft: Radius.circular(24),
+              topRight: Radius.circular(24),
             ),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            const Text('Apply for Position', style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: Colors.white)),
-            const SizedBox(height: 12),
-            Text('You are applying to ${job.company} for the ${job.title} role.', 
-              style: const TextStyle(color: Colors.grey), textAlign: TextAlign.center),
-            const SizedBox(height: 24),
-            SizedBox(
-              width: double.infinity,
-              child: ElevatedButton(
-                onPressed: () {
-                  Get.back();
-                  Get.snackbar('Application Sent', 'Good luck with your application!', 
-                    snackPosition: SnackPosition.BOTTOM, backgroundColor: Colors.green, colorText: Colors.white);
-                },
-                style: ElevatedButton.styleFrom(backgroundColor: AppPalette.accentBlue, padding: const EdgeInsets.all(16)),
-                child: const Text('Confirm Application', style: TextStyle(fontWeight: FontWeight.bold, color: Colors.white)),
+          ),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Text(
+                'Apply for Position',
+                style: TextStyle(
+                    fontSize: 20,
+                    fontWeight: FontWeight.bold,
+                    color: isDark ? Colors.white : Colors.black),
               ),
-            ),
-            const SizedBox(height: 12),
-          ],
-        ),
-      ),
+              const SizedBox(height: 12),
+              Text(
+                'You are applying to ${job.company} for the ${job.title} role.',
+                style: const TextStyle(color: Colors.grey),
+                textAlign: TextAlign.center,
+              ),
+              const SizedBox(height: 24),
+              SizedBox(
+                width: double.infinity,
+                child: ElevatedButton(
+                  onPressed: () {
+                    Get.back();
+                    Get.snackbar(
+                      'Application Sent',
+                      'Good luck with your application!',
+                      snackPosition: SnackPosition.BOTTOM,
+                      backgroundColor: Colors.green,
+                      colorText: Colors.white,
+                    );
+                  },
+                  style: ElevatedButton.styleFrom(
+                      backgroundColor: AppPalette.accentBlue,
+                      padding: const EdgeInsets.all(16)),
+                  child: const Text('Confirm Application',
+                      style: TextStyle(
+                          fontWeight: FontWeight.bold, color: Colors.white)),
+                ),
+              ),
+              const SizedBox(height: 12),
+            ],
+          ),
+        );
+      }),
     );
   }
 
   void showCompleteProfile() {
     Get.dialog(
-      Dialog(
-        backgroundColor: Colors.transparent,
-        child: Container(
-          padding: const EdgeInsets.all(24),
-          decoration: BoxDecoration(
-            color: Colors.grey[900],
-            borderRadius: BorderRadius.circular(24),
-          ),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              const Icon(Icons.stars, color: Colors.amber, size: 48),
-              const SizedBox(height: 16),
-              const Text('Level Up Your Search', style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: Colors.white)),
-              const SizedBox(height: 8),
-              const Text('Users with a complete profile are 4x more likely to be noticed by recruiters.', 
-                style: TextStyle(color: Colors.grey), textAlign: TextAlign.center),
-              const SizedBox(height: 24),
-              SizedBox(
-                width: double.infinity,
-                child: ElevatedButton(
-                  onPressed: () => Get.back(),
-                  style: ElevatedButton.styleFrom(backgroundColor: AppPalette.accentBlue),
-                  child: const Text('Complete Profile', style: TextStyle(color: Colors.white)),
+      Builder(builder: (context) {
+        final isDark = Theme.of(context).brightness == Brightness.dark;
+        return Dialog(
+          backgroundColor: Colors.transparent,
+          child: Container(
+            padding: const EdgeInsets.all(24),
+            decoration: BoxDecoration(
+              color: isDark ? Colors.grey[900] : Colors.white,
+              borderRadius: BorderRadius.circular(24),
+            ),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                const Icon(Icons.stars, color: Colors.amber, size: 48),
+                const SizedBox(height: 16),
+                Text(
+                  'Level Up Your Search',
+                  style: TextStyle(
+                      fontSize: 20,
+                      fontWeight: FontWeight.bold,
+                      color: isDark ? Colors.white : Colors.black),
                 ),
-              ),
-              TextButton(onPressed: () => Get.back(), child: const Text('Maybe later', style: TextStyle(color: Colors.grey))),
-            ],
+                const SizedBox(height: 8),
+                Text(
+                  'Users with a complete profile are 4x more likely to be noticed by recruiters.',
+                  style: TextStyle(
+                      color: isDark ? Colors.grey[400] : Colors.grey[600]),
+                  textAlign: TextAlign.center,
+                ),
+                const SizedBox(height: 24),
+                SizedBox(
+                  width: double.infinity,
+                  child: ElevatedButton(
+                    onPressed: () => Get.back(),
+                    style: ElevatedButton.styleFrom(
+                        backgroundColor: AppPalette.accentBlue),
+                    child: const Text('Complete Profile',
+                        style: TextStyle(color: Colors.white)),
+                  ),
+                ),
+                TextButton(
+                  onPressed: () => Get.back(),
+                  child: const Text('Maybe later',
+                      style: TextStyle(color: Colors.grey)),
+                ),
+              ],
+            ),
           ),
-        ),
-      ),
+        );
+      }),
     );
   }
 
@@ -733,13 +776,9 @@ class JobsScreen extends StatelessWidget {
       margin: const EdgeInsets.all(24),
       padding: const EdgeInsets.all(24),
       decoration: BoxDecoration(
-        gradient: const LinearGradient(
-          colors: [Color(0xFF1E2430), Color(0xFF0F1218)],
-          begin: Alignment.topLeft,
-          end: Alignment.bottomRight,
-        ),
+        color: isDark ? const Color(0xFF1E2430) : AppPalette.accentBlue,
         borderRadius: BorderRadius.circular(24),
-        border: Border.all(color: AppPalette.accentBlue.withOpacity(0.2)),
+        border: Border.all(color: Colors.white.withOpacity(0.1)),
       ),
       child: Stack(
         children: [
@@ -758,17 +797,21 @@ class JobsScreen extends StatelessWidget {
               const Text('Stand out to recruiters', style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold, color: Colors.white)),
               const SizedBox(height: 8),
               const Text('Complete your profile to unlock personalized recommendations and priority applications.', 
-                style: TextStyle(color: Colors.grey, fontSize: 13)),
+                style: TextStyle(color: Colors.white70, fontSize: 13)),
               const SizedBox(height: 24),
               Row(
                 children: [
                   ElevatedButton(
                     onPressed: () => controller.showCompleteProfile(),
-                    style: ElevatedButton.styleFrom(backgroundColor: AppPalette.accentBlue, shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12))),
-                    child: const Text('Complete Profile', style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold)),
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.white,
+                      foregroundColor: AppPalette.accentBlue,
+                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                    ),
+                    child: const Text('Complete Profile', style: TextStyle(fontWeight: FontWeight.bold)),
                   ),
                   const SizedBox(width: 12),
-                  TextButton(onPressed: () {}, child: const Text('Learn More', style: TextStyle(color: Colors.white70))),
+                  TextButton(onPressed: () {}, child: const Text('Learn More', style: TextStyle(color: Colors.white))),
                 ],
               ),
             ],

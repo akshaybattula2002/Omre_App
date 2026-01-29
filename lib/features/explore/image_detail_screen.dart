@@ -23,7 +23,6 @@ class ImageDetailScreen extends StatelessWidget {
               child: Image.asset(
                 imageUrl,
                 fit: BoxFit.contain,
-                width: double.infinity,
               ),
             ),
           ),

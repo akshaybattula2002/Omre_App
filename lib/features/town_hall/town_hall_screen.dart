@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:omre/core/constants/app_assets.dart';
 import 'package:get/get.dart';
-
+import 'package:omre/core/constants/app_assets.dart';
+import 'screens/town_hall_detail_screen.dart';
 
 class TownHallScreen extends StatelessWidget {
   const TownHallScreen({super.key});
@@ -22,216 +22,133 @@ class TownHallScreen extends StatelessWidget {
           onPressed: () => Get.back(),
         ),
       ),
-      body: SingleChildScrollView(
+      body: ListView(
+        padding: const EdgeInsets.all(16),
+        children: [
+          _buildRepSection(theme, isDark),
+          const SizedBox(height: 24),
+          const Text(
+            'Community Discussions',
+            style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+          ),
+          const SizedBox(height: 16),
+          _buildDiscussionCard(
+            'New Park Proposal',
+            'Proposed design for the central park renovation.',
+            'City Council',
+            'Yesterday',
+            AppAssets.cover1,
+            isDark,
+          ),
+          _buildDiscussionCard(
+            'Traffic Safety Measures',
+            'Discussion on implementing new speed bumps in residential areas.',
+            'Transport Dept',
+            '2 days ago',
+            AppAssets.cover2,
+            isDark,
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildRepSection(ThemeData theme, bool isDark) {
+    return Container(
+      padding: const EdgeInsets.all(16),
+      decoration: BoxDecoration(
+        color: isDark ? Colors.grey[900] : Colors.blue.withOpacity(0.1),
+        borderRadius: BorderRadius.circular(16),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            'Your Representatives',
+            style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: isDark ? Colors.white : Colors.blue[900]),
+          ),
+          const SizedBox(height: 16),
+          _buildRepItem('Mayor Sarah Connor', 'Mayor', AppAssets.avatar1, isDark),
+          const Divider(),
+          _buildRepItem('Councilman John Doe', 'District 9', AppAssets.avatar2, isDark),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildRepItem(String name, String role, String img, bool isDark) {
+    return ListTile(
+      contentPadding: EdgeInsets.zero,
+      leading: CircleAvatar(backgroundImage: AssetImage(img)),
+      title: Text(name, style: TextStyle(fontWeight: FontWeight.bold, color: isDark ? Colors.white : Colors.black)),
+      subtitle: Text(role, style: TextStyle(color: isDark ? Colors.grey[400] : Colors.grey[700])),
+      trailing: ElevatedButton(
+        onPressed: () {
+          Get.bottomSheet(
+            Container(
+              color: isDark ? const Color(0xFF242526) : Colors.white,
+              child: Wrap(
+                children: [
+                  ListTile(leading: const Icon(Icons.email), title: const Text('Email'), onTap: () => Get.back()),
+                  ListTile(leading: const Icon(Icons.phone), title: const Text('Call'), onTap: () => Get.back()),
+                  ListTile(leading: const Icon(Icons.message), title: const Text('Message'), onTap: () => Get.back()),
+                ],
+              ),
+            ),
+          );
+        },
+        child: const Text('Contact'),
+      ),
+    );
+  }
+
+  Widget _buildDiscussionCard(String title, String desc, String author, String time, String img, bool isDark) {
+    return GestureDetector(
+      onTap: () {
+        Get.to(() => TownHallDetailScreen(
+          title: title,
+          description: desc,
+          author: author,
+          time: time,
+        ));
+      },
+      child: Container(
+        margin: const EdgeInsets.only(bottom: 16),
+        decoration: BoxDecoration(
+          color: isDark ? const Color(0xFF242526) : Colors.white,
+          borderRadius: BorderRadius.circular(16),
+          boxShadow: [BoxShadow(color: Colors.black.withOpacity(0.05), blurRadius: 4, offset: const Offset(0, 2))],
+        ),
         child: Column(
           children: [
-            _buildHeader(theme, isDark),
+            ClipRRect(
+              borderRadius: const BorderRadius.vertical(top: Radius.circular(16)),
+              child: Image.asset(img, height: 150, width: double.infinity, fit: BoxFit.cover),
+            ),
             Padding(
-              padding: const EdgeInsets.all(16.0),
+              padding: const EdgeInsets.all(16),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(
-                    'Live Discussions',
-                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: theme.textTheme.bodyLarge?.color),
-                  ),
+                  Text(title, style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18, color: isDark ? Colors.white : Colors.black)),
+                  const SizedBox(height: 8),
+                  Text(desc, style: TextStyle(color: isDark ? Colors.grey[400] : Colors.grey[600])),
                   const SizedBox(height: 16),
-                  _buildDiscussionCard(
-                    'City Infrastructure Plan 2026',
-                    'Mayor\'s Office',
-                    '1.2K participating',
-                    AppAssets.post1,
-                    isDark,
-                    isLive: true,
-                  ),
-                  _buildDiscussionCard(
-                    'School District Budget Review',
-                    'Education Board',
-                    '450 participating',
-                    AppAssets.post2,
-                    isDark,
-                    isLive: false,
-                  ),
-                  
-                  const SizedBox(height: 24),
-                  Text(
-                    'Upcoming Votes',
-                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: theme.textTheme.bodyLarge?.color),
-                  ),
-                  const SizedBox(height: 16),
-                  _buildVoteCard(
-                    'Park Renovation Project',
-                    'Ends in 2 days',
-                    0.7,
-                    isDark,
-                  ),
-                  _buildVoteCard(
-                    'New Library Wing',
-                    'Ends in 5 days',
-                    0.4,
-                    isDark,
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text('$author • $time', style: const TextStyle(color: Colors.grey, fontSize: 12)),
+                      TextButton(
+                        onPressed: () {},
+                        child: const Text('View Details'),
+                      ),
+                    ],
                   ),
                 ],
               ),
             ),
           ],
         ),
-      ),
-    );
-  }
-
-  Widget _buildHeader(ThemeData theme, bool isDark) {
-    return Container(
-      width: double.infinity,
-      padding: const EdgeInsets.fromLTRB(24, 40, 24, 40),
-      decoration: BoxDecoration(
-        color: isDark ? Colors.brown[900] : Colors.orange[50],
-      ),
-      child: Column(
-        children: [
-          Icon(Icons.account_balance, size: 48, color: isDark ? Colors.brown[200] : Colors.brown),
-          const SizedBox(height: 16),
-          Text(
-            'Your Civic Voice Matters',
-            style: TextStyle(
-              fontSize: 24,
-              fontWeight: FontWeight.bold,
-              color: isDark ? Colors.white : Colors.brown[900],
-            ),
-          ),
-          const SizedBox(height: 8),
-          Text(
-            'Participate in local decisions and govern together.',
-            textAlign: TextAlign.center,
-            style: TextStyle(color: isDark ? Colors.white70 : Colors.brown[700]),
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildDiscussionCard(String title, String host, String participants, String imageUrl, bool isDark, {bool isLive = false}) {
-    return Container(
-      margin: const EdgeInsets.only(bottom: 16),
-      decoration: BoxDecoration(
-        color: isDark ? Colors.grey[900] : Colors.white,
-        borderRadius: BorderRadius.circular(16),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withOpacity(0.05),
-            blurRadius: 10,
-            offset: const Offset(0, 4),
-          ),
-        ],
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Stack(
-            children: [
-              ClipRRect(
-                borderRadius: const BorderRadius.vertical(top: Radius.circular(16)),
-                child: Image.asset(
-                  imageUrl,
-                  height: 150,
-                  width: double.infinity,
-                  fit: BoxFit.cover,
-                ),
-              ),
-              if (isLive)
-                Positioned(
-                  top: 12,
-                  left: 12,
-                  child: Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
-                    decoration: BoxDecoration(
-                      color: Colors.red,
-                      borderRadius: BorderRadius.circular(20),
-                    ),
-                    child: const Row(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        Icon(Icons.circle, color: Colors.white, size: 8),
-                        SizedBox(width: 6),
-                        Text('LIVE', style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 10)),
-                      ],
-                    ),
-                  ),
-                ),
-            ],
-          ),
-          Padding(
-            padding: const EdgeInsets.all(16),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  title,
-                  style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
-                ),
-                const SizedBox(height: 4),
-                Text(
-                  'Hosted by $host',
-                  style: TextStyle(color: Colors.grey[600], fontSize: 13),
-                ),
-                const SizedBox(height: 12),
-                Row(
-                  children: [
-                    Icon(Icons.people_outline, size: 16, color: Colors.grey[600]),
-                    const SizedBox(width: 4),
-                    Text(participants, style: TextStyle(color: Colors.grey[600], fontSize: 12)),
-                    const Spacer(),
-                    OutlinedButton(
-                      onPressed: () {},
-                      style: OutlinedButton.styleFrom(
-                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
-                      ),
-                      child: Text(isLive ? 'Join Now' : 'View Details'),
-                    ),
-                  ],
-                ),
-              ],
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildVoteCard(String title, String timeLeft, double progress, bool isDark) {
-    return Container(
-      margin: const EdgeInsets.only(bottom: 16),
-      padding: const EdgeInsets.all(16),
-      decoration: BoxDecoration(
-        color: isDark ? Colors.grey[900] : Colors.white,
-        borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: Colors.grey.withOpacity(0.1)),
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Text(title, style: const TextStyle(fontWeight: FontWeight.bold)),
-              Icon(Icons.how_to_vote_outlined, color: Colors.grey[400]),
-            ],
-          ),
-          const SizedBox(height: 4),
-          Text(timeLeft, style: const TextStyle(color: Colors.orange, fontSize: 12, fontWeight: FontWeight.bold)),
-          const SizedBox(height: 12),
-          ClipRRect(
-            borderRadius: BorderRadius.circular(4),
-            child: LinearProgressIndicator(
-              value: progress,
-              backgroundColor: Colors.grey.withOpacity(0.1),
-              color: Colors.blue,
-              minHeight: 8,
-            ),
-          ),
-          const SizedBox(height: 8),
-          Text('${(progress * 100).toInt()}% Voted', style: TextStyle(color: Colors.grey[600], fontSize: 12)),
-        ],
       ),
     );
   }

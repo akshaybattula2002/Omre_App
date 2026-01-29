@@ -11,13 +11,15 @@ class OrbitHomeScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     // Inject Controller
     final controller = Get.put(OrbitController());
+    final theme = Theme.of(context);
+    final isDark = theme.brightness == Brightness.dark;
     
-    // Theme Constants (Dark Theme Enforced for this screen based on request)
-    const bgColor = Color(0xFF0F0F12);
-    const cardColor = Color(0xFF1A1A1D);
-    const accentBlue = Color(0xFF2962FF); // High contrast blue
-    const textPrimary = Colors.white;
-    const textSecondary = Color(0xFFB0BEC5);
+    // Theme-aware colors
+    final bgColor = theme.scaffoldBackgroundColor;
+    final cardColor = isDark ? const Color(0xFF1A1A1D) : Colors.white;
+    final accentBlue = isDark ? const Color(0xFF2962FF) : theme.primaryColor;
+    final textPrimary = theme.textTheme.bodyLarge?.color ?? (isDark ? Colors.white : Colors.black);
+    final textSecondary = theme.textTheme.bodyMedium?.color?.withOpacity(0.7) ?? (isDark ? const Color(0xFFB0BEC5) : Colors.black54);
 
     return Scaffold(
       backgroundColor: bgColor,
@@ -30,7 +32,7 @@ class OrbitHomeScreen extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  const Text(
+                  Text(
                     'Find your signal.',
                     style: TextStyle(
                       fontSize: 32,
@@ -54,17 +56,17 @@ class OrbitHomeScreen extends StatelessWidget {
                     decoration: BoxDecoration(
                       color: cardColor,
                       borderRadius: BorderRadius.circular(16),
-                      border: Border.all(color: Colors.white.withOpacity(0.05)),
+                      border: Border.all(color: isDark ? Colors.white.withOpacity(0.05) : Colors.black.withOpacity(0.05)),
                       boxShadow: [
                         BoxShadow(
-                          color: Colors.black.withOpacity(0.2),
+                          color: Colors.black.withOpacity(isDark ? 0.2 : 0.05),
                           blurRadius: 10,
                           offset: const Offset(0, 4),
                         )
                       ],
                     ),
                     child: TextField(
-                      style: const TextStyle(color: textPrimary),
+                      style: TextStyle(color: textPrimary),
                       onChanged: controller.updateSearch,
                       decoration: InputDecoration(
                         hintText: 'Search topics, not people...',
@@ -89,7 +91,7 @@ class OrbitHomeScreen extends StatelessWidget {
                     children: [
                       const Icon(Icons.flash_on_rounded, color: Colors.amber, size: 20),
                       const SizedBox(width: 8),
-                      const Text(
+                      Text(
                         'Explore Topics',
                         style: TextStyle(
                           fontSize: 18,
@@ -136,7 +138,7 @@ class OrbitHomeScreen extends StatelessWidget {
                           color: isSelected ? accentBlue : cardColor,
                           borderRadius: BorderRadius.circular(20),
                           border: Border.all(
-                            color: isSelected ? accentBlue : Colors.white.withOpacity(0.1),
+                            color: isSelected ? accentBlue : (isDark ? Colors.white.withOpacity(0.1) : Colors.black.withOpacity(0.1)),
                             width: 1,
                           ),
                         ),
@@ -167,9 +169,9 @@ class OrbitHomeScreen extends StatelessWidget {
                   itemCount: topics.length + 1, // +1 for Create Card
                   itemBuilder: (context, index) {
                     if (index == topics.length) {
-                      return _buildCreateTopicCard(textSecondary);
+                      return _buildCreateTopicCard(textSecondary, cardColor);
                     }
-                    return _buildTopicCard(topics[index], cardColor, textPrimary, textSecondary, accentBlue);
+                    return _buildTopicCard(topics[index], cardColor, textPrimary, textSecondary, accentBlue, isDark);
                   },
                 );
               }),
@@ -180,7 +182,7 @@ class OrbitHomeScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildTopicCard(OrbitTopic topic, Color cardColor, Color textPrimary, Color textSecondary, Color accent) {
+  Widget _buildTopicCard(OrbitTopic topic, Color cardColor, Color textPrimary, Color textSecondary, Color accent, bool isDark) {
     return Container(
       margin: const EdgeInsets.only(bottom: 16),
       decoration: BoxDecoration(
@@ -188,8 +190,8 @@ class OrbitHomeScreen extends StatelessWidget {
         borderRadius: BorderRadius.circular(16),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.1),
-            blurRadius: 8,
+            color: Colors.black.withOpacity(isDark ? 0.2 : 0.05),
+            blurRadius: 10,
             offset: const Offset(0, 4),
           ),
         ],
@@ -198,7 +200,7 @@ class OrbitHomeScreen extends StatelessWidget {
           end: Alignment.bottomRight,
           colors: [
             cardColor,
-            Color.lerp(cardColor, Colors.white, 0.03)!,
+            isDark ? Color.lerp(cardColor, Colors.white, 0.03)! : cardColor,
           ],
         ),
       ),
@@ -220,7 +222,7 @@ class OrbitHomeScreen extends StatelessWidget {
                     Container(
                       padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
                       decoration: BoxDecoration(
-                        color: Colors.white.withOpacity(0.05),
+                        color: isDark ? Colors.white.withOpacity(0.05) : Colors.black.withOpacity(0.05),
                         borderRadius: BorderRadius.circular(8),
                       ),
                       child: Text(
@@ -342,19 +344,14 @@ class OrbitHomeScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildCreateTopicCard(Color textSecondary) {
+  Widget _buildCreateTopicCard(Color textSecondary, Color cardColor) {
     return Container(
       margin: const EdgeInsets.only(bottom: 32, top: 8),
       height: 80,
       decoration: BoxDecoration(
-        border: Border.all(
-          color: textSecondary.withOpacity(0.3),
-          style: BorderStyle.none, // Flutter dashed border needs custom painter, using simple outline for now or I can trust my prompt to avoid complex custom painters if time is short.
-        ),
-        // A simple workaround for dashed effect is not available out of the box without CustomPaint.
-        // I'll use a semi-transparent background with an outline.
-        color: Colors.white.withOpacity(0.02),
+        color: cardColor.withOpacity(0.5),
         borderRadius: BorderRadius.circular(16),
+        border: Border.all(color: textSecondary.withOpacity(0.2)),
       ),
       child: Material(
         color: Colors.transparent,
@@ -376,7 +373,7 @@ class OrbitHomeScreen extends StatelessWidget {
                     Text(
                       'Create Topic',
                       style: TextStyle(
-                        color: textSecondary, // Using variable directly if accessible or passed
+                        color: textSecondary,
                         fontSize: 15,
                         fontWeight: FontWeight.bold,
                       ),

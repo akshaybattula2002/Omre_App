@@ -23,6 +23,9 @@ import '../../features/biz/biz_home_screen.dart';
 import '../../features/jobs/jobs_screen.dart';
 import '../../features/education/education_screen.dart';
 import '../../features/studio/studio_home_screen.dart';
+import '../../features/studio/video_upload_screen.dart';
+import '../../features/studio/write_script_screen.dart';
+import '../../features/studio/studio_comments_screen.dart';
 import '../../features/games/game_verse_screen.dart';
 import '../../features/games/tournament_screen.dart';
 import '../../features/games/squad_finder_screen.dart';
@@ -45,6 +48,21 @@ import '../../features/omni_suite/virtual_world_screen.dart';
 import '../../features/omni_suite/digital_citizen_screen.dart';
 import '../../features/omni_suite/omni_ai_screen.dart';
 import '../../core/widgets/generic_placeholder_screen.dart';
+import '../../features/news/controllers/news_controller.dart';
+import '../../features/news/saved_news_screen.dart';
+import '../../features/news/scores_screen.dart';
+import '../../features/news/live_news_coverage_screen.dart';
+import '../../features/video/video_drawer_screens.dart';
+import '../../features/link/link_drawer_screens.dart';
+import '../../features/education/education_drawer_screens.dart';
+import '../../features/education/certificates_screen.dart';
+import '../../features/orbit/orbit_home_screen.dart';
+import '../../features/orbit/orbit_create_topic_screen.dart';
+import '../../features/orbit/orbit_drawer_screens.dart';
+import '../../features/studio/studio_drawer_screens.dart';
+import '../../features/meeting/meeting_drawer_screens.dart';
+import '../../features/games/games_drawer_screens.dart';
+import '../../features/messenger/messenger_drawer_screens.dart';
 
 class ShellScreen extends GetView<AppController> {
   const ShellScreen({super.key});
@@ -155,12 +173,6 @@ class ShellScreen extends GetView<AppController> {
                   color: theme.iconTheme.color
                 ),
               )),
-              IconButton(
-                onPressed: () {
-                  Get.changeThemeMode(isDark ? ThemeMode.light : ThemeMode.dark);
-                },
-                icon: Icon(isDark ? Icons.light_mode : Icons.wb_sunny_outlined, color: theme.iconTheme.color),
-              ),
               Stack(
                 children: [
                    IconButton(
@@ -504,13 +516,34 @@ class ShellScreen extends GetView<AppController> {
   List<Widget> _buildNewsDrawerItems(BuildContext context, bool isDark) {
     return [
       _buildSectionHeader('NEWS', isDark),
-      _buildDrawerItem(Icons.newspaper, 'For You', iconColor: Colors.blue, isDark: isDark, isActive: true, onTap: () => Navigator.pop(context)),
-      _buildDrawerItem(Icons.live_tv, 'Live Coverage', iconColor: Colors.red, isDark: isDark, onTap: () => Navigator.pop(context)),
-      _buildDrawerItem(Icons.star_outline, 'Following', iconColor: Colors.amber, isDark: isDark, onTap: () => Navigator.pop(context)),
-      _buildDrawerItem(Icons.explore_outlined, 'Discover', iconColor: Colors.purple, isDark: isDark, onTap: () => Navigator.pop(context)),
-      _buildDrawerItem(Icons.public, 'World', iconColor: Colors.green, isDark: isDark, onTap: () => Navigator.pop(context)),
-      _buildDrawerItem(Icons.bookmark_border, 'Saved', iconColor: Colors.blueGrey, isDark: isDark, onTap: () => Navigator.pop(context)),
-      _buildDrawerItem(Icons.scoreboard_outlined, 'Scores', iconColor: Colors.orange, isDark: isDark, onTap: () => Navigator.pop(context)),
+      _buildDrawerItem(Icons.newspaper, 'For You', iconColor: Colors.blue, isDark: isDark, isActive: true, onTap: () {
+        Navigator.pop(context);
+        if (Get.isRegistered<NewsController>()) Get.find<NewsController>().selectCategory('For You');
+      }),
+      _buildDrawerItem(Icons.live_tv, 'Live Coverage', iconColor: Colors.red, isDark: isDark, onTap: () {
+        Navigator.pop(context);
+        Get.to(() => const LiveNewsCoverageScreen());
+      }),
+      _buildDrawerItem(Icons.star_outline, 'Following', iconColor: Colors.amber, isDark: isDark, onTap: () {
+        Navigator.pop(context);
+        if (Get.isRegistered<NewsController>()) Get.find<NewsController>().selectCategory('Following');
+      }),
+      _buildDrawerItem(Icons.explore_outlined, 'Discover', iconColor: Colors.purple, isDark: isDark, onTap: () {
+        Navigator.pop(context);
+        if (Get.isRegistered<NewsController>()) Get.find<NewsController>().selectCategory('Technology');
+      }),
+      _buildDrawerItem(Icons.public, 'World', iconColor: Colors.green, isDark: isDark, onTap: () {
+        Navigator.pop(context);
+        if (Get.isRegistered<NewsController>()) Get.find<NewsController>().selectCategory('World');
+      }),
+      _buildDrawerItem(Icons.bookmark_border, 'Saved', iconColor: Colors.blueGrey, isDark: isDark, onTap: () {
+        Navigator.pop(context);
+        Get.to(() => const SavedNewsScreen());
+      }),
+      _buildDrawerItem(Icons.scoreboard_outlined, 'Scores', iconColor: Colors.orange, isDark: isDark, onTap: () {
+        Navigator.pop(context);
+        Get.to(() => const ScoresScreen());
+      }),
     ];
   }
 
@@ -518,14 +551,38 @@ class ShellScreen extends GetView<AppController> {
     return [
       _buildSectionHeader('VIDEO', isDark),
       _buildDrawerItem(Icons.home_outlined, 'Home', iconColor: Colors.red, isDark: isDark, isActive: true, onTap: () => Navigator.pop(context)),
-      _buildDrawerItem(Icons.videocam_outlined, 'Shorts', iconColor: Colors.redAccent, isDark: isDark, onTap: () => Navigator.pop(context)),
-      _buildDrawerItem(Icons.subscriptions_outlined, 'Subscriptions', iconColor: Colors.blue, isDark: isDark, onTap: () => Navigator.pop(context)),
-      _buildDrawerItem(Icons.video_library_outlined, 'Library', iconColor: Colors.purple, isDark: isDark, onTap: () => Navigator.pop(context)),
-      _buildDrawerItem(Icons.history, 'History', iconColor: Colors.grey, isDark: isDark, onTap: () => Navigator.pop(context)),
-      _buildDrawerItem(Icons.watch_later_outlined, 'Watch Later', iconColor: Colors.amber, isDark: isDark, onTap: () => Navigator.pop(context)),
-      _buildDrawerItem(Icons.thumb_up_outlined, 'Liked Videos', iconColor: Colors.pink, isDark: isDark, onTap: () => Navigator.pop(context)),
-      _buildDrawerItem(Icons.local_fire_department_outlined, 'Trending', iconColor: Colors.orange, isDark: isDark, onTap: () => Navigator.pop(context)),
-      _buildDrawerItem(Icons.movie_outlined, 'Movies & Shows', iconColor: Colors.indigo, isDark: isDark, onTap: () => Navigator.pop(context)),
+      _buildDrawerItem(Icons.videocam_outlined, 'Shorts', iconColor: Colors.redAccent, isDark: isDark, onTap: () {
+        Navigator.pop(context);
+        Get.to(() => const ShortsScreen());
+      }),
+      _buildDrawerItem(Icons.subscriptions_outlined, 'Subscriptions', iconColor: Colors.blue, isDark: isDark, onTap: () {
+        Navigator.pop(context);
+        Get.to(() => const VideoSubscriptionsScreen());
+      }),
+      _buildDrawerItem(Icons.video_library_outlined, 'Library', iconColor: Colors.purple, isDark: isDark, onTap: () {
+        Navigator.pop(context);
+        Get.to(() => const VideoLibraryScreen());
+      }),
+      _buildDrawerItem(Icons.history, 'History', iconColor: Colors.grey, isDark: isDark, onTap: () {
+        Navigator.pop(context);
+        Get.to(() => const VideoHistoryScreen());
+      }),
+      _buildDrawerItem(Icons.watch_later_outlined, 'Watch Later', iconColor: Colors.amber, isDark: isDark, onTap: () {
+         Navigator.pop(context);
+         Get.to(() => const VideoWatchLaterScreen());
+      }),
+      _buildDrawerItem(Icons.thumb_up_outlined, 'Liked Videos', iconColor: Colors.pink, isDark: isDark, onTap: () {
+        Navigator.pop(context);
+        Get.to(() => const VideoLikedVideosScreen());
+      }),
+      _buildDrawerItem(Icons.local_fire_department_outlined, 'Trending', iconColor: Colors.orange, isDark: isDark, onTap: () {
+        Navigator.pop(context);
+         Get.to(() => const VideoTrendingScreen());
+      }),
+      _buildDrawerItem(Icons.movie_outlined, 'Movies & Shows', iconColor: Colors.indigo, isDark: isDark, onTap: () {
+        Navigator.pop(context);
+        Get.to(() => const MoviesScreen());
+      }),
     ];
   }
 
@@ -533,13 +590,34 @@ class ShellScreen extends GetView<AppController> {
     return [
       _buildSectionHeader('JOBS', isDark),
       _buildDrawerItem(Icons.work_outline, 'Jobs Home', iconColor: Colors.teal, isDark: isDark, isActive: true, onTap: () => Navigator.pop(context)),
-      _buildDrawerItem(Icons.people_outline, 'My Network', iconColor: Colors.blue, isDark: isDark, onTap: () => Navigator.pop(context)),
-      _buildDrawerItem(Icons.search, 'Job Search', iconColor: Colors.grey, isDark: isDark, onTap: () => Navigator.pop(context)),
-      _buildDrawerItem(Icons.assignment_outlined, 'Applications', iconColor: Colors.purple, isDark: isDark, onTap: () => Navigator.pop(context)),
-      _buildDrawerItem(Icons.bookmark_border, 'Saved Jobs', iconColor: Colors.amber, isDark: isDark, onTap: () => Navigator.pop(context)),
-      _buildDrawerItem(Icons.notifications_none, 'Job Alerts', iconColor: Colors.red, isDark: isDark, onTap: () => Navigator.pop(context)),
-      _buildDrawerItem(Icons.business, 'Company Pages', iconColor: Colors.indigo, isDark: isDark, onTap: () => Navigator.pop(context)),
-      _buildDrawerItem(Icons.monetization_on_outlined, 'Salary Insights', iconColor: Colors.green, isDark: isDark, onTap: () => Navigator.pop(context)),
+      _buildDrawerItem(Icons.people_outline, 'My Network', iconColor: Colors.blue, isDark: isDark, onTap: () {
+        Navigator.pop(context);
+        Get.to(() => const LinkMyNetworkScreen());
+      }),
+      _buildDrawerItem(Icons.search, 'Job Search', iconColor: Colors.grey, isDark: isDark, onTap: () {
+        Navigator.pop(context);
+        Get.to(() => const LinkJobSearchScreen());
+      }),
+      _buildDrawerItem(Icons.assignment_outlined, 'Applications', iconColor: Colors.purple, isDark: isDark, onTap: () {
+        Navigator.pop(context);
+        Get.to(() => const LinkApplicationsScreen());
+      }),
+      _buildDrawerItem(Icons.bookmark_border, 'Saved Jobs', iconColor: Colors.amber, isDark: isDark, onTap: () {
+        Navigator.pop(context);
+        Get.to(() => const LinkSavedJobsScreen());
+      }),
+      _buildDrawerItem(Icons.notifications_none, 'Job Alerts', iconColor: Colors.red, isDark: isDark, onTap: () {
+        Navigator.pop(context);
+        Get.to(() => const LinkJobAlertsScreen());
+      }),
+      _buildDrawerItem(Icons.business, 'Company Pages', iconColor: Colors.indigo, isDark: isDark, onTap: () {
+        Navigator.pop(context);
+        Get.to(() => const LinkCompanyPagesScreen());
+      }),
+      _buildDrawerItem(Icons.monetization_on_outlined, 'Salary Insights', iconColor: Colors.green, isDark: isDark, onTap: () {
+        Navigator.pop(context);
+        Get.to(() => const LinkSalaryInsightsScreen());
+      }),
     ];
   }
 
@@ -547,28 +625,80 @@ class ShellScreen extends GetView<AppController> {
     return [
       _buildSectionHeader('LEARN', isDark),
       _buildDrawerItem(Icons.explore_outlined, 'Discover', iconColor: Colors.orange, isDark: isDark, isActive: true, onTap: () => Navigator.pop(context)),
-      _buildDrawerItem(Icons.school_outlined, 'My Learning', iconColor: Colors.blue, isDark: isDark, onTap: () => Navigator.pop(context)),
-      _buildDrawerItem(Icons.cast_for_education, 'Tutor Marketplace', iconColor: Colors.purple, isDark: isDark, onTap: () => Navigator.pop(context)),
-      _buildDrawerItem(Icons.favorite_border, 'Wishlist', iconColor: Colors.pink, isDark: isDark, onTap: () => Navigator.pop(context)),
-      _buildDrawerItem(Icons.shopping_cart_outlined, 'Cart', iconColor: Colors.green, isDark: isDark, onTap: () => Navigator.pop(context)),
-      _buildDrawerItem(Icons.workspace_premium_outlined, 'Certificates', iconColor: Colors.amber, isDark: isDark, onTap: () => Navigator.pop(context)),
+      _buildDrawerItem(Icons.school_outlined, 'My Learning', iconColor: Colors.blue, isDark: isDark, onTap: () {
+        Navigator.pop(context);
+        Get.to(() => const EducationMyLearningScreen());
+      }),
+      _buildDrawerItem(Icons.cast_for_education, 'Tutor Marketplace', iconColor: Colors.purple, isDark: isDark, onTap: () {
+        Navigator.pop(context);
+        Get.to(() => const EducationTutorMarketplaceScreen());
+      }),
+      _buildDrawerItem(Icons.favorite_border, 'Wishlist', iconColor: Colors.pink, isDark: isDark, onTap: () {
+        Navigator.pop(context);
+        Get.to(() => const EducationWishlistScreen());
+      }),
+      _buildDrawerItem(Icons.shopping_cart_outlined, 'Cart', iconColor: Colors.green, isDark: isDark, onTap: () {
+        Navigator.pop(context);
+        Get.to(() => const EducationCartScreen());
+      }),
+      _buildDrawerItem(Icons.workspace_premium_outlined, 'Certificates', iconColor: Colors.amber, isDark: isDark, onTap: () {
+        Navigator.pop(context);
+        Get.to(() => const CertificatesScreen());
+      }),
     ];
   }
   
   List<Widget> _buildOrbitDrawerItems(BuildContext context, bool isDark) {
     return [
       _buildSectionHeader('ORBIT', isDark),
-      _buildDrawerItem(Icons.home_outlined, 'Home', iconColor: Colors.deepPurple, isDark: isDark, isActive: true, onTap: () => Navigator.pop(context)),
-      _buildDrawerItem(Icons.explore_outlined, 'Explore', iconColor: Colors.blue, isDark: isDark, onTap: () => Navigator.pop(context)),
-      _buildDrawerItem(Icons.notifications_outlined, 'Notifications', iconColor: Colors.red, isDark: isDark, onTap: () => Navigator.pop(context)),
-      _buildDrawerItem(Icons.chat_bubble_outline, 'Messages', iconColor: Colors.green, isDark: isDark, onTap: () => Navigator.pop(context)),
-      _buildDrawerItem(Icons.space_dashboard_outlined, 'Spaces', iconColor: Colors.orange, isDark: isDark, onTap: () => Navigator.pop(context)),
-      _buildDrawerItem(Icons.groups_outlined, 'Communities', iconColor: Colors.teal, isDark: isDark, onTap: () => Navigator.pop(context)),
-      _buildDrawerItem(Icons.list_alt, 'Lists', iconColor: Colors.amber, isDark: isDark, onTap: () => Navigator.pop(context)),
-      _buildDrawerItem(Icons.bookmark_border, 'Bookmarks', iconColor: Colors.indigo, isDark: isDark, onTap: () => Navigator.pop(context)),
-      _buildDrawerItem(Icons.person_outline, 'Profile', iconColor: Colors.blueGrey, isDark: isDark, onTap: () => Navigator.pop(context)),
-      _buildDrawerItem(Icons.star_outline, 'Special', iconColor: Colors.purple, isDark: isDark, onTap: () => Navigator.pop(context)),
-      _buildDrawerItem(Icons.translate, 'Language (EN/ES)', iconColor: Colors.grey, isDark: isDark, onTap: () => Navigator.pop(context)),
+      _buildDrawerItem(Icons.home_outlined, 'Home', iconColor: Colors.deepPurple, isDark: isDark, isActive: true, onTap: () {
+        Navigator.pop(context);
+        // Home is already handled by ShellScreen when appMode is orbit
+      }),
+      _buildDrawerItem(Icons.add_circle_outline, 'New Topic', iconColor: Colors.amber, isDark: isDark, onTap: () {
+        Navigator.pop(context);
+        Get.to(() => const OrbitCreateTopicScreen());
+      }),
+      _buildDrawerItem(Icons.explore_outlined, 'Explore', iconColor: Colors.blue, isDark: isDark, onTap: () {
+        Navigator.pop(context);
+        Get.to(() => const OrbitExploreScreen());
+      }),
+      _buildDrawerItem(Icons.notifications_outlined, 'Notifications', iconColor: Colors.red, isDark: isDark, onTap: () {
+        Navigator.pop(context);
+        Get.to(() => const OrbitNotificationsScreen());
+      }),
+      _buildDrawerItem(Icons.chat_bubble_outline, 'Messages', iconColor: Colors.green, isDark: isDark, onTap: () {
+        Navigator.pop(context);
+        Get.to(() => const OrbitMessagesScreen());
+      }),
+      _buildDrawerItem(Icons.space_dashboard_outlined, 'Spaces', iconColor: Colors.orange, isDark: isDark, onTap: () {
+        Navigator.pop(context);
+        Get.to(() => const OrbitSpacesScreen());
+      }),
+      _buildDrawerItem(Icons.groups_outlined, 'Communities', iconColor: Colors.teal, isDark: isDark, onTap: () {
+        Navigator.pop(context);
+        Get.to(() => const OrbitCommunitiesScreen());
+      }),
+      _buildDrawerItem(Icons.list_alt, 'Lists', iconColor: Colors.amber, isDark: isDark, onTap: () {
+        Navigator.pop(context);
+        Get.to(() => const OrbitListsScreen());
+      }),
+      _buildDrawerItem(Icons.bookmark_border, 'Bookmarks', iconColor: Colors.indigo, isDark: isDark, onTap: () {
+        Navigator.pop(context);
+        Get.to(() => const OrbitBookmarksScreen());
+      }),
+      _buildDrawerItem(Icons.person_outline, 'Profile', iconColor: Colors.blueGrey, isDark: isDark, onTap: () {
+        Navigator.pop(context);
+        Get.to(() => const OrbitProfileScreen());
+      }),
+      _buildDrawerItem(Icons.star_outline, 'Special', iconColor: Colors.purple, isDark: isDark, onTap: () {
+        Navigator.pop(context);
+        Get.to(() => const OrbitSpecialScreen());
+      }),
+      _buildDrawerItem(Icons.translate, 'Language (EN/ES)', iconColor: Colors.grey, isDark: isDark, onTap: () {
+        Navigator.pop(context);
+        Get.to(() => const OrbitLanguageScreen());
+      }),
     ];
   }
 
@@ -628,62 +758,64 @@ class ShellScreen extends GetView<AppController> {
   // 🟦 SOCIAL
   List<Widget> _buildSocialDrawerItems(BuildContext context, bool isDark) {
     return [
-      _buildSectionHeader('SOCIAL', isDark),
-      _buildDrawerItem(Icons.home_outlined, 'Home', iconColor: Colors.blue, isActive: controller.bottomNavIndex == 0, isDark: isDark, onTap: () { controller.bottomNavIndex = 0; Navigator.pop(context); }),
-      _buildDrawerItem(Icons.explore_outlined, 'Explore', iconColor: Colors.purpleAccent, isActive: controller.bottomNavIndex == 1, isDark: isDark, onTap: () { controller.bottomNavIndex = 1; Navigator.pop(context); }),
-      _buildDrawerItem(Icons.videocam_outlined, 'Shorts', iconColor: Colors.redAccent, isDark: isDark, onTap: () { Navigator.pop(context); Get.to(() => const ShortsScreen()); }),
-      _buildDrawerItem(Icons.chat_bubble_outline, 'Messages', iconColor: Colors.greenAccent, isActive: controller.bottomNavIndex == 2, isDark: isDark, onTap: () { controller.bottomNavIndex = 2; Navigator.pop(context); }),
-      _buildDrawerItem(Icons.favorite_border, 'Notifications', iconColor: Colors.pinkAccent, isDark: isDark, onTap: () { Navigator.pop(context); Get.to(() => const NotificationsScreen()); }),
-      _buildDrawerItem(Icons.person_outline, 'Profile', iconColor: Colors.indigoAccent, isActive: controller.bottomNavIndex == 3, isDark: isDark, onTap: () { controller.bottomNavIndex = 3; Navigator.pop(context); }),
+      _buildDrawerItem(Icons.home, 'Home', iconColor: Colors.blue, isActive: controller.bottomNavIndex == 0, isDark: isDark, onTap: () { controller.bottomNavIndex = 0; Navigator.pop(context); }),
+      _buildDrawerItem(Icons.explore_outlined, 'Explore', iconColor: Colors.purple, isActive: controller.bottomNavIndex == 1, isDark: isDark, onTap: () { controller.bottomNavIndex = 1; Navigator.pop(context); }),
+      _buildDrawerItem(Icons.videocam_outlined, 'Shorts', iconColor: Colors.red, isDark: isDark, onTap: () { Navigator.pop(context); Get.to(() => const ShortsScreen()); }),
+      _buildDrawerItem(Icons.chat_bubble_outline, 'Messages', iconColor: Colors.green, isActive: controller.bottomNavIndex == 2, isDark: isDark, onTap: () { controller.bottomNavIndex = 2; Navigator.pop(context); }),
+      _buildDrawerItem(Icons.favorite_border, 'Notifications', iconColor: Colors.pink, isDark: isDark, onTap: () { Navigator.pop(context); Get.to(() => const NotificationsScreen()); }),
+      _buildDrawerItem(Icons.person_outline, 'Profile', iconColor: Colors.blue, isActive: controller.bottomNavIndex == 3, isDark: isDark, onTap: () { controller.bottomNavIndex = 3; Navigator.pop(context); }),
+      _buildDrawerItem(Icons.settings_outlined, 'Settings', iconColor: Colors.grey, isDark: isDark, onTap: () { Navigator.pop(context); Get.to(() => const SettingsScreen()); }),
       
-      const Padding(padding: EdgeInsets.symmetric(vertical: 8), child: Divider(color: Colors.transparent)),
+      _buildDrawerItem(Icons.lightbulb_outline, 'OmniKnow', iconColor: Colors.orange, isDark: isDark, onTap: () { Navigator.pop(context); Get.to(() => const OmniKnowScreen()); }),
+      _buildDrawerItem(Icons.sentiment_satisfied_alt, 'Happy Corner', iconColor: Colors.amber, isDark: isDark, onTap: () { Navigator.pop(context); Get.to(() => const HappyCornerScreen()); }),
+      _buildDrawerItem(Icons.language, 'Virtual World', iconColor: Colors.cyan, isDark: isDark, onTap: () { Navigator.pop(context); Get.to(() => const VirtualWorldScreen()); }),
+      _buildDrawerItem(Icons.security_outlined, 'Digital Citizen', iconColor: Colors.green, isDark: isDark, onTap: () { Navigator.pop(context); Get.to(() => const DigitalCitizenScreen()); }),
+      _buildDrawerItem(Icons.smart_toy_outlined, 'Omni AI', iconColor: Colors.deepPurpleAccent, isDark: isDark, onTap: () { Navigator.pop(context); Get.to(() => const OmniAIScreen()); }),
       
-      _buildDrawerFeatureItem(Icons.article_outlined, 'Pages', Colors.blue, isDark, onTap: () { Navigator.pop(context); Get.to(() => const PagesScreen()); }),
-      _buildDrawerFeatureItem(Icons.groups_outlined, 'Groups', Colors.deepPurple, isDark, onTap: () { Navigator.pop(context); Get.to(() => const GroupsScreen()); }),
-      _buildDrawerFeatureItem(Icons.account_balance_outlined, 'Town Hall', Colors.orange[800]!, isDark, onTap: () { Navigator.pop(context); Get.to(() => const TownHallScreen()); }),
-      _buildDrawerFeatureItem(Icons.cake_outlined, 'Birthday', Colors.pink, isDark, onTap: () { Navigator.pop(context); Get.to(() => const BirthdayScreen()); }),
-      _buildDrawerFeatureItem(Icons.person_add_outlined, 'Friends', Colors.purpleAccent, isDark, onTap: () { Navigator.pop(context); Get.to(() => const FriendsScreen()); }),
-      _buildDrawerFeatureItem(Icons.live_tv_outlined, 'Watch', Colors.red, isDark, onTap: () { controller.appMode = AppMode.video; controller.bottomNavIndex = 0; Navigator.pop(context); }),
-      _buildDrawerFeatureItem(Icons.image_outlined, 'Images', Colors.cyan, isDark, onTap: () { Navigator.pop(context); Get.to(() => const ImagesScreen()); }),
+      _buildDrawerItem(Icons.article_outlined, 'Pages', iconColor: Colors.blue, isDark: isDark, onTap: () { Navigator.pop(context); Get.to(() => const PagesScreen()); }),
+      _buildDrawerItem(Icons.groups_outlined, 'Groups', iconColor: Colors.blueAccent, isDark: isDark, onTap: () { Navigator.pop(context); Get.to(() => const GroupsScreen()); }),
+      _buildDrawerItem(Icons.account_balance_outlined, 'Town Hall', iconColor: Colors.orange, isDark: isDark, onTap: () { Navigator.pop(context); Get.to(() => const TownHallScreen()); }),
+      _buildDrawerItem(Icons.cake_outlined, 'Birthday', iconColor: Colors.pink, isDark: isDark, onTap: () { Navigator.pop(context); Get.to(() => const BirthdayScreen()); }),
       
-      const Padding(padding: EdgeInsets.symmetric(vertical: 8), child: Divider(color: Colors.transparent)),
-      
-      _buildDrawerFeatureItem(Icons.settings, 'Settings', Colors.grey, isDark, onTap: () { Navigator.pop(context); Get.to(() => const SettingsScreen()); }),
+      _buildDrawerItem(Icons.edit_note_outlined, 'Blogs', iconColor: Colors.green, isDark: isDark, onTap: () { Navigator.pop(context); Get.to(() => const BlogsScreen()); }),
+      _buildDrawerItem(Icons.wb_sunny_outlined, 'Weather', iconColor: Colors.lightBlue, isDark: isDark, onTap: () { Navigator.pop(context); Get.to(() => const WeatherScreen()); }),
+      _buildDrawerItem(Icons.person_add_outlined, 'Friends', iconColor: Colors.purpleAccent, isDark: isDark, onTap: () { Navigator.pop(context); Get.to(() => const FriendsScreen()); }),
+      _buildDrawerItem(Icons.live_tv_outlined, 'Watch', iconColor: Colors.red, isDark: isDark, onTap: () { controller.appMode = AppMode.video; controller.bottomNavIndex = 0; Navigator.pop(context); }),
+      _buildDrawerItem(Icons.movie_outlined, 'Movies', iconColor: Colors.deepPurpleAccent, isDark: isDark, onTap: () { Navigator.pop(context); Get.to(() => const MoviesScreen()); }),
+      _buildDrawerItem(Icons.image_outlined, 'Images', iconColor: Colors.cyan, isDark: isDark, onTap: () { Navigator.pop(context); Get.to(() => const ImagesScreen()); }),
     ];
   }
 
   // 🟩 CHAT
   List<Widget> _buildChatDrawerItems(BuildContext context, bool isDark) {
     return [
-      _buildSectionHeader('CHAT', isDark),
+      _buildSectionHeader('MESSENGER', isDark),
       _buildDrawerItem(Icons.chat_bubble_outline, 'Messages', iconColor: Colors.greenAccent, isActive: controller.bottomNavIndex == 2, isDark: isDark, onTap: () { controller.bottomNavIndex = 2; Navigator.pop(context); }),
+      _buildDrawerItem(Icons.donut_large, 'Status', iconColor: Colors.blueAccent, isDark: isDark, onTap: () { 
+        Navigator.pop(context); 
+        Get.to(() => const MessengerStatusScreen()); 
+      }),
+      _buildDrawerItem(Icons.broadcast_on_personal, 'Channels', iconColor: Colors.orange, isDark: isDark, onTap: () { 
+        Navigator.pop(context); 
+        Get.to(() => const MessengerChannelsScreen()); 
+      }),
+      _buildDrawerItem(Icons.people_outline, 'Communities', iconColor: Colors.teal, isDark: isDark, onTap: () { 
+        Navigator.pop(context); 
+        Get.to(() => const MessengerCommunitiesScreen()); 
+      }),
+      _buildDrawerItem(Icons.group_outlined, 'Groups', iconColor: Colors.purple, isDark: isDark, onTap: () { 
+        Navigator.pop(context); 
+        Get.to(() => const MessengerGroupsScreen()); 
+      }),
+
+      const Padding(padding: EdgeInsets.symmetric(vertical: 8), child: Divider(color: Colors.transparent)),
+      
+      _buildSectionHeader('GENERAL', isDark),
       _buildDrawerItem(Icons.home_outlined, 'Home', iconColor: Colors.blue, isActive: controller.bottomNavIndex == 0, isDark: isDark, onTap: () { controller.bottomNavIndex = 0; Navigator.pop(context); }),
       _buildDrawerItem(Icons.explore_outlined, 'Explore', iconColor: Colors.purpleAccent, isActive: controller.bottomNavIndex == 1, isDark: isDark, onTap: () { controller.bottomNavIndex = 1; Navigator.pop(context); }),
       _buildDrawerItem(Icons.favorite_border, 'Notifications', iconColor: Colors.pinkAccent, isDark: isDark, onTap: () { Navigator.pop(context); Get.to(() => const NotificationsScreen()); }),
       _buildDrawerItem(Icons.person_outline, 'Profile', iconColor: Colors.indigoAccent, isActive: controller.bottomNavIndex == 3, isDark: isDark, onTap: () { controller.bottomNavIndex = 3; Navigator.pop(context); }),
-      
-      const Padding(padding: EdgeInsets.symmetric(vertical: 8), child: Divider(color: Colors.transparent)),
-      
-      _buildSectionHeader('FEATURES', isDark),
-      _buildDrawerFeatureItem(Icons.lightbulb_outline, 'OmniKnow', Colors.orange, isDark, onTap: () { Navigator.pop(context); Get.to(() => const OmniKnowScreen()); }),
-      _buildDrawerFeatureItem(Icons.sentiment_satisfied_alt, 'Happy Corner', Colors.amber, isDark, onTap: () { Navigator.pop(context); Get.to(() => const HappyCornerScreen()); }),
-      _buildDrawerFeatureItem(Icons.language, 'Virtual World', Colors.lightBlue, isDark, onTap: () { Navigator.pop(context); Get.to(() => const VirtualWorldScreen()); }),
-      _buildDrawerFeatureItem(Icons.security_outlined, 'Digital Citizen', Colors.green, isDark, onTap: () { Navigator.pop(context); Get.to(() => const DigitalCitizenScreen()); }),
-      _buildDrawerFeatureItem(Icons.smart_toy_outlined, 'Omni AI', Colors.deepPurpleAccent, isDark, onTap: () { Navigator.pop(context); Get.to(() => const OmniAIScreen()); }),
-      
-      const Padding(padding: EdgeInsets.symmetric(vertical: 8), child: Divider(color: Colors.transparent)),
-      
-      _buildSectionHeader('MORE', isDark),
-      _buildDrawerFeatureItem(Icons.article_outlined, 'Pages', Colors.blue, isDark, onTap: () { Navigator.pop(context); Get.to(() => const PagesScreen()); }),
-      _buildDrawerFeatureItem(Icons.groups_outlined, 'Groups', Colors.deepPurple, isDark, onTap: () { Navigator.pop(context); Get.to(() => const GroupsScreen()); }),
-      _buildDrawerFeatureItem(Icons.account_balance_outlined, 'Town Hall', Colors.orange[800]!, isDark, onTap: () { Navigator.pop(context); Get.to(() => const TownHallScreen()); }),
-      _buildDrawerFeatureItem(Icons.cake_outlined, 'Birthday', Colors.pink, isDark, onTap: () { Navigator.pop(context); Get.to(() => const BirthdayScreen()); }),
-      _buildDrawerFeatureItem(Icons.edit_note_outlined, 'Blogs', Colors.green, isDark, onTap: () { Navigator.pop(context); Get.to(() => const BlogsScreen()); }),
-      _buildDrawerFeatureItem(Icons.wb_sunny_outlined, 'Weather', Colors.lightBlue, isDark, onTap: () { Navigator.pop(context); Get.to(() => const WeatherScreen()); }),
-      _buildDrawerFeatureItem(Icons.person_add_outlined, 'Friends', Colors.purpleAccent, isDark, onTap: () { Navigator.pop(context); Get.to(() => const FriendsScreen()); }),
-      _buildDrawerFeatureItem(Icons.movie_outlined, 'Movies', Colors.deepPurpleAccent, isDark, onTap: () { Navigator.pop(context); Get.to(() => const MoviesScreen()); }),
-      _buildDrawerFeatureItem(Icons.image_outlined, 'Images', Colors.cyan, isDark, onTap: () { Navigator.pop(context); Get.to(() => const ImagesScreen()); }),
-      _buildDrawerFeatureItem(Icons.settings, 'Settings', Colors.grey, isDark, onTap: () { Navigator.pop(context); Get.to(() => const SettingsScreen()); }),
+      _buildDrawerItem(Icons.settings_outlined, 'Settings', iconColor: Colors.grey, isDark: isDark, onTap: () { Navigator.pop(context); Get.to(() => const SettingsScreen()); }),
     ];
   }
 
@@ -715,9 +847,34 @@ class ShellScreen extends GetView<AppController> {
       _buildDrawerItem(Icons.chat_bubble_outline, 'Messages', iconColor: Colors.greenAccent, isDark: isDark, onTap: () { controller.bottomNavIndex = 2; Navigator.pop(context); }),
       _buildDrawerItem(Icons.favorite_border, 'Notifications', iconColor: Colors.pinkAccent, isDark: isDark, onTap: () { Navigator.pop(context); Get.to(() => const NotificationsScreen()); }),
       _buildDrawerItem(Icons.person_outline, 'Profile', iconColor: Colors.indigoAccent, isDark: isDark, onTap: () { controller.bottomNavIndex = 3; Navigator.pop(context); }),
-      _buildDrawerItem(Icons.dashboard_outlined, 'Content Dashboard', iconColor: Colors.blue, isDark: isDark, onTap: () { Navigator.pop(context); Get.to(() => const GenericPlaceholderScreen(title: 'Content Dashboard')); }),
-      _buildDrawerItem(Icons.monetization_on_outlined, 'Earnings', iconColor: Colors.green, isDark: isDark, onTap: () { Navigator.pop(context); Get.to(() => const GenericPlaceholderScreen(title: 'Earnings')); }),
-      _buildDrawerItem(Icons.bar_chart, 'Analytics', iconColor: Colors.orange, isDark: isDark, onTap: () { Navigator.pop(context); Get.to(() => const GenericPlaceholderScreen(title: 'Analytics')); }),
+      
+      const Padding(padding: EdgeInsets.symmetric(vertical: 8), child: Divider(color: Colors.transparent)),
+      _buildSectionHeader('CHANNEL TOOLS', isDark),
+      
+      _buildDrawerItem(Icons.dashboard_outlined, 'Content Dashboard', iconColor: Colors.blue, isDark: isDark, onTap: () { 
+        Navigator.pop(context); 
+        Get.to(() => const StudioContentDashboardScreen()); 
+      }),
+      _buildDrawerItem(Icons.upload, 'Upload Video', iconColor: Colors.blueAccent, isDark: isDark, onTap: () { 
+        Navigator.pop(context); 
+        Get.to(() => const VideoUploadScreen()); 
+      }),
+      _buildDrawerItem(Icons.edit_note, 'Write Script', iconColor: Colors.orange, isDark: isDark, onTap: () { 
+        Navigator.pop(context); 
+        Get.to(() => const WriteScriptScreen()); 
+      }),
+      _buildDrawerItem(Icons.comment_outlined, 'Comments', iconColor: Colors.teal, isDark: isDark, onTap: () { 
+        Navigator.pop(context); 
+        Get.to(() => const StudioCommentsScreen()); 
+      }),
+      _buildDrawerItem(Icons.monetization_on_outlined, 'Earnings', iconColor: Colors.green, isDark: isDark, onTap: () { 
+        Navigator.pop(context); 
+        Get.to(() => const StudioEarningsScreen()); 
+      }),
+      _buildDrawerItem(Icons.bar_chart, 'Analytics', iconColor: Colors.deepOrange, isDark: isDark, onTap: () { 
+        Navigator.pop(context); 
+        Get.to(() => const StudioAnalyticsScreen()); 
+      }),
       _buildDrawerItem(Icons.settings, 'Settings', iconColor: Colors.grey, isDark: isDark, onTap: () { Navigator.pop(context); Get.to(() => const SettingsScreen()); }),
     ];
   }
@@ -731,10 +888,22 @@ class ShellScreen extends GetView<AppController> {
       _buildDrawerItem(Icons.chat_bubble_outline, 'Messages', iconColor: Colors.greenAccent, isDark: isDark, onTap: () { controller.bottomNavIndex = 2; Navigator.pop(context); }),
       _buildDrawerItem(Icons.favorite_border, 'Notifications', iconColor: Colors.pinkAccent, isDark: isDark, onTap: () { Navigator.pop(context); Get.to(() => const NotificationsScreen()); }),
       _buildDrawerItem(Icons.person_outline, 'Profile', iconColor: Colors.indigoAccent, isDark: isDark, onTap: () { controller.bottomNavIndex = 3; Navigator.pop(context); }),
-      _buildDrawerItem(Icons.calendar_today, 'Upcoming Meetings', iconColor: Colors.teal, isDark: isDark, onTap: () { Navigator.pop(context); Get.to(() => const GenericPlaceholderScreen(title: 'Upcoming Meetings')); }),
-      _buildDrawerItem(Icons.add_box_outlined, 'Join Meeting', iconColor: Colors.blue, isDark: isDark, onTap: () { Navigator.pop(context); Get.to(() => const GenericPlaceholderScreen(title: 'Join Meeting')); }),
-      _buildDrawerItem(Icons.schedule, 'Schedule', iconColor: Colors.orange, isDark: isDark, onTap: () { Navigator.pop(context); Get.to(() => const GenericPlaceholderScreen(title: 'Schedule')); }),
-      _buildDrawerItem(Icons.mic_none_outlined, 'Recordings', iconColor: Colors.red, isDark: isDark, onTap: () { Navigator.pop(context); Get.to(() => const GenericPlaceholderScreen(title: 'Recordings')); }),
+      _buildDrawerItem(Icons.calendar_today, 'Upcoming Meetings', iconColor: Colors.teal, isDark: isDark, onTap: () { 
+        Navigator.pop(context); 
+        Get.to(() => const MeetingUpcomingScreen()); 
+      }),
+      _buildDrawerItem(Icons.add_box_outlined, 'Join Meeting', iconColor: Colors.blue, isDark: isDark, onTap: () { 
+        Navigator.pop(context); 
+        Get.to(() => const MeetingJoinScreen()); 
+      }),
+      _buildDrawerItem(Icons.schedule, 'Schedule', iconColor: Colors.orange, isDark: isDark, onTap: () { 
+        Navigator.pop(context); 
+        Get.to(() => const MeetingScheduleScreen()); 
+      }),
+      _buildDrawerItem(Icons.mic_none_outlined, 'Recordings', iconColor: Colors.red, isDark: isDark, onTap: () { 
+        Navigator.pop(context); 
+        Get.to(() => const MeetingRecordingsScreen()); 
+      }),
       _buildDrawerItem(Icons.settings, 'Settings', iconColor: Colors.grey, isDark: isDark, onTap: () { Navigator.pop(context); Get.to(() => const SettingsScreen()); }),
     ];
   }
@@ -744,12 +913,21 @@ class ShellScreen extends GetView<AppController> {
     return [
       _buildSectionHeader('GAMES', isDark),
       _buildDrawerItem(Icons.sports_esports, 'Home', iconColor: Colors.indigo, isDark: isDark, isActive: true, onTap: () => Navigator.pop(context)),
-      _buildDrawerItem(Icons.web, 'Web Based Games', iconColor: Colors.blue, isDark: isDark, onTap: () { Navigator.pop(context); Get.to(() => const GenericPlaceholderScreen(title: 'Web Games')); }),
-      _buildDrawerItem(Icons.html, 'HTML5 Games', iconColor: Colors.orange, isDark: isDark, onTap: () { Navigator.pop(context); Get.to(() => const GenericPlaceholderScreen(title: 'HTML5 Games')); }),
+      _buildDrawerItem(Icons.web, 'Web Based Games', iconColor: Colors.blue, isDark: isDark, onTap: () { 
+        Navigator.pop(context); 
+        Get.to(() => const GamesWebBasedScreen()); 
+      }),
+      _buildDrawerItem(Icons.html, 'HTML5 Games', iconColor: Colors.orange, isDark: isDark, onTap: () { 
+        Navigator.pop(context); 
+        Get.to(() => const GamesHTML5Screen()); 
+      }),
       _buildDrawerItem(Icons.emoji_events_outlined, 'Tournaments', iconColor: Colors.amber, isDark: isDark, onTap: () { Navigator.pop(context); Get.to(() => const TournamentScreen()); }),
       _buildDrawerItem(Icons.group_add_outlined, 'LFG / Squad Finder', iconColor: Colors.green, isDark: isDark, onTap: () { Navigator.pop(context); Get.to(() => const SquadFinderScreen()); }),
       _buildDrawerItem(Icons.library_books_outlined, 'My Library', iconColor: Colors.purple, isDark: isDark, onTap: () { Navigator.pop(context); Get.to(() => const LibraryScreen()); }),
-      _buildDrawerItem(Icons.local_activity_outlined, 'Gaming Activity', iconColor: Colors.redAccent, isDark: isDark, onTap: () { Navigator.pop(context); Get.to(() => const GenericPlaceholderScreen(title: 'Activity')); }),
+      _buildDrawerItem(Icons.local_activity_outlined, 'Gaming Activity', iconColor: Colors.redAccent, isDark: isDark, onTap: () { 
+        Navigator.pop(context); 
+        Get.to(() => const GamesActivityScreen()); 
+      }),
       _buildDrawerItem(Icons.notifications_outlined, 'Notifications', iconColor: Colors.pink, isDark: isDark, onTap: () { Navigator.pop(context); Get.to(() => const NotificationsScreen()); }),
       
       const Padding(padding: EdgeInsets.symmetric(vertical: 8), child: Divider(color: Colors.transparent)),
