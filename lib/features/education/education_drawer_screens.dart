@@ -236,3 +236,21 @@ class EducationCartScreen extends StatelessWidget {
     );
   }
 }
+
+class EducationTeacherDashboardScreen extends StatelessWidget {
+  const EducationTeacherDashboardScreen({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(appBar: AppBar(title: const Text('Teacher Dashboard')), body: const Center(child: Text('Teacher Dashboard Content')));
+  }
+}
+
+class EducationCreateCourseScreen extends StatelessWidget {
+  const EducationCreateCourseScreen({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(appBar: AppBar(title: const Text('Create Course')), body: const Center(child: Text('Create Course Wizard')));
+  }
+}

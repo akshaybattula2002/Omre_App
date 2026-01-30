@@ -204,3 +204,75 @@ class StudioAnalyticsScreen extends StatelessWidget {
     return const AnalyticsScreen();
   }
 }
+
+class StudioOverviewScreen extends StatelessWidget {
+  const StudioOverviewScreen({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(appBar: AppBar(title: const Text('Overview')), body: const Center(child: Text('Studio Overview content')));
+  }
+}
+
+class StudioOmreAIScreen extends StatelessWidget {
+  const StudioOmreAIScreen({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(appBar: AppBar(title: const Text('Omre AI')), body: const Center(child: Text('Omre AI Tools')));
+  }
+}
+
+class StudioIdeaLabScreen extends StatelessWidget {
+  const StudioIdeaLabScreen({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(appBar: AppBar(title: const Text('Idea Lab')), body: const Center(child: Text('Generate Ideas Here')));
+  }
+}
+
+class StudioScriptGenScreen extends StatelessWidget {
+  const StudioScriptGenScreen({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(appBar: AppBar(title: const Text('Script Generator')), body: const Center(child: Text('Generate Scripts Here')));
+  }
+}
+
+class StudioVideoEditorScreen extends StatelessWidget {
+  const StudioVideoEditorScreen({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(appBar: AppBar(title: const Text('Video Editor')), body: const Center(child: Text('Edit Video Here')));
+  }
+}
+
+class StudioImageEditorScreen extends StatelessWidget {
+  const StudioImageEditorScreen({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(appBar: AppBar(title: const Text('Image Editor')), body: const Center(child: Text('Edit Images Here')));
+  }
+}
+
+class StudioSchedulerScreen extends StatelessWidget {
+  const StudioSchedulerScreen({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(appBar: AppBar(title: const Text('Scheduler')), body: const Center(child: Text('Schedule Content')));
+  }
+}
+
+class StudioSafetyCheckScreen extends StatelessWidget {
+  const StudioSafetyCheckScreen({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(appBar: AppBar(title: const Text('Safety Check')), body: const Center(child: Text('Content Safety Analysis')));
+  }
+}

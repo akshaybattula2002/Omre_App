@@ -35,3 +35,16 @@ class GamesActivityScreen extends StatelessWidget {
     );
   }
 }
+
+class GamesCategoryScreen extends StatelessWidget {
+  final String category;
+  const GamesCategoryScreen({super.key, required this.category});
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(title: Text('$category Games')),
+      body: Center(child: Text('List of $category games')),
+    );
+  }
+}

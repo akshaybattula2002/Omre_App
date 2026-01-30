@@ -359,3 +359,51 @@ class MeetingRecordingsScreen extends StatelessWidget {
     );
   }
 }
+
+class MeetingHistoryScreen extends StatelessWidget {
+  const MeetingHistoryScreen({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final isDark = theme.brightness == Brightness.dark;
+    
+    return Scaffold(
+      backgroundColor: theme.scaffoldBackgroundColor,
+      appBar: PreferredSize(
+        preferredSize: const Size.fromHeight(kToolbarHeight),
+        child: _buildMeetingAppBar('Meeting History', context),
+      ),
+      body: Center(
+        child: Text(
+          'Meeting History Content',
+          style: TextStyle(color: isDark ? Colors.white : Colors.black),
+        ),
+      ),
+    );
+  }
+}
+
+class MeetingCreateTemplateScreen extends StatelessWidget {
+  const MeetingCreateTemplateScreen({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final isDark = theme.brightness == Brightness.dark;
+    
+    return Scaffold(
+      backgroundColor: theme.scaffoldBackgroundColor,
+      appBar: PreferredSize(
+        preferredSize: const Size.fromHeight(kToolbarHeight),
+        child: _buildMeetingAppBar('Create Template', context),
+      ),
+      body: Center(
+        child: Text(
+          'Create Meeting Template',
+          style: TextStyle(color: isDark ? Colors.white : Colors.black),
+        ),
+      ),
+    );
+  }
+}

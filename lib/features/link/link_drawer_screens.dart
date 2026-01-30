@@ -297,3 +297,48 @@ class LinkSalaryInsightsScreen extends StatelessWidget {
     );
   }
 }
+
+class LinkResumeBuilderScreen extends StatelessWidget {
+  const LinkResumeBuilderScreen({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(appBar: AppBar(title: const Text('Resume Builder')), body: const Center(child: Text('Build your resume')));
+  }
+}
+
+class LinkPortfolioCreateScreen extends StatelessWidget {
+  const LinkPortfolioCreateScreen({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(appBar: AppBar(title: const Text('Create Portfolio')), body: const Center(child: Text('Create your portfolio')));
+  }
+}
+
+class LinkCreateCoverLetterScreen extends StatelessWidget {
+  const LinkCreateCoverLetterScreen({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(appBar: AppBar(title: const Text('Cover Letter')), body: const Center(child: Text('Generate Cover Letter')));
+  }
+}
+
+class LinkAiHeadshotScreen extends StatelessWidget {
+  const LinkAiHeadshotScreen({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(appBar: AppBar(title: const Text('AI Headshot')), body: const Center(child: Text('Generate AI Headshots')));
+  }
+}
+
+class LinkAtsCheckerScreen extends StatelessWidget {
+  const LinkAtsCheckerScreen({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(appBar: AppBar(title: const Text('ATS Checker')), body: const Center(child: Text('Check your resume score')));
+  }
+}
