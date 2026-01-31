@@ -757,7 +757,7 @@ class ShellScreen extends GetView<AppController> {
       _buildDrawerItem(Icons.chat_bubble_outline, 'Messages', iconColor: Colors.green, isDark: isDark, onTap: () {
         Navigator.pop(context);
         Get.to(() => const OrbitMessagesScreen());
-      }, assetPath: AppAssets.messageIcon3d),
+      }, assetPath: AppAssets.messagesIcon3d),
       _buildDrawerItem(Icons.space_dashboard_outlined, 'Spaces', iconColor: Colors.orange, isDark: isDark, onTap: () {
         Navigator.pop(context);
         Get.to(() => const OrbitSpacesScreen());
@@ -849,7 +849,7 @@ class ShellScreen extends GetView<AppController> {
       _buildDrawerItem(Icons.home, 'Home', iconColor: Colors.blue, isActive: controller.bottomNavIndex == 0, isDark: isDark, onTap: () { controller.bottomNavIndex = 0; Navigator.pop(context); }, assetPath: 'assets/images/home_icon_3d.png'),
       _buildDrawerItem(Icons.explore_outlined, 'Explore', iconColor: Colors.purple, isActive: controller.bottomNavIndex == 1, isDark: isDark, onTap: () { controller.bottomNavIndex = 1; Navigator.pop(context); }, assetPath: AppAssets.exploreIcon3d),
       _buildDrawerItem(Icons.videocam_outlined, 'Shorts', iconColor: Colors.red, isDark: isDark, onTap: () { Navigator.pop(context); Get.to(() => const ShortsScreen()); }, assetPath: 'assets/images/video_icon_3d.png'),
-      _buildDrawerItem(Icons.chat_bubble_outline, 'Messages', iconColor: Colors.green, isActive: controller.bottomNavIndex == 2, isDark: isDark, onTap: () { controller.bottomNavIndex = 2; Navigator.pop(context); }, assetPath: 'assets/images/chat_icon_3d.png'),
+      _buildDrawerItem(Icons.chat_bubble_outline, 'Messages', iconColor: Colors.green, isActive: controller.bottomNavIndex == 2, isDark: isDark, onTap: () { controller.bottomNavIndex = 2; Navigator.pop(context); }, assetPath: AppAssets.messagesIcon3d),
       _buildDrawerItem(Icons.notifications_outlined, 'Notifications', iconColor: Colors.pink, isDark: isDark, onTap: () { Navigator.pop(context); Get.to(() => const NotificationsScreen()); }, assetPath: AppAssets.notificationIcon3d),
       _buildDrawerItem(Icons.person_outline, 'Profile', iconColor: Colors.blue, isActive: controller.bottomNavIndex == 3, isDark: isDark, onTap: () { controller.bottomNavIndex = 3; Navigator.pop(context); }, assetPath: 'assets/images/profile_icon_3d.png'),
       _buildDrawerItem(Icons.settings_outlined, 'Settings', iconColor: Colors.grey, isDark: isDark, onTap: () { Navigator.pop(context); Get.to(() => const SettingsScreen()); }, assetPath: 'assets/images/setting_icon_3d.png'),
@@ -878,7 +878,7 @@ class ShellScreen extends GetView<AppController> {
   List<Widget> _buildChatDrawerItems(BuildContext context, bool isDark) {
     return [
       _buildSectionHeader('MESSENGER', isDark),
-      _buildDrawerItem(Icons.chat_bubble_outline, 'Messages', iconColor: Colors.greenAccent, isActive: controller.bottomNavIndex == 2, isDark: isDark, onTap: () { controller.bottomNavIndex = 2; Navigator.pop(context); }, assetPath: 'assets/images/chat_icon_3d.png'),
+      _buildDrawerItem(Icons.chat_bubble_outline, 'Messages', iconColor: Colors.greenAccent, isActive: controller.bottomNavIndex == 2, isDark: isDark, onTap: () { controller.bottomNavIndex = 2; Navigator.pop(context); }, assetPath: AppAssets.messagesIcon3d),
       _buildDrawerItem(Icons.donut_large, 'Status', iconColor: Colors.blueAccent, isDark: isDark, onTap: () { 
         Navigator.pop(context); 
         Get.to(() => const MessengerStatusScreen()); 

@@ -26,6 +26,7 @@ class AppAssets {
   static const String statusIcon3d = 'assets/icons/status_3d.png';
   static const String channelsIcon3d = 'assets/icons/channels_3d.png';
   static const String digitalCitizenIcon3d = 'assets/icons/digital_citizen_3d.png';
+  static const String messagesIcon3d = 'assets/icons/messages_3d.png';
   static const String catalogIcon3d = 'assets/images/catalog_icon_3d.png';
   static const String ordersIcon3d = 'assets/images/orders_icon_3d.png';
   static const String inboxToolsIcon3d = 'assets/images/inbox_tools_icon_3d.png';
