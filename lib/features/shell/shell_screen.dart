@@ -520,15 +520,6 @@ class ShellScreen extends GetView<AppController> {
                     child: Divider(color: Colors.transparent),
                   ),
 
-                  // Standard Footer Items (Help & Logout)
-                  _buildDrawerFeatureItem(
-                    Icons.help_outline, 'Help Center', Colors.blue, isDark,
-                    assetPath: AppAssets.helpCenterIcon3d,
-                    onTap: () {
-                      Navigator.pop(context);
-                      Get.to(() => HelpCenterScreen());
-                    },
-                  ),
                   if (controller.appMode != AppMode.biz && controller.appMode != AppMode.link && controller.appMode != AppMode.education && controller.appMode != AppMode.news)
                     _buildDrawerFeatureItem(
                       Icons.logout, 'Logout', Colors.red, isDark,
@@ -866,7 +857,7 @@ class ShellScreen extends GetView<AppController> {
       _buildDrawerItem(Icons.lightbulb_outline, 'OmreKnow', iconColor: Colors.orange, isDark: isDark, onTap: () { Navigator.pop(context); Get.to(() => const OmreKnowScreen()); }, assetPath: 'assets/images/omniknow_icon_3d.png'),
       _buildDrawerItem(Icons.sentiment_satisfied_alt, 'Happy Corner', iconColor: Colors.amber, isDark: isDark, onTap: () { Navigator.pop(context); Get.to(() => const HappyCornerScreen()); }, assetPath: 'assets/images/happy_corner_icon_3d.png'),
       _buildDrawerItem(Icons.language, 'Virtual World', iconColor: Colors.cyan, isDark: isDark, onTap: () { Navigator.pop(context); Get.to(() => const VirtualWorldScreen()); }, assetPath: AppAssets.languageIcon3d),
-      _buildDrawerItem(Icons.security_outlined, 'Digital Citizen', iconColor: Colors.green, isDark: isDark, onTap: () { Navigator.pop(context); Get.to(() => const DigitalCitizenScreen()); }, assetPath: AppAssets.securitySafeIcon3d),
+      _buildDrawerItem(Icons.security_outlined, 'Digital Citizen', iconColor: Colors.green, isDark: isDark, onTap: () { Navigator.pop(context); Get.to(() => const DigitalCitizenScreen()); }, assetPath: AppAssets.digitalCitizenIcon3d),
       _buildDrawerItem(Icons.smart_toy_outlined, 'Omre AI', iconColor: Colors.deepPurpleAccent, isDark: isDark, onTap: () { Navigator.pop(context); Get.to(() => const OmreAIScreen()); }, assetPath: 'assets/images/omre_ai_icon_3d.png'),
       
       _buildDrawerItem(Icons.article_outlined, 'Pages', iconColor: Colors.blue, isDark: isDark, onTap: () { Navigator.pop(context); Get.to(() => const PagesScreen()); }, assetPath: 'assets/images/news_icon_3d.png'),
@@ -891,11 +882,11 @@ class ShellScreen extends GetView<AppController> {
       _buildDrawerItem(Icons.donut_large, 'Status', iconColor: Colors.blueAccent, isDark: isDark, onTap: () { 
         Navigator.pop(context); 
         Get.to(() => const MessengerStatusScreen()); 
-      }),
+      }, assetPath: AppAssets.statusIcon3d),
       _buildDrawerItem(Icons.broadcast_on_personal, 'Channels', iconColor: Colors.orange, isDark: isDark, onTap: () { 
         Navigator.pop(context); 
         Get.to(() => const MessengerChannelsScreen()); 
-      }),
+      }, assetPath: AppAssets.channelsIcon3d),
       _buildDrawerItem(Icons.people_outline, 'Communities', iconColor: Colors.teal, isDark: isDark, onTap: () { 
         Navigator.pop(context); 
         Get.to(() => const MessengerCommunitiesScreen()); 
@@ -1063,6 +1054,10 @@ class ShellScreen extends GetView<AppController> {
       const Padding(padding: EdgeInsets.symmetric(vertical: 8), child: Divider(color: Colors.transparent)),
       
       _buildSectionHeader('CATEGORIES', isDark),
+      _buildDrawerItem(Icons.grid_view, 'All Categories', iconColor: Colors.blue, isDark: isDark, onTap: () { 
+        Navigator.pop(context); 
+        Get.to(() => const GamesCategoryScreen(category: 'All')); 
+      }, assetPath: AppAssets.allCategoriesIcon3d),
       _buildDrawerItem(Icons.flash_on, 'Action', iconColor: Colors.red, isDark: isDark, onTap: () { Navigator.pop(context); Get.to(() => const GamesCategoryScreen(category: 'Action')); }, assetPath: AppAssets.actionGamesIcon3d),
       _buildDrawerItem(Icons.map_outlined, 'Adventure', iconColor: Colors.green, isDark: isDark, onTap: () { Navigator.pop(context); Get.to(() => const GamesCategoryScreen(category: 'Adventure')); }, assetPath: AppAssets.adventureGamesIcon3d),
       _buildDrawerItem(Icons.videogame_asset, 'Arcade', iconColor: Colors.amber, isDark: isDark, onTap: () { Navigator.pop(context); Get.to(() => const GamesCategoryScreen(category: 'Arcade')); }, assetPath: AppAssets.arcadeGamesIcon3d),

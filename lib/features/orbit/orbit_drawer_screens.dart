@@ -405,8 +405,12 @@ class OrbitCommunitiesScreen extends StatelessWidget {
         preferredSize: const Size.fromHeight(kToolbarHeight),
         child: _buildOrbitScreenHeader('Communities', context, actions: [
           Padding(
-            padding: const EdgeInsets.only(right: 16.0),
+            padding: const EdgeInsets.only(right: 8.0),
             child: Image.asset(AppAssets.communitiesIcon3d, width: 28, height: 28),
+          ),
+          Padding(
+            padding: const EdgeInsets.only(right: 16.0),
+            child: Image.asset(AppAssets.statusIcon3d, width: 28, height: 28),
           ),
         ]),
       ),

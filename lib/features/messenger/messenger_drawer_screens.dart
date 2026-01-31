@@ -141,7 +141,12 @@ class MessengerStatusScreen extends StatelessWidget {
       backgroundColor: theme.scaffoldBackgroundColor,
       appBar: PreferredSize(
         preferredSize: const Size.fromHeight(kToolbarHeight),
-        child: _buildMessengerAppBar('Status', context),
+        child: _buildMessengerAppBar('Status', context, actions: [
+          Padding(
+            padding: const EdgeInsets.only(right: 16.0),
+            child: Image.asset(AppAssets.statusIcon3d, width: 28, height: 28),
+          ),
+        ]),
       ),
       body: ListView(
         children: [
@@ -426,6 +431,10 @@ class MessengerChannelsScreen extends StatelessWidget {
       appBar: PreferredSize(
         preferredSize: const Size.fromHeight(kToolbarHeight),
         child: _buildMessengerAppBar('Channels', context, actions: [
+          Padding(
+            padding: const EdgeInsets.only(right: 8.0),
+            child: Image.asset(AppAssets.channelsIcon3d, width: 28, height: 28),
+          ),
           IconButton(icon: const Icon(Icons.search), onPressed: () => Get.to(() => const FindChannelsScreen())),
         ]),
       ),
@@ -596,6 +605,10 @@ class MessengerCommunitiesScreen extends StatelessWidget {
             padding: const EdgeInsets.only(right: 8.0),
             child: Image.asset(AppAssets.communitiesIcon3d, width: 28, height: 28),
           ),
+          Padding(
+            padding: const EdgeInsets.only(right: 8.0),
+            child: Image.asset(AppAssets.statusIcon3d, width: 28, height: 28),
+          ),
           IconButton(icon: const Icon(Icons.search), onPressed: () {}),
         ]),
       ),
@@ -742,7 +755,12 @@ class MessengerGroupsScreen extends StatelessWidget {
       backgroundColor: theme.scaffoldBackgroundColor,
       appBar: PreferredSize(
         preferredSize: const Size.fromHeight(kToolbarHeight),
-        child: _buildMessengerAppBar('Groups', context),
+        child: _buildMessengerAppBar('Groups', context, actions: [
+          Padding(
+            padding: const EdgeInsets.only(right: 16.0),
+            child: Image.asset(AppAssets.statusIcon3d, width: 28, height: 28),
+          ),
+        ]),
       ),
       body: ListView(
         padding: const EdgeInsets.all(16),

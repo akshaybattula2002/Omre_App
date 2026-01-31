@@ -2,7 +2,7 @@ class AppAssets {
   static const String logoLight = 'assets/logo/omre_light_mode.png';
   static const String logoDark = 'assets/logo/omre_dark_mode.png';
   static const String logoutIcon3d = 'assets/images/logout_icon_3d.png';
-  static const String groupsIcon3d = 'assets/images/groups_icon_3d.png';
+  static const String groupsIcon3d = 'assets/icons/groups_3d.png';
   static const String townHallIcon3d = 'assets/images/town_hall_icon_3d.png';
   static const String friendsIcon3d = 'assets/images/friends_icon_3d.png';
   static const String watchIcon3d = 'assets/images/watch_icon_3d.png';
@@ -23,6 +23,9 @@ class AppAssets {
   static const String accountPrivacyIcon3d = 'assets/icons/account_privacy_3d.png';
   static const String exploreIcon3d = 'assets/icons/explore_3d.png';
   static const String communitiesIcon3d = 'assets/icons/communities_3d.png';
+  static const String statusIcon3d = 'assets/icons/status_3d.png';
+  static const String channelsIcon3d = 'assets/icons/channels_3d.png';
+  static const String digitalCitizenIcon3d = 'assets/icons/digital_citizen_3d.png';
   static const String catalogIcon3d = 'assets/images/catalog_icon_3d.png';
   static const String ordersIcon3d = 'assets/images/orders_icon_3d.png';
   static const String inboxToolsIcon3d = 'assets/images/inbox_tools_icon_3d.png';
@@ -92,7 +95,7 @@ class AppAssets {
   static const String boardGamesIcon3d = 'assets/images/board_games_icon_3d.png';
   static const String builderGamesIcon3d = 'assets/images/builder_games_icon_3d.png';
   static const String cardGamesIcon3d = 'assets/images/card_games_icon_3d.png';
-  static const String allCategoriesIcon3d = 'assets/images/all_categories_icon_3d.png';
+  static const String allCategoriesIcon3d = 'assets/icons/all_categories_3d.png';
   static const String nearMeIcon3d = 'assets/images/near_me_icon_3d.png';
   static const String verifiedIcon3d = 'assets/images/verified_icon_3d.png';
   static const String trendingArrowIcon3d = 'assets/images/trending_arrow_icon_3d.png';
