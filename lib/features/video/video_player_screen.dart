@@ -238,11 +238,12 @@ class _VideoPlayerScreenState extends State<VideoPlayerScreen> {
                                 _buildActionButton(Icons.download_outlined, 'Download', isDark, textColor, onTap: _handleDownload),
                                 const SizedBox(width: 8),
                                 _buildActionButton(
-                                  _isSaved ? Icons.bookmark : Icons.bookmark_border, 
+                                  Icons.bookmark, 
                                   _isSaved ? 'Saved' : 'Save', 
                                   isDark, 
                                   textColor,
-                                  onTap: _handleSave
+                                  onTap: _handleSave,
+                                  assetPath: AppAssets.savedIcon3d
                                 ),
                               ],
                             ),
@@ -403,7 +404,7 @@ class _VideoPlayerScreenState extends State<VideoPlayerScreen> {
     );
   }
 
-  Widget _buildActionButton(IconData icon, String label, bool isDark, Color? textColor, {VoidCallback? onTap}) {
+  Widget _buildActionButton(IconData icon, String label, bool isDark, Color? textColor, {VoidCallback? onTap, String? assetPath}) {
     return GestureDetector(
       onTap: onTap,
       child: Container(
@@ -414,7 +415,9 @@ class _VideoPlayerScreenState extends State<VideoPlayerScreen> {
         ),
         child: Row(
           children: [
-            Icon(icon, size: 20, color: textColor),
+            assetPath != null
+                ? Image.asset(assetPath, width: 20, height: 20, color: textColor)
+                : Icon(icon, size: 20, color: textColor),
             const SizedBox(width: 8),
             Text(label, style: TextStyle(color: textColor, fontWeight: FontWeight.w600)),
           ],

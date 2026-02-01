@@ -25,6 +25,12 @@ class OrbitTopic {
 class OrbitController extends GetxController {
   final searchQuery = ''.obs;
   final selectedCategory = 'All'.obs;
+  final joinedCommunities = <String>[].obs;
+  final bookmarkedTopics = <String>[
+    'AI Ethics & Safety',
+    'Mars Colonization',
+    'Global Climate Action',
+  ].obs;
   
   final categories = <String>[
     'All', 'Trending', 'Tech', 'Science', 'Politics', 'Finance', 'Arts', 'Sports'
@@ -225,5 +231,21 @@ class OrbitController extends GetxController {
 
   void addTopic(OrbitTopic topic) {
     allTopics.insert(0, topic);
+  }
+
+  void toggleCommunity(String name) {
+    if (joinedCommunities.contains(name)) {
+      joinedCommunities.remove(name);
+    } else {
+      joinedCommunities.add(name);
+    }
+  }
+
+  void toggleBookmark(String title) {
+    if (bookmarkedTopics.contains(title)) {
+      bookmarkedTopics.remove(title);
+    } else {
+      bookmarkedTopics.add(title);
+    }
   }
 }

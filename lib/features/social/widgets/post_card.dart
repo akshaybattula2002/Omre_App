@@ -5,6 +5,7 @@ import '../controllers/home_controller.dart';
 import '../post_detail_screen.dart';
 import '../user_profile_screen.dart';
 import '../../../core/theme/palette.dart';
+import '../../../core/constants/app_assets.dart';
 
 class PostCard extends StatelessWidget {
   final PostModel post;
@@ -95,7 +96,7 @@ class PostCard extends StatelessWidget {
                   const SizedBox(width: 16),
                   GestureDetector(
                     onTap: () => controller.commentOnPost(post.id),
-                    child: const Icon(Icons.chat_bubble_outline, size: 26),
+                    child: const Icon(Icons.comment_outlined, size: 26),
                   ),
                   const SizedBox(width: 16),
                   GestureDetector(
@@ -105,10 +106,11 @@ class PostCard extends StatelessWidget {
                   const Spacer(),
                   Obx(() => GestureDetector(
                     onTap: () => controller.toggleSave(post.id),
-                    child: Icon(
-                      post.isSaved.value ? Icons.bookmark : Icons.bookmark_border,
-                      size: 28,
-                      color: post.isSaved.value ? Colors.grey : null,
+                    child: Image.asset(
+                      AppAssets.savedIcon3d,
+                      width: 28,
+                      height: 28,
+                      color: post.isSaved.value ? null : Colors.grey,
                     ),
                   )),
                 ],

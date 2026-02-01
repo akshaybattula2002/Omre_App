@@ -277,7 +277,7 @@ class MarketplaceListingScreen extends StatelessWidget {
                     const SizedBox(width: 12),
                     Expanded(
                       child: OutlinedButton.icon(
-                        icon: const Icon(Icons.chat_bubble_outline, size: 18),
+                        icon: Image.asset('assets/images/chat_icon_3d.png', width: 18, height: 18),
                         label: const Text('Chat'),
                         onPressed: () => controller.chatProvider(provider['name']),
                         style: OutlinedButton.styleFrom(

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import '../../../core/theme/palette.dart';
+import '../../../core/constants/app_assets.dart';
 import 'data_usage_controller.dart';
 
 class DataUsageScreen extends StatelessWidget {
@@ -19,6 +20,12 @@ class DataUsageScreen extends StatelessWidget {
         title: const Text('Data Usage', style: TextStyle(fontWeight: FontWeight.bold)),
         elevation: 0,
         backgroundColor: Colors.transparent,
+        actions: [
+          Padding(
+            padding: const EdgeInsets.only(right: 16),
+            child: Image.asset(AppAssets.dataUsageIcon3d, width: 28, height: 28),
+          ),
+        ],
       ),
       body: ListView(
         children: [

@@ -75,7 +75,9 @@ class MartServicesScreen extends GetView<MartServicesController> {
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          Icon(service['icon'], size: 32, color: Colors.blueAccent),
+                          service['assetPath'] != null
+                              ? Image.asset(service['assetPath'], width: 32, height: 32)
+                              : Icon(service['icon'], size: 32, color: Colors.blueAccent),
                           const SizedBox(height: 12),
                           Text(service['title'], style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16, color: textColor)),
                           const SizedBox(height: 4),

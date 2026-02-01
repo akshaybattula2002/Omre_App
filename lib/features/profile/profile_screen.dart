@@ -50,13 +50,14 @@ class ProfileScreen extends StatelessWidget {
             ],
           ),
           const SizedBox(height: 32),
-          _ProfileOption(icon: Icons.settings, label: 'Settings', onTap: () => Get.to(() => const SettingsScreen())),
-          _ProfileOption(icon: Icons.bookmark_outline, label: 'Saved', onTap: () => Get.to(() => const SavedScreen())),
-          _ProfileOption(icon: Icons.help_outline, label: 'Help Center', onTap: () => Get.to(() => HelpCenterScreen())),
+          _ProfileOption(icon: Icons.settings, label: 'Settings', onTap: () => Get.to(() => const SettingsScreen()), assetPath: 'assets/images/setting_icon_3d.png'),
+          _ProfileOption(icon: Icons.bookmark_outline, label: 'Saved', onTap: () => Get.to(() => const SavedScreen()), assetPath: AppAssets.savedIcon3d),
+          _ProfileOption(icon: Icons.help_outline, label: 'Help Center', onTap: () => Get.to(() => HelpCenterScreen()), assetPath: 'assets/icons/help_center.png'),
           _ProfileOption(
             icon: Icons.logout, 
             label: 'Logout', 
             isDestructive: true,
+            assetPath: AppAssets.logoutIcon3d,
             onTap: () => Get.offAllNamed('/login'),
           ),
         ],
@@ -95,18 +96,22 @@ class _ProfileOption extends StatelessWidget {
   final String label;
   final bool isDestructive;
   final VoidCallback? onTap;
+  final String? assetPath;
 
   const _ProfileOption({
     required this.icon,
     required this.label,
     this.isDestructive = false,
     this.onTap,
+    this.assetPath,
   });
 
   @override
   Widget build(BuildContext context) {
     return ListTile(
-      leading: Icon(icon, color: isDestructive ? Colors.red : null),
+      leading: assetPath != null
+          ? Image.asset(assetPath!, width: 24, height: 24)
+          : Icon(icon, color: isDestructive ? Colors.red : null),
       title: Text(
         label,
         style: TextStyle(

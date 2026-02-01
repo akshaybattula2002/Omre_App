@@ -26,7 +26,11 @@ class GroupsScreen extends StatelessWidget {
             onPressed: () => Get.back(),
           ),
           actions: [
-            IconButton(icon: Icon(Icons.search, color: isDark ? Colors.white : Colors.black), onPressed: () {}),
+            Padding(
+              padding: const EdgeInsets.only(right: 8.0, top: 4),
+              child: Image.asset(AppAssets.statusIcon3d, width: 28, height: 28),
+            ),
+            IconButton(icon: Image.asset('assets/images/search_icon_3d.png', width: 24, height: 24), onPressed: () {}),
             IconButton(
               icon: Icon(Icons.add_circle_outline, color: isDark ? Colors.white : Colors.black), 
               onPressed: () => Get.to(() => const CreateGroupScreen()),

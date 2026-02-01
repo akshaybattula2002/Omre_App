@@ -11,7 +11,8 @@ class CategoryModel {
   final String name;
   final int jobCount;
   final IconData icon;
-  CategoryModel({required this.name, required this.jobCount, required this.icon});
+  final String? assetPath;
+  CategoryModel({required this.name, required this.jobCount, required this.icon, this.assetPath});
 }
 
 class JobModel {
@@ -68,14 +69,14 @@ class JobsController extends GetxController {
   final locationController = TextEditingController();
 
   final categories = <CategoryModel>[
-    CategoryModel(name: 'Engineering', jobCount: 234, icon: Icons.code),
-    CategoryModel(name: 'Design', jobCount: 89, icon: Icons.palette_outlined),
+    CategoryModel(name: 'Engineering', jobCount: 234, icon: Icons.code, assetPath: 'assets/images/link_icon_3d.png'),
+    CategoryModel(name: 'Design', jobCount: 89, icon: Icons.palette_outlined, assetPath: 'assets/images/studio_icon_3d.png'),
     CategoryModel(name: 'Marketing', jobCount: 156, icon: Icons.campaign_outlined),
     CategoryModel(name: 'Sales', jobCount: 123, icon: Icons.trending_up),
     CategoryModel(name: 'Product', jobCount: 67, icon: Icons.inventory_2_outlined),
     CategoryModel(name: 'HR', jobCount: 45, icon: Icons.people_outline),
     CategoryModel(name: 'Operations', jobCount: 78, icon: Icons.settings_outlined),
-    CategoryModel(name: 'Education', jobCount: 92, icon: Icons.school_outlined),
+    CategoryModel(name: 'Education', jobCount: 92, icon: Icons.school_outlined, assetPath: 'assets/images/learn_icon_3d.png'),
   ].obs;
 
   final allJobs = <JobModel>[
@@ -463,9 +464,9 @@ class JobsScreen extends StatelessWidget {
             ),
             child: Column(
               children: [
-                _buildSearchInput(Icons.search, 'Job title / keywords / company', controller.searchController, isDark),
+                _buildSearchInput(Image.asset('assets/images/search_icon_3d.png', width: 20, height: 20), 'Job title / keywords / company', controller.searchController, isDark),
                 const Divider(height: 1, indent: 48),
-                _buildSearchInput(Icons.location_on_outlined, 'City, state, or remote', controller.locationController, isDark),
+                _buildSearchInput(Icon(Icons.location_on_outlined, color: Colors.grey, size: 20), 'City, state, or remote', controller.locationController, isDark),
               ],
             ),
           ),
@@ -487,12 +488,12 @@ class JobsScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildSearchInput(IconData icon, String hint, TextEditingController textController, bool isDark) {
+  Widget _buildSearchInput(Widget iconWidget, String hint, TextEditingController textController, bool isDark) {
     return Row(
       children: [
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 16),
-          child: Icon(icon, color: Colors.grey, size: 20),
+          child: iconWidget,
         ),
         Expanded(
           child: TextField(
@@ -891,9 +892,9 @@ class JobsScreen extends StatelessWidget {
               ),
               child: Row(
                 children: [
-                  const Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 16),
-                    child: Icon(Icons.search, color: Colors.grey),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 16),
+                    child: Image.asset('assets/images/search_icon_3d.png', width: 24, height: 24),
                   ),
                   Expanded(
                     child: TextField(
@@ -979,9 +980,9 @@ class JobsScreen extends StatelessWidget {
       crossAxisSpacing: 16,
       childAspectRatio: 0.85,
       children: [
-        _buildCategoryCard('Web Dev', Icons.code, const Color(0xFFE8F1FF), const Color(0xFF2B7FFF), isDark),
-        _buildCategoryCard('Design', Icons.palette_outlined, const Color(0xFFF6EEFF), const Color(0xFF9B51E0), isDark),
-        _buildCategoryCard('Marketing', Icons.campaign_outlined, const Color(0xFFFFF0F5), const Color(0xFFFF4D94), isDark),
+        _buildCategoryCard('Web Dev', Icons.code, const Color(0xFFE8F1FF), const Color(0xFF2B7FFF), isDark, assetPath: 'assets/images/link_icon_3d.png'),
+        _buildCategoryCard('Design', Icons.palette_outlined, const Color(0xFFF6EEFF), const Color(0xFF9B51E0), isDark, assetPath: 'assets/images/studio_icon_3d.png'),
+        _buildCategoryCard('Marketing', Icons.campaign_outlined, const Color(0xFFFFF0F5), const Color(0xFFFF4D94), isDark, assetPath: AppAssets.adsIcon3d),
         _buildCategoryCard('Writing', Icons.edit_note, const Color(0xFFFFF7EB), const Color(0xFFF2994A), isDark),
         _buildCategoryCard('Video', Icons.videocam_outlined, const Color(0xFFEFFFF7), const Color(0xFF27AE60), isDark),
       ],
@@ -1007,34 +1008,30 @@ class JobsScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildCategoryCard(String label, IconData icon, Color bgColor, Color iconColor, bool isDark) {
+  Widget _buildCategoryCard(String label, IconData icon, Color bgColor, Color iconColor, bool isDark, {String? assetPath}) {
     return GestureDetector(
       onTap: () => Get.to(() => CategoryServicesScreen(categoryName: label)),
       child: Container(
         decoration: BoxDecoration(
-          color: isDark ? const Color(0xFF11141B) : Colors.white,
+          color: isDark ? const Color(0xFF1E1E1E) : Colors.white,
           borderRadius: BorderRadius.circular(24),
-          border: Border.all(color: Colors.grey.withOpacity(0.1)),
-          boxShadow: !isDark ? [
-            BoxShadow(color: Colors.black.withOpacity(0.02), blurRadius: 10, offset: const Offset(0, 4))
-          ] : null,
+          border: Border.all(color: isDark ? Colors.grey[800]! : Colors.grey[100]!),
         ),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Container(
-              padding: const EdgeInsets.all(20),
+              padding: const EdgeInsets.all(16),
               decoration: BoxDecoration(
-                color: isDark ? iconColor.withOpacity(0.1) : bgColor,
+                color: isDark ? bgColor.withOpacity(0.05) : bgColor,
                 shape: BoxShape.circle,
               ),
-              child: Icon(icon, color: iconColor, size: 32),
+              child: assetPath != null
+                  ? Image.asset(assetPath, width: 32, height: 32)
+                  : Icon(icon, size: 32, color: iconColor),
             ),
-            const SizedBox(height: 16),
-            Text(
-              label,
-              style: const TextStyle(fontWeight: FontWeight.w900, fontSize: 16),
-            ),
+            const SizedBox(height: 12),
+            Text(label, style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16)),
           ],
         ),
       ),

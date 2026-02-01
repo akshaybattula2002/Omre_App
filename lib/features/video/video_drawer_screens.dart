@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import '../../core/constants/app_assets.dart';
+import '../movies/movies_screen.dart';
 
 // --- Shared Widgets ---
 class VideoListItem extends StatelessWidget {
@@ -10,6 +11,7 @@ class VideoListItem extends StatelessWidget {
   final String time;
   final String thumbnail;
   final Widget? trailing;
+  final VoidCallback? onTap;
 
   const VideoListItem({
     super.key,
@@ -19,11 +21,14 @@ class VideoListItem extends StatelessWidget {
     required this.time,
     required this.thumbnail,
     this.trailing,
+    this.onTap,
   });
 
   @override
   Widget build(BuildContext context) {
-    return Container(
+    return InkWell(
+      onTap: onTap,
+      child: Container(
       margin: const EdgeInsets.only(bottom: 12),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -81,6 +86,7 @@ class VideoListItem extends StatelessWidget {
           ),
         ],
       ),
+      ),
     );
   }
 }
@@ -98,7 +104,7 @@ class VideoSubscriptionsScreen extends StatelessWidget {
         children: [
           // Story-like avatars for recent updates
           SizedBox(
-            height: 100,
+            height: 120,
             child: ListView.builder(
               scrollDirection: Axis.horizontal,
               padding: const EdgeInsets.all(12),
@@ -106,22 +112,25 @@ class VideoSubscriptionsScreen extends StatelessWidget {
               itemBuilder: (context, index) {
                 return Padding(
                   padding: const EdgeInsets.only(right: 16),
-                  child: Column(
-                    children: [
-                      CircleAvatar(
-                        radius: 30,
-                        backgroundImage: AssetImage(AppAssets.avatar1), // You might want to rotate avatars
-                        child: Align(
-                          alignment: Alignment.bottomRight,
-                          child: Container(
-                            width: 12, height: 12,
-                            decoration: const BoxDecoration(color: Colors.blue, shape: BoxShape.circle, border: Border.fromBorderSide(BorderSide(color: Colors.white, width: 2))),
+                  child: SizedBox(
+                    width: 70,
+                    child: Column(
+                      children: [
+                        CircleAvatar(
+                          radius: 30,
+                          backgroundImage: AssetImage(AppAssets.avatar1), // You might want to rotate avatars
+                          child: Align(
+                            alignment: Alignment.bottomRight,
+                            child: Container(
+                              width: 12, height: 12,
+                              decoration: const BoxDecoration(color: Colors.blue, shape: BoxShape.circle, border: Border.fromBorderSide(BorderSide(color: Colors.white, width: 2))),
+                            ),
                           ),
                         ),
-                      ),
-                      const SizedBox(height: 4),
-                      Text('Channel $index', style: const TextStyle(fontSize: 10)),
-                    ],
+                        const SizedBox(height: 4),
+                        Text('Channel $index', style: const TextStyle(fontSize: 10), maxLines: 1, overflow: TextOverflow.ellipsis, textAlign: TextAlign.center),
+                      ],
+                    ),
                   ),
                 );
               },
@@ -134,9 +143,9 @@ class VideoSubscriptionsScreen extends StatelessWidget {
               children: [
                 const Text('Recent', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16)),
                 const SizedBox(height: 12),
-                 VideoListItem(title: 'Flutter Tutorial for Beginners', channel: 'CodeMaster', views: '20k views', time: '2 hours ago', thumbnail: AppAssets.thumbnail1),
-                 VideoListItem(title: 'Exploring the Metaverse', channel: 'TechDaily', views: '1.5M views', time: '5 hours ago', thumbnail: AppAssets.thumbnail2),
-                 VideoListItem(title: 'New Game Release Review', channel: 'GamerZone', views: '500k views', time: '1 day ago', thumbnail: AppAssets.thumbnail3),
+                 VideoListItem(title: 'Flutter Tutorial for Beginners', channel: 'CodeMaster', views: '20k views', time: '2 hours ago', thumbnail: AppAssets.thumbnail1, onTap: () => Get.toNamed('/video_player', arguments: {'title': 'Flutter Tutorial for Beginners'})),
+                 VideoListItem(title: 'Exploring the Metaverse', channel: 'TechDaily', views: '1.5M views', time: '5 hours ago', thumbnail: AppAssets.thumbnail2, onTap: () => Get.toNamed('/video_player', arguments: {'title': 'Exploring the Metaverse'})),
+                 VideoListItem(title: 'New Game Release Review', channel: 'GamerZone', views: '500k views', time: '1 day ago', thumbnail: AppAssets.thumbnail3, onTap: () => Get.toNamed('/video_player', arguments: {'title': 'New Game Release Review'})),
               ],
             ),
           ),
@@ -156,50 +165,55 @@ class VideoLibraryScreen extends StatelessWidget {
       body: ListView(
         padding: const EdgeInsets.all(16),
         children: [
-          _buildLibraryItem(context, Icons.history, 'History', '120 videos'),
-          _buildLibraryItem(context, Icons.play_circle_outline, 'Your Videos', '5 videos'),
-          _buildLibraryItem(context, Icons.download_done_outlined, 'Downloads', '12 videos'),
-          _buildLibraryItem(context, Icons.movie_creation_outlined, 'Your Movies', '2 movies'),
+          _buildLibraryItem(context, Icons.history, 'History', '120 videos', onTap: () => Get.to(() => VideoHistoryScreen())),
+          _buildLibraryItem(context, Icons.play_circle_outline, 'Your Videos', '5 videos', onTap: () => Get.snackbar('Library', 'Coming soon: Your Videos')),
+          _buildLibraryItem(context, Icons.download_done_outlined, 'Downloads', '12 videos', onTap: () => Get.snackbar('Library', 'Coming soon: Downloads')),
+          _buildLibraryItem(context, Icons.movie_creation_outlined, 'Your Movies', '2 movies', assetPath: AppAssets.watchIcon3d, onTap: () => Get.to(() => MoviesScreen())),
           const Divider(height: 32),
           const Text('Playlists', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16)),
           const SizedBox(height: 16),
-          _buildPlaylistItem('Liked Videos', '520 videos', Icons.thumb_up),
-          _buildPlaylistItem('Flutter Learning', '15 videos', Icons.playlist_play),
-          _buildPlaylistItem('Chill Music', '50 videos', Icons.music_note),
+          _buildPlaylistItem('Liked Videos', '520 videos', Icons.thumb_up, onTap: () => Get.to(() => VideoLikedVideosScreen())),
+          _buildPlaylistItem('Flutter Learning', '15 videos', Icons.playlist_play, onTap: () => Get.snackbar('Playlist', 'Opening Flutter Learning...')),
+          _buildPlaylistItem('Chill Music', '50 videos', Icons.music_note, onTap: () => Get.snackbar('Playlist', 'Opening Chill Music...')),
         ],
       ),
     );
   }
 
-  Widget _buildLibraryItem(BuildContext context, IconData icon, String title, String subtitle) {
+  Widget _buildLibraryItem(BuildContext context, IconData icon, String title, String subtitle, {String? assetPath, VoidCallback? onTap}) {
     return ListTile(
-      leading: Icon(icon, color: Theme.of(context).iconTheme.color),
+      leading: assetPath != null
+          ? Image.asset(assetPath, width: 24, height: 24)
+          : Icon(icon, color: Theme.of(context).iconTheme.color),
       title: Text(title),
       subtitle: Text(subtitle, style: const TextStyle(fontSize: 12)),
-      onTap: () {},
+      onTap: onTap ?? () {},
     );
   }
 
-  Widget _buildPlaylistItem(String title, String count, IconData icon) {
+  Widget _buildPlaylistItem(String title, String count, IconData icon, {VoidCallback? onTap}) {
     return Padding(
       padding: const EdgeInsets.only(bottom: 16),
-      child: Row(
-        children: [
-          Container(
-            width: 140,
-            height: 80,
-            decoration: BoxDecoration(color: Colors.grey[800], borderRadius: BorderRadius.circular(8)),
-            child: Center(child: Icon(icon, color: Colors.white)),
-          ),
-          const SizedBox(width: 12),
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(title, style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 14)),
-              Text(count, style: const TextStyle(color: Colors.grey, fontSize: 12)),
-            ],
-          ),
-        ],
+      child: InkWell(
+        onTap: onTap ?? () {},
+        child: Row(
+          children: [
+            Container(
+              width: 140,
+              height: 80,
+              decoration: BoxDecoration(color: Colors.grey[800], borderRadius: BorderRadius.circular(8)),
+              child: Center(child: Icon(icon, color: Colors.white)),
+            ),
+            const SizedBox(width: 12),
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(title, style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 14)),
+                Text(count, style: const TextStyle(color: Colors.grey, fontSize: 12)),
+              ],
+            ),
+          ],
+        ),
       ),
     );
   }
@@ -212,21 +226,22 @@ class VideoHistoryScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: const Text('History'), actions: [
-        IconButton(icon: const Icon(Icons.search), onPressed: () {}),
-        IconButton(icon: const Icon(Icons.more_vert), onPressed: () {}),
+        IconButton(icon: const Icon(Icons.search), onPressed: () => Get.snackbar('Search', 'Search history coming soon')),
+        IconButton(icon: const Icon(Icons.more_vert), onPressed: () => Get.snackbar('Options', 'More options coming soon')),
       ]),
       body: ListView(
         padding: const EdgeInsets.all(16),
-        children: const [
-          Text('Today', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16)),
-          SizedBox(height: 12),
+        children: [
+          const Text('Today', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16)),
+          const SizedBox(height: 12),
           VideoListItem(
             title: 'Advanced State Management', 
             channel: 'Flutter Dev', 
             views: '12k views', 
             time: '2h ago', 
             thumbnail: AppAssets.thumbnail1,
-            trailing: LinearProgressIndicator(value: 0.8, backgroundColor: Colors.grey, color: Colors.red, minHeight: 2),
+            trailing: const LinearProgressIndicator(value: 0.8, backgroundColor: Colors.grey, color: Colors.red, minHeight: 2),
+            onTap: () => Get.toNamed('/video_player', arguments: {'title': 'Advanced State Management'}),
           ),
           VideoListItem(
             title: 'Funny Cat Compilation 2026', 
@@ -234,18 +249,20 @@ class VideoHistoryScreen extends StatelessWidget {
             views: '2M views', 
             time: '5h ago', 
             thumbnail: AppAssets.thumbnail2,
-            trailing: LinearProgressIndicator(value: 0.1, backgroundColor: Colors.grey, color: Colors.red, minHeight: 2),
+            trailing: const LinearProgressIndicator(value: 0.1, backgroundColor: Colors.grey, color: Colors.red, minHeight: 2),
+            onTap: () => Get.toNamed('/video_player', arguments: {'title': 'Funny Cat Compilation 2026'}),
           ),
-          SizedBox(height: 16),
-          Text('Yesterday', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16)),
-          SizedBox(height: 12),
+          const SizedBox(height: 16),
+          const Text('Yesterday', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16)),
+          const SizedBox(height: 12),
           VideoListItem(
             title: 'Podcast: Future of Tech', 
             channel: 'Tech Talk', 
             views: '500k views', 
             time: '1d ago', 
             thumbnail: AppAssets.thumbnail3,
-             trailing: LinearProgressIndicator(value: 1.0, backgroundColor: Colors.grey, color: Colors.red, minHeight: 2),
+             trailing: const LinearProgressIndicator(value: 1.0, backgroundColor: Colors.grey, color: Colors.red, minHeight: 2),
+             onTap: () => Get.toNamed('/video_player', arguments: {'title': 'Podcast: Future of Tech'}),
           ),
         ],
       ),
@@ -267,15 +284,15 @@ class VideoWatchLaterScreen extends StatelessWidget {
             child: Padding(
               padding: const EdgeInsets.symmetric(vertical: 20),
               child: ElevatedButton.icon(
-                onPressed: () {},
+                onPressed: () => Get.snackbar('Watch Later', 'Starting playlist: Watch Later'),
                 icon: const Icon(Icons.play_arrow),
                 label: const Text('Play All'),
                 style: ElevatedButton.styleFrom(backgroundColor: Colors.white, foregroundColor: Colors.black),
               ),
             ),
           ),
-          const VideoListItem(title: 'Documentary: Deep Ocean', channel: 'NatGeo', views: '1M views', time: '4 days ago', thumbnail: AppAssets.thumbnail1),
-          const VideoListItem(title: 'Speedrun: Elden Ring 2', channel: 'SpeedGamer', views: '300k views', time: '1 week ago', thumbnail: AppAssets.thumbnail2),
+          VideoListItem(title: 'Documentary: Deep Ocean', channel: 'NatGeo', views: '1M views', time: '4 days ago', thumbnail: AppAssets.thumbnail1, onTap: () => Get.toNamed('/video_player', arguments: {'title': 'Documentary: Deep Ocean'})),
+          VideoListItem(title: 'Speedrun: Elden Ring 2', channel: 'SpeedGamer', views: '300k views', time: '1 week ago', thumbnail: AppAssets.thumbnail2, onTap: () => Get.toNamed('/video_player', arguments: {'title': 'Speedrun: Elden Ring 2'})),
         ],
       ),
     );
@@ -291,10 +308,10 @@ class VideoLikedVideosScreen extends StatelessWidget {
       appBar: AppBar(title: const Text('Liked Videos')),
       body: ListView(
         padding: const EdgeInsets.all(16),
-        children: const [
-          VideoListItem(title: 'Top 10 Goals of the Season', channel: 'SportsCentral', views: '5M views', time: '2 months ago', thumbnail: AppAssets.thumbnail3),
-          VideoListItem(title: 'How to Bake: Perfect Cake', channel: 'ChefAnna', views: '800k views', time: '5 months ago', thumbnail: AppAssets.thumbnail1),
-          VideoListItem(title: 'Music Video: Summer Vibes', channel: 'MusicVevo', views: '100M views', time: '1 year ago', thumbnail: AppAssets.thumbnail2),
+        children: [
+          VideoListItem(title: 'Top 10 Goals of the Season', channel: 'SportsCentral', views: '5M views', time: '2 months ago', thumbnail: AppAssets.thumbnail3, onTap: () => Get.toNamed('/video_player', arguments: {'title': 'Top 10 Goals of the Season'})),
+          VideoListItem(title: 'How to Bake: Perfect Cake', channel: 'ChefAnna', views: '800k views', time: '5 months ago', thumbnail: AppAssets.thumbnail1, onTap: () => Get.toNamed('/video_player', arguments: {'title': 'How to Bake: Perfect Cake'})),
+          VideoListItem(title: 'Music Video: Summer Vibes', channel: 'MusicVevo', views: '100M views', time: '1 year ago', thumbnail: AppAssets.thumbnail2, onTap: () => Get.toNamed('/video_player', arguments: {'title': 'Music Video: Summer Vibes'})),
         ],
       ),
     );
@@ -337,10 +354,62 @@ class VideoTrendingScreen extends StatelessWidget {
     return ListView(
       padding: const EdgeInsets.all(16),
       children: [
-        VideoListItem(title: 'Trending #1 in $category', channel: 'TopChannel', views: '5M views', time: '10 hours ago', thumbnail: AppAssets.thumbnail1),
-        VideoListItem(title: 'Viral Video Alert!', channel: 'BuzzFeed', views: '3M views', time: '12 hours ago', thumbnail: AppAssets.thumbnail2),
-         VideoListItem(title: 'Must Watch: $category Special', channel: 'Influencer', views: '1M views', time: '1 day ago', thumbnail: AppAssets.thumbnail3),
+        VideoListItem(title: 'Trending #1 in $category', channel: 'TopChannel', views: '5M views', time: '10 hours ago', thumbnail: AppAssets.thumbnail1, onTap: () => Get.toNamed('/video_player', arguments: {'title': 'Trending #1 in $category'})),
+        VideoListItem(title: 'Viral Video Alert!', channel: 'BuzzFeed', views: '3M views', time: '12 hours ago', thumbnail: AppAssets.thumbnail2, onTap: () => Get.toNamed('/video_player', arguments: {'title': 'Viral Video Alert!'})),
+         VideoListItem(title: 'Must Watch: $category Special', channel: 'Influencer', views: '1M views', time: '1 day ago', thumbnail: AppAssets.thumbnail3, onTap: () => Get.toNamed('/video_player', arguments: {'title': 'Must Watch: $category Special'})),
       ],
+    );
+  }
+}
+
+class VideoMoviesShowsScreen extends StatelessWidget {
+  const VideoMoviesShowsScreen({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(title: const Text('Movies & Shows')),
+      body: GridView.builder(
+        padding: const EdgeInsets.all(16),
+        gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+          crossAxisCount: 2,
+          childAspectRatio: 0.7,
+          crossAxisSpacing: 16,
+          mainAxisSpacing: 16,
+        ),
+        itemCount: 6,
+        itemBuilder: (context, index) {
+          return InkWell(
+            onTap: () => Get.snackbar('Movies', 'Opening Movie ${index + 1}...'),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Expanded(
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.circular(8),
+                    child: Image.asset(
+                      AppAssets.covers[index % AppAssets.covers.length],
+                      fit: BoxFit.cover,
+                      width: double.infinity,
+                    ),
+                  ),
+                ),
+                const SizedBox(height: 8),
+                Text(
+                  'Movie Title ${index + 1}',
+                  style: const TextStyle(fontWeight: FontWeight.bold),
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                ),
+                const Text(
+                  'Action • 2h 15m',
+                  style: TextStyle(color: Colors.grey, fontSize: 12),
+                ),
+              ],
+            ),
+          );
+        },
+      ),
     );
   }
 }

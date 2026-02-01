@@ -23,7 +23,7 @@ class BlogsScreen extends StatelessWidget {
           onPressed: () => Get.back(),
         ),
         actions: [
-          IconButton(icon: Icon(Icons.search, color: theme.iconTheme.color), onPressed: () {}),
+          IconButton(icon: Image.asset('assets/images/search_icon_3d.png', width: 24, height: 24), onPressed: () {}),
           IconButton(icon: Icon(Icons.bookmark_border, color: theme.iconTheme.color), onPressed: () {}),
         ],
       ),

@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import '../controllers/link_controller.dart';
-import '../../../../core/theme/palette.dart';
+import '../../../core/theme/palette.dart';
+import '../../../core/constants/app_assets.dart';
 
 class JobDetailsScreen extends StatelessWidget {
   final JobModel job;
@@ -29,8 +30,10 @@ class JobDetailsScreen extends StatelessWidget {
           Obx(() {
             final isSaved = controller.savedJobIds.contains(job.id);
             return IconButton(
-              icon: Icon(
-                isSaved ? Icons.bookmark : Icons.bookmark_border_outlined,
+              icon: Image.asset(
+                AppAssets.savedIcon3d,
+                width: 24,
+                height: 24,
                 color: isSaved ? AppPalette.accentBlue : theme.iconTheme.color,
               ),
               onPressed: () => controller.toggleSaveJob(job.id),

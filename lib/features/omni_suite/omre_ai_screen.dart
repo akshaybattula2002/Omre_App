@@ -2,15 +2,16 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
+import '../../core/constants/app_assets.dart';
 
-class OmniAIScreen extends StatefulWidget {
-  const OmniAIScreen({super.key});
+class OmreAIScreen extends StatefulWidget {
+  const OmreAIScreen({super.key});
 
   @override
-  State<OmniAIScreen> createState() => _OmniAIScreenState();
+  State<OmreAIScreen> createState() => _OmreAIScreenState();
 }
 
-class _OmniAIScreenState extends State<OmniAIScreen> {
+class _OmreAIScreenState extends State<OmreAIScreen> {
   // Expansion states for inline modules
   final Map<String, bool> _expansionStates = {};
 
@@ -181,7 +182,7 @@ class _OmniAIScreenState extends State<OmniAIScreen> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            'TITANCONNECT',
+            'OMRE AI',
             style: TextStyle(
               fontSize: 18,
               fontWeight: FontWeight.w900,
@@ -199,7 +200,7 @@ class _OmniAIScreenState extends State<OmniAIScreen> {
         ],
       ),
       actions: [
-        _buildHeaderAction(Icons.verified_user, 'Level 4', accentCyan),
+        _buildHeaderAction(Icons.verified_user, 'Level 4', accentCyan, assetPath: AppAssets.securitySafeIcon3d),
         const SizedBox(width: 8),
         _buildHeaderAction(Icons.bolt, '842', Colors.amber),
         const SizedBox(width: 16),
@@ -207,7 +208,7 @@ class _OmniAIScreenState extends State<OmniAIScreen> {
     );
   }
 
-  Widget _buildHeaderAction(IconData icon, String label, Color color) {
+  Widget _buildHeaderAction(IconData icon, String label, Color color, {String? assetPath}) {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
       decoration: BoxDecoration(
@@ -218,7 +219,9 @@ class _OmniAIScreenState extends State<OmniAIScreen> {
       child: Row(
         mainAxisSize: MainAxisSize.min,
         children: [
-          Icon(icon, size: 12, color: color),
+          assetPath != null 
+              ? Image.asset(assetPath, width: 12, height: 12)
+              : Icon(icon, size: 12, color: color),
           const SizedBox(width: 6),
           Text(label, style: TextStyle(fontSize: 10, fontWeight: FontWeight.bold, color: color)),
         ],
@@ -497,6 +500,7 @@ class _OmniAIScreenState extends State<OmniAIScreen> {
           _buildGovItem('AI Ethics Audit', 'Verified Transparent'),
         ],
       ),
+      assetPath: AppAssets.townHallIcon3d,
     );
   }
 
@@ -560,9 +564,9 @@ class _OmniAIScreenState extends State<OmniAIScreen> {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: [
-              _footerIcon(Icons.data_usage, 'Data Control', isDark),
+              _footerIcon(Icons.data_usage, 'Data Control', isDark, assetPath: AppAssets.dataUsageIcon3d),
               _footerIcon(Icons.visibility_off, 'Ad Shield', isDark),
-              _footerIcon(Icons.security, 'Decentralized', isDark),
+              _footerIcon(Icons.security, 'Decentralized', isDark, assetPath: AppAssets.securitySafeIcon3d),
             ],
           ),
           const SizedBox(height: 32),
@@ -576,10 +580,12 @@ class _OmniAIScreenState extends State<OmniAIScreen> {
     );
   }
 
-  Widget _footerIcon(IconData icon, String label, bool isDark) {
+  Widget _footerIcon(IconData icon, String label, bool isDark, {String? assetPath}) {
     return Column(
       children: [
-        Icon(icon, size: 20, color: isDark ? Colors.white24 : Colors.black26),
+        assetPath != null 
+            ? Image.asset(assetPath, width: 20, height: 20)
+            : Icon(icon, size: 20, color: isDark ? Colors.white24 : Colors.black26),
         const SizedBox(height: 8),
         Text(label, style: TextStyle(fontSize: 9, color: isDark ? Colors.white24 : Colors.black26)),
       ],
@@ -612,7 +618,7 @@ class _OmniAIScreenState extends State<OmniAIScreen> {
     );
   }
 
-  Widget _buildExpandableModule(String key, String title, String sub, IconData icon, Color color, Widget content) {
+  Widget _buildExpandableModule(String key, String title, String sub, IconData icon, Color color, Widget content, {String? assetPath}) {
     final bool isDark = Theme.of(context).brightness == Brightness.dark;
     bool isExp = _expansionStates[key] ?? false;
     return Container(
@@ -634,7 +640,9 @@ class _OmniAIScreenState extends State<OmniAIScreen> {
                   Container(
                     padding: const EdgeInsets.all(12),
                     decoration: BoxDecoration(color: color.withOpacity(0.1), borderRadius: BorderRadius.circular(16)),
-                    child: Icon(icon, size: 20, color: color),
+                    child: assetPath != null
+                        ? Image.asset(assetPath, width: 20, height: 20)
+                        : Icon(icon, size: 20, color: color),
                   ),
                   const SizedBox(width: 20),
                   Expanded(

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import '../../core/constants/app_assets.dart';
 import 'controllers/orbit_controller.dart';
 import 'orbit_topic_detail_screen.dart';
 import 'orbit_create_topic_screen.dart';
@@ -271,7 +272,7 @@ class OrbitHomeScreen extends StatelessWidget {
                 // Stats Row
                 Row(
                   children: [
-                    Icon(Icons.people_alt_rounded, size: 16, color: accent),
+                    Image.asset(AppAssets.friendsIcon3d, width: 16, height: 16),
                     const SizedBox(width: 4),
                     Text(
                       '${topic.liveUsers} live',

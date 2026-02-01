@@ -6,10 +6,10 @@ class MartServicesController extends GetxController {
   
   // Primary Services
   final primaryServices = <Map<String, dynamic>>[
-    {'title': 'B2B', 'subtitle': 'Quick Quotes', 'icon': Icons.business},
+    {'title': 'B2B', 'subtitle': 'Quick Quotes', 'icon': Icons.business, 'assetPath': 'assets/images/biz_icon_3d.png'},
     {'title': 'Repairs & Services', 'subtitle': 'Get Nearest Vendor', 'icon': Icons.build},
-    {'title': 'Real Estate', 'subtitle': 'Finest Agents', 'icon': Icons.real_estate_agent},
-    {'title': 'Doctors', 'subtitle': 'Book Now', 'icon': Icons.medical_services},
+    {'title': 'Real Estate', 'subtitle': 'Finest Agents', 'icon': Icons.real_estate_agent, 'assetPath': 'assets/images/mart_icon_3d.png'},
+    {'title': 'Doctors', 'subtitle': 'Book Now', 'icon': Icons.medical_services, 'assetPath': 'assets/images/mart_icon_3d.png'},
   ].obs;
 
   // Tim to Fly Offer

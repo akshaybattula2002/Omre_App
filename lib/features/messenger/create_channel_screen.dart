@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 import '../../core/theme/palette.dart';
+import '../../core/constants/app_assets.dart';
 
 class CreateChannelScreen extends StatefulWidget {
   const CreateChannelScreen({super.key});
@@ -83,7 +84,7 @@ class _CreateChannelScreenState extends State<CreateChannelScreen> {
             const SizedBox(height: 24),
             Row(
               children: [
-                const Icon(Icons.public, color: Colors.grey),
+                Image.asset(AppAssets.languageIcon3d, width: 24, height: 24),
                 const SizedBox(width: 16),
                 const Expanded(
                   child: Column(

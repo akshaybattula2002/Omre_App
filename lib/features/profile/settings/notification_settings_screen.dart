@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../../../core/theme/palette.dart';
+import '../../../core/constants/app_assets.dart';
 
 class NotificationSettingsScreen extends StatefulWidget {
   const NotificationSettingsScreen({super.key});
@@ -25,6 +26,12 @@ class _NotificationSettingsScreenState extends State<NotificationSettingsScreen>
       appBar: AppBar(
         title: const Text('Notifications', style: TextStyle(fontWeight: FontWeight.bold)),
         elevation: 0,
+        actions: [
+          Padding(
+            padding: const EdgeInsets.only(right: 16),
+            child: Image.asset(AppAssets.notificationIcon3d, width: 28, height: 28),
+          ),
+        ],
       ),
       body: ListView(
         children: [

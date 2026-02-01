@@ -115,7 +115,7 @@ class ExplorePostCard extends StatelessWidget {
                   padding: const EdgeInsets.all(8.0),
                   child: Row(
                     children: [
-                      Icon(Icons.chat_bubble_outline, size: 20, color: isDark ? Colors.grey[400] : Colors.grey[600]),
+                      Icon(Icons.comment_outlined, size: 20, color: isDark ? Colors.grey[400] : Colors.grey[600]),
                       const SizedBox(width: 4),
                       Obx(() => Text('${post['comments']}', style: TextStyle(fontSize: 12, color: isDark ? Colors.grey[400] : Colors.grey[600]))),
                     ],

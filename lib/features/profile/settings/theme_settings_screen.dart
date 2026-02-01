@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import '../../../core/theme/palette.dart';
+import '../../../core/constants/app_assets.dart';
 
 class ThemeSettingsScreen extends StatelessWidget {
   const ThemeSettingsScreen({super.key});
@@ -11,6 +12,12 @@ class ThemeSettingsScreen extends StatelessWidget {
       appBar: AppBar(
         title: const Text('Appearance', style: TextStyle(fontWeight: FontWeight.bold)),
         elevation: 0,
+        actions: [
+          Padding(
+            padding: const EdgeInsets.only(right: 16),
+            child: Image.asset(AppAssets.appearanceIcon3d, width: 28, height: 28),
+          ),
+        ],
       ),
       body: Column(
         children: [

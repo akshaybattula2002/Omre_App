@@ -2,6 +2,7 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
+import '../../core/constants/app_assets.dart';
 
 class DigitalCitizenScreen extends StatefulWidget {
   const DigitalCitizenScreen({super.key});
@@ -103,6 +104,7 @@ class _DigitalCitizenScreenState extends State<DigitalCitizenScreen> {
                           title: 'Identity & Trust Score',
                           subtitle: 'Credibility rooted in verification & behavior.',
                           icon: Icons.verified_user_outlined,
+                          assetPath: AppAssets.digitalCitizenIcon3d,
                           accentColor: Colors.blueAccent,
                           content: _buildIdentityTrustContent(),
                         ),
@@ -124,6 +126,7 @@ class _DigitalCitizenScreenState extends State<DigitalCitizenScreen> {
                           title: 'Content Integrity Audit',
                           subtitle: 'AI & human oversight status across your media.',
                           icon: Icons.security_outlined,
+                          assetPath: AppAssets.digitalCitizenIcon3d,
                           accentColor: Colors.purpleAccent,
                           content: _buildIntegrityContent(),
                         ),
@@ -230,7 +233,7 @@ class _DigitalCitizenScreenState extends State<DigitalCitizenScreen> {
                   Text('Trusted Citizen', style: TextStyle(color: isDark ? Colors.white : Colors.black87, fontSize: 22, fontWeight: FontWeight.bold)),
                 ],
               ),
-              const Icon(Icons.verified_user, color: Colors.blueAccent, size: 40),
+              Image.asset(AppAssets.securitySafeIcon3d, width: 40, height: 40),
             ],
           ),
           const SizedBox(height: 32),
@@ -434,20 +437,22 @@ class _DigitalCitizenScreenState extends State<DigitalCitizenScreen> {
     return Column(
       children: [
         _buildCivicTile('Governance Debate Chambers', 'Role-aware, moderated discussion suites.', Icons.chat_bubble_outline, isDark),
-        _buildCivicTile('Verified Institutional AMAs', 'Direct line to verified world leaders.', Icons.verified_user_outlined, isDark),
+        _buildCivicTile('Verified Institutional AMAs', 'Direct line to verified world leaders.', Icons.verified_user_outlined, isDark, assetPath: AppAssets.securitySafeIcon3d),
         _buildCivicTile('Region-Aware Legislation Hub', 'Local policy updates & simulation votes.', Icons.how_to_vote_outlined, isDark),
       ],
     );
   }
 
-  Widget _buildCivicTile(String title, String sub, IconData icon, bool isDark) {
+  Widget _buildCivicTile(String title, String sub, IconData icon, bool isDark, {String? assetPath}) {
     return Container(
       margin: const EdgeInsets.only(bottom: 8),
       child: ListTile(
         contentPadding: const EdgeInsets.symmetric(horizontal: 20, vertical: 4),
         tileColor: isDark ? Colors.white.withOpacity(0.02) : Colors.black.withOpacity(0.02),
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
-        leading: Icon(icon, color: isDark ? Colors.white24 : Colors.black26, size: 20),
+        leading: assetPath != null 
+            ? Image.asset(assetPath, width: 20, height: 20)
+            : Icon(icon, color: isDark ? Colors.white24 : Colors.black26, size: 20),
         title: Text(title, style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold, color: isDark ? Colors.white : Colors.black87)),
         subtitle: Text(sub, style: TextStyle(fontSize: 11, color: isDark ? Colors.white38 : Colors.black38)),
         trailing: Icon(Icons.chevron_right, size: 16, color: isDark ? Colors.white10 : Colors.black12),
@@ -486,15 +491,15 @@ class _DigitalCitizenScreenState extends State<DigitalCitizenScreen> {
       physics: const BouncingScrollPhysics(),
       child: Row(
         children: [
-          _buildCitizenBadge('Trusted Citizen', Icons.shield, Colors.blueAccent),
+          _buildCitizenBadge('Trusted Citizen', Icons.shield, Colors.blueAccent, assetPath: AppAssets.securitySafeIcon3d),
           _buildCitizenBadge('Truth Anchor', Icons.anchor, Colors.purpleAccent),
-          _buildCitizenBadge('Civic Pioneer', Icons.rocket_launch, Colors.tealAccent),
+          _buildCitizenBadge('Civic Pioneer', Icons.rocket_launch, Colors.tealAccent, assetPath: 'assets/images/orbit_icon_3d.png'),
         ],
       ),
     );
   }
 
-  Widget _buildCitizenBadge(String label, IconData icon, Color color) {
+  Widget _buildCitizenBadge(String label, IconData icon, Color color, {String? assetPath}) {
     return Container(
       margin: const EdgeInsets.only(right: 12),
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
@@ -505,7 +510,9 @@ class _DigitalCitizenScreenState extends State<DigitalCitizenScreen> {
       ),
       child: Row(
         children: [
-          Icon(icon, color: color, size: 16),
+          assetPath != null
+              ? Image.asset(assetPath, width: 16, height: 16)
+              : Icon(icon, color: color, size: 16),
           const SizedBox(width: 10),
           Text(label, style: TextStyle(fontSize: 11, fontWeight: FontWeight.bold, color: color)),
         ],
@@ -591,7 +598,7 @@ class _DigitalCitizenScreenState extends State<DigitalCitizenScreen> {
     return Text(txt.toUpperCase(), style: TextStyle(fontSize: 11, fontWeight: FontWeight.w900, letterSpacing: 1.5, color: isDark ? Colors.white24 : Colors.black26));
   }
 
-  Widget _buildExpandableModule({required String key, required String title, required String subtitle, required IconData icon, required Color accentColor, required Widget content}) {
+  Widget _buildExpandableModule({required String key, required String title, required String subtitle, required IconData icon, required Color accentColor, required Widget content, String? assetPath}) {
     final bool isDark = Theme.of(context).brightness == Brightness.dark;
     bool isExpanded = _expansionStates[key] ?? false;
     return Column(
@@ -609,7 +616,7 @@ class _DigitalCitizenScreenState extends State<DigitalCitizenScreen> {
             ),
             child: Row(
               children: [
-                CircleAvatar(backgroundColor: accentColor.withOpacity(0.1), child: Icon(icon, color: accentColor, size: 20)),
+                CircleAvatar(backgroundColor: accentColor.withOpacity(0.1), child: assetPath != null ? Image.asset(assetPath, width: 20, height: 20) : Icon(icon, color: accentColor, size: 20)),
                 const SizedBox(width: 20),
                 Expanded(
                   child: Column(

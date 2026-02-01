@@ -87,6 +87,7 @@ class CreatePostWidget extends GetView<HomeController> {
                     label: 'Photo',
                     color: Colors.blue,
                     onTap: controller.pickImage,
+                    assetPath: AppAssets.imagesIcon3d,
                   ),
                   const SizedBox(width: 16),
                   _ActionButton(
@@ -94,6 +95,7 @@ class CreatePostWidget extends GetView<HomeController> {
                     label: 'Video',
                     color: Colors.green,
                     onTap: controller.pickVideo,
+                    assetPath: 'assets/images/video_icon_3d.png',
                   ),
                   const SizedBox(width: 16),
                   _ActionButton(
@@ -101,6 +103,7 @@ class CreatePostWidget extends GetView<HomeController> {
                     label: 'Feeling',
                     color: Colors.orange,
                     onTap: controller.selectFeeling,
+                    assetPath: AppAssets.happyCornerIcon3d,
                   ),
                 ],
               ),
@@ -132,11 +135,13 @@ class _ActionButton extends StatelessWidget {
   final Color color;
   final VoidCallback onTap;
 
+  final String? assetPath;
   const _ActionButton({
     required this.icon,
     required this.label,
     required this.color,
     required this.onTap,
+    this.assetPath,
   });
 
   @override
@@ -145,7 +150,9 @@ class _ActionButton extends StatelessWidget {
       onTap: onTap,
       child: Row(
         children: [
-          Icon(icon, color: color, size: 20),
+          assetPath != null
+              ? Image.asset(assetPath!, width: 20, height: 20)
+              : Icon(icon, color: color, size: 20),
           const SizedBox(width: 6),
           Text(
             label,

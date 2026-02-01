@@ -64,6 +64,12 @@ class _PrivacySettingsScreenState extends State<PrivacySettingsScreen> {
       appBar: AppBar(
         title: const Text('Privacy', style: TextStyle(fontWeight: FontWeight.bold)),
         elevation: 0,
+        actions: [
+          Padding(
+            padding: const EdgeInsets.only(right: 16),
+            child: Image.asset(AppAssets.accountPrivacyIcon3d, width: 28, height: 28),
+          ),
+        ],
       ),
       body: ListView(
         children: [
@@ -93,7 +99,7 @@ class _PrivacySettingsScreenState extends State<PrivacySettingsScreen> {
           ]),
           _buildSection('Connections', [
             _buildTile(Icons.block_flipped, 'Blocked Accounts', null, 
-              onTap: () => Get.to(() => const BlockedAccountsScreen())),
+              onTap: () => Get.to(() => const BlockedAccountsScreen()), assetPath: AppAssets.blockedAccountsIcon3d),
             _buildTile(Icons.person_off_outlined, 'Restricted Accounts', null,
               onTap: () => Get.to(() => const GenericUserListScreen(title: 'Restricted Accounts', emptyMessage: 'No accounts restricted.'))),
             _buildTile(Icons.visibility_off_outlined, 'Muted Accounts', null,
@@ -129,9 +135,11 @@ class _PrivacySettingsScreenState extends State<PrivacySettingsScreen> {
     );
   }
 
-  Widget _buildTile(IconData icon, String title, String? value, {VoidCallback? onTap}) {
+  Widget _buildTile(IconData icon, String title, String? value, {VoidCallback? onTap, String? assetPath}) {
     return ListTile(
-      leading: Icon(icon, size: 22),
+      leading: assetPath != null 
+          ? Image.asset(assetPath, width: 22, height: 22)
+          : Icon(icon, size: 22),
       title: Text(title),
       trailing: Row(
         mainAxisSize: MainAxisSize.min,

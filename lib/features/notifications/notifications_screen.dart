@@ -2,6 +2,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import '../../core/theme/palette.dart';
+import '../../core/constants/app_assets.dart';
 import 'notifications_controller.dart';
 
 class NotificationsScreen extends StatelessWidget {
@@ -36,9 +37,9 @@ class NotificationsScreen extends StatelessWidget {
                     ),
                   ),
                   const Spacer(),
-                  _buildHeaderButton(Icons.search, isDark),
+                  _buildHeaderButton(Image.asset('assets/images/search_icon_3d.png', width: 20, height: 20), isDark),
                   const SizedBox(width: 12),
-                  _buildHeaderButton(Icons.settings, isDark),
+                  _buildHeaderButton(Image.asset('assets/images/setting_icon_3d.png', width: 20, height: 20), isDark),
                 ],
               ),
             ),
@@ -75,14 +76,14 @@ class NotificationsScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildHeaderButton(IconData icon, bool isDark) {
+  Widget _buildHeaderButton(Widget iconWidget, bool isDark) {
     return Container(
       decoration: BoxDecoration(
         color: isDark ? Colors.grey[850] : Colors.grey[200],
         shape: BoxShape.circle,
       ),
       child: IconButton(
-        icon: Icon(icon, color: isDark ? Colors.white : Colors.black, size: 20),
+        icon: iconWidget,
         onPressed: () {},
         padding: EdgeInsets.zero,
         constraints: const BoxConstraints(minWidth: 36, minHeight: 36),
@@ -303,7 +304,7 @@ class NotificationsScreen extends StatelessWidget {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Icon(Icons.notifications_none_outlined, size: 100, color: isDark ? Colors.white10 : Colors.grey[300]),
+          Image.asset(AppAssets.notificationIcon3d, width: 100, height: 100, color: isDark ? Colors.white10 : Colors.grey[300]),
           const SizedBox(height: 20),
           Text(
             'You have no notifications',

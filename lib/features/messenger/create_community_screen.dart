@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
+import '../../core/constants/app_assets.dart';
 import 'package:get/get.dart';
-import '../../core/theme/palette.dart';
 
 class CreateCommunityScreen extends StatefulWidget {
   const CreateCommunityScreen({super.key});
@@ -10,110 +10,158 @@ class CreateCommunityScreen extends StatefulWidget {
 }
 
 class _CreateCommunityScreenState extends State<CreateCommunityScreen> {
-  final _nameController = TextEditingController();
-  final _descController = TextEditingController();
-  String _selectedCategory = 'Tech';
+  bool _isPublic = true;
+  String? _selectedImage;
 
   @override
   Widget build(BuildContext context) {
-    final isDark = Theme.of(context).brightness == Brightness.dark;
+    final theme = Theme.of(context);
+    final isDark = theme.brightness == Brightness.dark;
 
     return Scaffold(
-      backgroundColor: isDark ? const Color(0xFF1E1E1E) : Colors.white,
-      appBar: AppBar(
-        title: const Text('New Community', style: TextStyle(fontWeight: FontWeight.bold)),
-        backgroundColor: Colors.transparent,
-        elevation: 0,
-      ),
+      appBar: AppBar(title: const Text('Create Community')),
       body: SingleChildScrollView(
-        padding: const EdgeInsets.all(24.0),
+        padding: const EdgeInsets.all(16),
         child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Center(
               child: Stack(
                 children: [
-                   CircleAvatar(
-                     radius: 50,
-                     backgroundColor: Colors.grey.withOpacity(0.1),
-                     child: const Icon(Icons.groups_outlined, size: 40, color: Colors.grey),
-                   ),
-                   Positioned(
-                     bottom: 0,
-                     right: 0,
-                     child: Container(
-                       padding: const EdgeInsets.all(8),
-                       decoration: const BoxDecoration(color: AppPalette.accentBlue, shape: BoxShape.circle),
-                       child: const Icon(Icons.add_a_photo, color: Colors.white, size: 20),
-                     ),
-                   ),
+                  CircleAvatar(
+                    radius: 50,
+                    backgroundColor: Colors.grey[200],
+                    backgroundImage: _selectedImage != null ? AssetImage(_selectedImage!) : null,
+                    child: _selectedImage == null 
+                      ? const Icon(Icons.group_add, size: 50, color: Colors.grey) 
+                      : null,
+                  ),
+                  Positioned(
+                    bottom: 0,
+                    right: 0,
+                    child: CircleAvatar(
+                      radius: 18,
+                      backgroundColor: Colors.blue,
+                      child: IconButton(
+                        icon: const Icon(Icons.camera_alt, size: 18, color: Colors.white),
+                        onPressed: _showImagePicker,
+                        padding: EdgeInsets.zero,
+                      ),
+                    ),
+                  ),
                 ],
               ),
             ),
+            const SizedBox(height: 24),
+            _buildTextField('Community Name', 'e.g., Tech Enthusiasts'),
+            const SizedBox(height: 16),
+            _buildTextField('Description', 'What is this community about?', maxLines: 3),
+            const SizedBox(height: 24),
+            const Align(
+              alignment: Alignment.centerLeft,
+              child: Text('Privacy Settings', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16)),
+            ),
+            const SizedBox(height: 12),
+            _buildPrivacyOption('Public', 'Anyone can find and join', true, theme),
+            _buildPrivacyOption('Private', 'Only invited members can join', false, theme),
             const SizedBox(height: 32),
-            const Text('Community Name', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16)),
-            const SizedBox(height: 8),
-            TextField(
-              controller: _nameController,
-              decoration: InputDecoration(
-                hintText: 'e.g. Flutter Devs India',
-                filled: true,
-                fillColor: isDark ? Colors.white10 : Colors.grey[100],
-                border: OutlineInputBorder(borderRadius: BorderRadius.circular(12), borderSide: BorderSide.none),
-              ),
-            ),
-            const SizedBox(height: 24),
-            const Text('Category', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16)),
-            const SizedBox(height: 8),
-            Container(
-              padding: const EdgeInsets.symmetric(horizontal: 16),
-              decoration: BoxDecoration(
-                color: isDark ? Colors.white10 : Colors.grey[100],
-                borderRadius: BorderRadius.circular(12),
-              ),
-              child: DropdownButtonHideUnderline(
-                child: DropdownButton<String>(
-                  value: _selectedCategory,
-                  isExpanded: true,
-                  dropdownColor: isDark ? Colors.grey[900] : Colors.white,
-                  items: ['Tech', 'Hobbies', 'News', 'Education', 'Gaming']
-                      .map((c) => DropdownMenuItem(value: c, child: Text(c)))
-                      .toList(),
-                  onChanged: (val) => setState(() => _selectedCategory = val!),
-                ),
-              ),
-            ),
-            const SizedBox(height: 24),
-            const Text('Description', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16)),
-            const SizedBox(height: 8),
-            TextField(
-              controller: _descController,
-              maxLines: 4,
-              decoration: InputDecoration(
-                hintText: 'What is this community about?',
-                filled: true,
-                fillColor: isDark ? Colors.white10 : Colors.grey[100],
-                border: OutlineInputBorder(borderRadius: BorderRadius.circular(12), borderSide: BorderSide.none),
-              ),
-            ),
-            const SizedBox(height: 40),
             SizedBox(
               width: double.infinity,
-              height: 56,
+              height: 50,
               child: ElevatedButton(
                 onPressed: () {
                   Get.back();
-                  Get.snackbar('Community Launching', 'Setting up your new community...',
-                      backgroundColor: Colors.blueAccent, colorText: Colors.white);
+                  Get.snackbar('Success', 'Community created successfully!');
                 },
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: AppPalette.accentBlue,
-                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
-                ),
-                child: const Text('Launch Community', style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 16)),
+                child: const Text('Create Community'),
               ),
             ),
           ],
+        ),
+      ),
+    );
+  }
+
+  void _showImagePicker() {
+    Get.bottomSheet(
+      Container(
+        color: Theme.of(context).scaffoldBackgroundColor,
+        child: Wrap(
+          children: [
+            ListTile(
+              leading: const Icon(Icons.camera_alt),
+              title: const Text('Take Photo'),
+              onTap: () {
+                Get.back();
+                // Simulate taking a photo by using a random avatar
+                setState(() {
+                  _selectedImage = AppAssets.avatar1;
+                });
+                Get.snackbar('Image', 'Photo taken (simulated)');
+              },
+            ),
+            ListTile(
+              leading: const Icon(Icons.photo_library),
+              title: const Text('Choose from Gallery'),
+              onTap: () {
+                Get.back();
+                // Simulate choosing from gallery
+                setState(() {
+                  _selectedImage = AppAssets.avatar2;
+                });
+                 Get.snackbar('Image', 'Image selected (simulated)');
+              },
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildTextField(String label, String hint, {int maxLines = 1}) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(label, style: const TextStyle(fontWeight: FontWeight.bold)),
+        const SizedBox(height: 8),
+        TextField(
+          maxLines: maxLines,
+          decoration: InputDecoration(
+            hintText: hint,
+            border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildPrivacyOption(String title, String subtitle, bool isPublicOption, ThemeData theme) {
+    bool isSelected = _isPublic == isPublicOption;
+    return GestureDetector(
+      onTap: () {
+        setState(() {
+          _isPublic = isPublicOption;
+        });
+      },
+      child: Container(
+        margin: const EdgeInsets.only(bottom: 12),
+        decoration: BoxDecoration(
+          border: Border.all(color: isSelected ? Colors.blue : Colors.grey[300]!),
+          borderRadius: BorderRadius.circular(12),
+          color: isSelected ? Colors.blue.withOpacity(0.05) : null,
+        ),
+        child: RadioListTile<bool>(
+          value: isPublicOption,
+          groupValue: _isPublic,
+          onChanged: (val) {
+             if (val != null) {
+               setState(() {
+                 _isPublic = val;
+               });
+             }
+          },
+          title: Text(title, style: const TextStyle(fontWeight: FontWeight.bold)),
+          subtitle: Text(subtitle),
+          selected: isSelected,
         ),
       ),
     );

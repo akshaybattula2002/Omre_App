@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'controllers/meeting_controller.dart';
+import '../../core/constants/app_assets.dart';
 
 class MeetingScreen extends StatelessWidget {
   const MeetingScreen({super.key});
@@ -36,7 +37,7 @@ class MeetingScreen extends StatelessWidget {
                 child: Row(
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    const Icon(Icons.verified_user_outlined, size: 14, color: Colors.blue),
+                    Image.asset(AppAssets.securitySafeIcon3d, width: 14, height: 14),
                     const SizedBox(width: 8),
                     Text(
                       'SECURE & ENCRYPTED',
@@ -395,7 +396,7 @@ class MeetingScreen extends StatelessWidget {
               'Start an instant meeting', 
               'Join the meeting immediately', 
               isDark,
-              onTap: () => controller.startInstantMeeting()
+              onTap: () => controller.startInstantMeeting(),
             ),
             const SizedBox(height: 24),
             _buildModalOption(
@@ -540,7 +541,7 @@ class MeetingScreen extends StatelessWidget {
     );
   }
 
-   Widget _buildModalOption(IconData icon, String title, String subtitle, bool isDark, {VoidCallback? onTap}) {
+   Widget _buildModalOption(IconData icon, String title, String subtitle, bool isDark, {VoidCallback? onTap, String? assetPath}) {
     final textColor = isDark ? Colors.white : Colors.black;
     final subTextColor = isDark ? Colors.grey : Colors.grey[700];
 
@@ -555,7 +556,9 @@ class MeetingScreen extends StatelessWidget {
               color: isDark ? Colors.white.withAlpha(13) : Colors.black.withAlpha(13),
               shape: BoxShape.circle,
             ),
-            child: Icon(icon, color: isDark ? Colors.white : Colors.black, size: 24),
+            child: assetPath != null
+                ? Image.asset(assetPath, width: 24, height: 24)
+                : Icon(icon, color: isDark ? Colors.white : Colors.black, size: 24),
           ),
           const SizedBox(width: 20),
           Expanded(
@@ -573,7 +576,7 @@ class MeetingScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildActionCard(String title, IconData icon, Color color, {required VoidCallback onTap}) {
+  Widget _buildActionCard(String title, IconData icon, Color color, {required VoidCallback onTap, String? assetPath}) {
      return GestureDetector(
        onTap: onTap,
        child: Container(
@@ -587,7 +590,9 @@ class MeetingScreen extends StatelessWidget {
          child: Column(
            mainAxisAlignment: MainAxisAlignment.center,
            children: [
-             Icon(icon, color: Colors.white, size: 32),
+             assetPath != null
+                 ? Image.asset(assetPath, width: 32, height: 32)
+                 : Icon(icon, color: Colors.white, size: 32),
              const SizedBox(height: 12),
              Text(title, style: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 14)),
            ],

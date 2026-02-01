@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import '../../../core/constants/app_assets.dart';
 import '../../../core/theme/palette.dart';
 
 class ActiveSessionsScreen extends StatelessWidget {
@@ -141,7 +142,7 @@ class ActiveSessionsScreen extends StatelessWidget {
           if (!isCurrent)
             IconButton(
               onPressed: () {},
-              icon: const Icon(Icons.logout, color: Colors.grey, size: 20),
+              icon: Image.asset(AppAssets.logoutIcon3d, width: 20, height: 20),
             ),
         ],
       ),

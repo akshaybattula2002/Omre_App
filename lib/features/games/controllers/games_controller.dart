@@ -37,6 +37,7 @@ class GamesController extends GetxController {
       'subtitle': 'Find teammates',
       'icon': Icons.group_add_outlined,
       'color': Colors.green,
+      'assetPath': AppAssets.groupsIcon3d,
     },
     {
       'title': 'Game Library',

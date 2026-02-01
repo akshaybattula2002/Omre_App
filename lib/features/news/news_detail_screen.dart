@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'widgets/news_share_sheet.dart';
+import '../../core/constants/app_assets.dart';
 
 class NewsDetailScreen extends StatefulWidget {
   final Map<String, String> story;
@@ -88,10 +89,11 @@ class _NewsDetailScreenState extends State<NewsDetailScreen> {
               IconButton(
                 icon: CircleAvatar(
                   backgroundColor: Colors.black26,
-                  child: Icon(
-                    _isBookmarked ? Icons.bookmark : Icons.bookmark_border,
+                  child: Image.asset(
+                    AppAssets.savedIcon3d,
+                    width: 20,
+                    height: 20,
                     color: _isBookmarked ? Colors.blue : Colors.white,
-                    size: 20,
                   ),
                 ),
                 onPressed: _handleSave,

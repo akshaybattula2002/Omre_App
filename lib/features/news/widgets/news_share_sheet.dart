@@ -15,7 +15,7 @@ class NewsShareSheet extends StatelessWidget {
       {'name': 'Twitter', 'icon': Icons.close}, // Using close icon for X
       {'name': 'Facebook', 'icon': Icons.facebook},
       {'name': 'Instagram', 'icon': Icons.photo_camera},
-      {'name': 'Copy Link', 'icon': Icons.link},
+      {'name': 'Copy Link', 'icon': Icons.link, 'assetPath': 'assets/images/link_icon_3d.png'},
       {'name': 'Threads', 'icon': Icons.alternate_email},
       {'name': 'Messenger', 'icon': Icons.chat_bubble},
       {'name': 'SMS', 'icon': Icons.sms},
@@ -84,7 +84,9 @@ class NewsShareSheet extends StatelessWidget {
                           color: isDark ? Colors.white10 : Colors.grey[100],
                           shape: BoxShape.circle,
                         ),
-                        child: Icon(app['icon'] as IconData, color: textColor, size: 28),
+                        child: app['assetPath'] != null
+                            ? Image.asset(app['assetPath'] as String, width: 28, height: 28)
+                            : Icon(app['icon'] as IconData, color: textColor, size: 28),
                       ),
                       const SizedBox(height: 8),
                       Text(

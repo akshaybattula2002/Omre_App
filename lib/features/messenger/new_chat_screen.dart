@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import '../../core/services/mock_service.dart';
 import '../../core/theme/palette.dart';
+import '../../core/constants/app_assets.dart';
 import 'create_group_screen.dart';
 import 'create_contact_screen.dart';
 import 'create_community_screen.dart';
@@ -81,7 +82,7 @@ class NewChatScreen extends StatelessWidget {
                 padding: const EdgeInsets.symmetric(horizontal: 16),
                 children: [
                   _buildActionItem(Icons.group_add, 'New group', isDark, onTap: () => Get.to(() => const CreateGroupScreen())),
-                  _buildActionItem(Icons.person_add, 'New contact', isDark, onTap: () => Get.to(() => const CreateContactScreen())),
+                  _buildActionItem(Icons.person_add, 'New contact', isDark, onTap: () => Get.to(() => const CreateContactScreen()), assetPath: AppAssets.personalInfoIcon3d),
                   _buildActionItem(Icons.groups, 'New community', isDark, onTap: () => Get.to(() => const CreateCommunityScreen())),
                   _buildActionItem(Icons.campaign, 'New channel', isDark, onTap: () => Get.to(() => const CreateChannelScreen())),
                   
@@ -108,7 +109,7 @@ class NewChatScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildActionItem(IconData icon, String label, bool isDark, {VoidCallback? onTap}) {
+  Widget _buildActionItem(IconData icon, String label, bool isDark, {VoidCallback? onTap, String? assetPath}) {
     return InkWell(
       onTap: onTap,
       child: Padding(
@@ -122,7 +123,9 @@ class NewChatScreen extends StatelessWidget {
                 color: Color(0xFF00A884), // WhatsApp Green
                 shape: BoxShape.circle,
               ),
-              child: Icon(icon, color: Colors.white, size: 24),
+              child: assetPath != null 
+                  ? Center(child: Image.asset(assetPath, width: 24, height: 24))
+                  : Icon(icon, color: Colors.white, size: 24),
             ),
             const SizedBox(width: 16),
             Text(

@@ -2,15 +2,16 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
+import '../../core/constants/app_assets.dart';
 
-class OmniKnowScreen extends StatefulWidget {
-  const OmniKnowScreen({super.key});
+class OmreKnowScreen extends StatefulWidget {
+  const OmreKnowScreen({super.key});
 
   @override
-  State<OmniKnowScreen> createState() => _OmniKnowScreenState();
+  State<OmreKnowScreen> createState() => _OmreKnowScreenState();
 }
 
-class _OmniKnowScreenState extends State<OmniKnowScreen> {
+class _OmreKnowScreenState extends State<OmreKnowScreen> {
   // --- State for Inline Expansions ---
   final Map<String, bool> _expansionStates = {};
   double _skillLevel = 0.5; // 0.0: Beginner, 1.0: Expert
@@ -173,7 +174,7 @@ class _OmniKnowScreenState extends State<OmniKnowScreen> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            'OMNIKNOW',
+            'OMREKNOW',
             style: TextStyle(
               fontSize: 18,
               fontWeight: FontWeight.w900,
@@ -189,7 +190,7 @@ class _OmniKnowScreenState extends State<OmniKnowScreen> {
         ],
       ),
       actions: [
-        _buildHeaderAction(Icons.translate, () => _showLanguageSelector(context)),
+        _buildHeaderAction(Icons.translate, () => _showLanguageSelector(context), assetPath: AppAssets.languageIcon3d),
         _buildHeaderAction(Icons.mic_none, () {}),
         Padding(
           padding: const EdgeInsets.only(right: 16, left: 8),
@@ -215,9 +216,11 @@ class _OmniKnowScreenState extends State<OmniKnowScreen> {
     );
   }
 
-  Widget _buildHeaderAction(IconData icon, VoidCallback onTap) {
+  Widget _buildHeaderAction(IconData icon, VoidCallback onTap, {String? assetPath}) {
     return IconButton(
-      icon: Icon(icon, size: 20),
+      icon: assetPath != null 
+          ? Image.asset(assetPath, width: 20, height: 20)
+          : Icon(icon, size: 20),
       onPressed: onTap,
     );
   }
@@ -318,9 +321,9 @@ class _OmniKnowScreenState extends State<OmniKnowScreen> {
     final domains = [
       {'name': 'Science & Tech', 'icon': Icons.biotech, 'topics': 'Physics, AI, Space', 'count': '1.2M+', 'color': Colors.blue},
       {'name': 'Medicine & Health', 'icon': Icons.medical_services_outlined, 'topics': 'Anatomy, Vaccine, Genes', 'count': '850K', 'color': Colors.red},
-      {'name': 'Humanities & Arts', 'icon': Icons.palette_outlined, 'topics': 'Philosophy, History, Art', 'count': '2.1M+', 'color': Colors.orange},
+      {'name': 'Humanities & Arts', 'icon': Icons.palette_outlined, 'topics': 'Philosophy, History, Art', 'count': '2.1M+', 'color': Colors.orange, 'assetPath': 'assets/images/studio_icon_3d.png'},
       {'name': 'Nature & Environment', 'icon': Icons.landscape_outlined, 'topics': 'Climate, Zoology, Botany', 'count': '940K', 'color': Colors.green},
-      {'name': 'Culture & Society', 'icon': Icons.people_outline, 'topics': 'Anthropology, Law, Music', 'count': '1.5M', 'color': Colors.purple},
+      {'name': 'Culture & Society', 'icon': Icons.people_outline, 'topics': 'Anthropology, Law, Music', 'count': '1.5M', 'color': Colors.purple, 'assetPath': AppAssets.groupsIcon3d},
       {'name': 'Museums & Archives', 'icon': Icons.museum_outlined, 'topics': 'Louvre, Smithsonian, Cairo', 'count': '3K Collections', 'color': Colors.brown},
     ];
 
@@ -354,7 +357,9 @@ class _OmniKnowScreenState extends State<OmniKnowScreen> {
           children: [
             Row(
               children: [
-                Icon(d['icon'] as IconData, color: dColor, size: 24),
+                d['assetPath'] != null
+                    ? Image.asset(d['assetPath'], width: 24, height: 24)
+                    : Icon(d['icon'] as IconData, color: dColor, size: 24),
                 const Spacer(),
                 Text(d['count'] as String, style: TextStyle(fontSize: 9, color: text.withOpacity(0.4), fontWeight: FontWeight.bold)),
               ],
@@ -403,8 +408,8 @@ class _OmniKnowScreenState extends State<OmniKnowScreen> {
   // --- 4️⃣ Featured Content Stream ---
   Widget _buildFeaturedStream(bool isDark, Color surface, Color text, Color subText) {
     final content = [
-      {'title': 'SpaceX Mars Habitat Sim', 'type': 'SIMULATION', 'level': 'Expert', 'time': '20m', 'icon': Icons.rocket_launch, 'ver': true},
-      {'title': 'The Silk Road Documentary', 'type': 'VIDEO', 'level': 'Intermediate', 'time': '52m', 'icon': Icons.movie_outlined, 'ver': true},
+      {'title': 'SpaceX Mars Habitat Sim', 'type': 'SIMULATION', 'level': 'Expert', 'time': '20m', 'icon': Icons.rocket_launch, 'ver': true, 'assetPath': 'assets/images/orbit_icon_3d.png'},
+      {'title': 'The Silk Road Documentary', 'type': 'VIDEO', 'level': 'Intermediate', 'time': '52m', 'icon': Icons.movie_outlined, 'ver': true, 'assetPath': 'assets/images/video_icon_3d.png'},
       {'title': 'Arabic Calligraphy Masterclass', 'type': 'AI LESSON', 'level': 'Beginner', 'time': '15m', 'icon': Icons.brush_outlined, 'ver': false},
     ];
 
@@ -431,7 +436,9 @@ class _OmniKnowScreenState extends State<OmniKnowScreen> {
               color: text.withOpacity(0.03),
               borderRadius: BorderRadius.circular(16),
             ),
-            child: Icon(c['icon'] as IconData, color: text.withOpacity(0.3), size: 30),
+            child: c['assetPath'] != null
+                ? Image.asset(c['assetPath'], width: 30, height: 30)
+                : Icon(c['icon'] as IconData, color: text.withOpacity(0.3), size: 30),
           ),
           const SizedBox(width: 16),
           Expanded(
@@ -607,7 +614,7 @@ class _OmniKnowScreenState extends State<OmniKnowScreen> {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              _buildContributorStat('Peer Reviewed', '85%', Icons.verified_user_outlined, Colors.blue),
+              _buildContributorStat('Peer Reviewed', '85%', Icons.verified_user_outlined, Colors.blue, assetPath: AppAssets.securitySafeIcon3d),
               _buildContributorStat('Institutions', '124', Icons.account_balance_outlined, Colors.purple),
               _buildContributorStat('Your Rep', '4.9', Icons.star_outline, gold),
             ],
@@ -626,10 +633,12 @@ class _OmniKnowScreenState extends State<OmniKnowScreen> {
     );
   }
 
-  Widget _buildContributorStat(String label, String val, IconData icon, Color color) {
+  Widget _buildContributorStat(String label, String val, IconData icon, Color color, {String? assetPath}) {
     return Column(
       children: [
-        Icon(icon, color: color, size: 16),
+        assetPath != null 
+            ? Image.asset(assetPath, width: 16, height: 16)
+            : Icon(icon, color: color, size: 16),
         const SizedBox(height: 6),
         Text(val, style: const TextStyle(fontSize: 13, fontWeight: FontWeight.bold)),
         Text(label, style: const TextStyle(fontSize: 8, color: Colors.grey)),
@@ -702,7 +711,7 @@ class _OmniKnowScreenState extends State<OmniKnowScreen> {
         _buildSectionHeader('Ecosystem Sustainability', isDark, Colors.blueGrey),
         const SizedBox(height: 12),
         Text(
-          'OmniKnow is supported through institutional licensing, premium certifications, and community grants. Core knowledge always remains free.',
+          'OmreKnow is supported through institutional licensing, premium certifications, and community grants. Core knowledge always remains free.',
           style: TextStyle(fontSize: 11, color: text.withOpacity(0.5), height: 1.5),
         ),
       ],
@@ -722,12 +731,12 @@ class _OmniKnowScreenState extends State<OmniKnowScreen> {
           Icon(Icons.auto_stories_outlined, color: gold, size: 40),
           const SizedBox(height: 20),
           Text(
-            'OMNIKNOW VISION',
+            'OMREKNOW VISION',
             style: TextStyle(fontSize: 12, fontWeight: FontWeight.w900, letterSpacing: 2, color: gold),
           ),
           const SizedBox(height: 12),
           Text(
-            '“OmniKnow is a living ecosystem of human knowledge—open, immersive, verified, and collaborative.”',
+            '“OmreKnow is a living ecosystem of human knowledge—open, immersive, verified, and collaborative.”',
             textAlign: TextAlign.center,
             style: TextStyle(fontSize: 14, fontWeight: FontWeight.w600, color: text, fontStyle: FontStyle.italic, height: 1.6),
           ),

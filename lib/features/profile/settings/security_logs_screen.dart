@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../../../core/theme/palette.dart';
+import '../../../core/constants/app_assets.dart';
 
 class SecurityLogsScreen extends StatelessWidget {
   const SecurityLogsScreen({super.key});
@@ -32,6 +33,7 @@ class SecurityLogsScreen extends StatelessWidget {
         'location': 'New York, USA',
         'time': 'Yesterday',
         'icon': Icons.security,
+        'assetPath': AppAssets.securitySafeIcon3d,
         'color': AppPalette.accentBlue,
       },
       {
@@ -77,7 +79,9 @@ class SecurityLogsScreen extends StatelessWidget {
                   color: (log['color'] as Color).withValues(alpha: 0.1),
                   shape: BoxShape.circle,
                 ),
-                child: Icon(log['icon'] as IconData, color: log['color'] as Color, size: 20),
+                child: log['assetPath'] != null 
+                    ? Image.asset(log['assetPath'] as String, width: 20, height: 20)
+                    : Icon(log['icon'] as IconData, color: log['color'] as Color, size: 20),
               ),
               const SizedBox(width: 16),
               Expanded(

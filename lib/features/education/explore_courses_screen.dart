@@ -25,7 +25,7 @@ class ExploreCoursesScreen extends StatelessWidget {
                   color: theme.primaryColor.withOpacity(0.1),
                   borderRadius: BorderRadius.circular(8),
                 ),
-                child: const Icon(Icons.school_outlined),
+                child: Image.asset('assets/images/learn_icon_3d.png', width: 32, height: 32),
               ),
               title: Text('Course Topic #$index'),
               subtitle: const Text('Learn the fundamentals of this topic from experts.'),

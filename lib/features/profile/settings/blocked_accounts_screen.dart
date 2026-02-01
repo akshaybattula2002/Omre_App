@@ -18,6 +18,12 @@ class BlockedAccountsScreen extends StatelessWidget {
       appBar: AppBar(
         title: const Text('Blocked Accounts', style: TextStyle(fontWeight: FontWeight.bold)),
         elevation: 0,
+        actions: [
+          Padding(
+            padding: const EdgeInsets.only(right: 16),
+            child: Image.asset(AppAssets.blockedAccountsIcon3d, width: 28, height: 28),
+          ),
+        ],
       ),
       body: blockedUsers.isEmpty
           ? const Center(child: Text('You haven\'t blocked anyone yet.'))

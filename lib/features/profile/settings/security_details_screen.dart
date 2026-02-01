@@ -4,6 +4,7 @@ import '../../../core/theme/palette.dart';
 import 'recovery_email_screen.dart';
 import 'security_logs_screen.dart';
 import 'active_sessions_screen.dart';
+import '../../../core/constants/app_assets.dart';
 
 class SecurityDetailsScreen extends StatefulWidget {
   const SecurityDetailsScreen({super.key});
@@ -49,6 +50,7 @@ class _SecurityDetailsScreenState extends State<SecurityDetailsScreen> {
               icon: Icons.verified_user_outlined,
               title: 'Two-Factor Authentication',
               subtitle: 'Secured with Google Authenticator',
+              assetPath: AppAssets.securitySafeIcon3d,
               trailing: Switch(
                 value: _twoFactorAuth,
                 onChanged: (val) => setState(() => _twoFactorAuth = val),
@@ -213,6 +215,7 @@ class _SecurityDetailsScreenState extends State<SecurityDetailsScreen> {
     required String subtitle,
     Widget? trailing,
     VoidCallback? onTap,
+    String? assetPath,
   }) {
     final isDark = Theme.of(context).brightness == Brightness.dark;
     return Container(
@@ -230,7 +233,9 @@ class _SecurityDetailsScreenState extends State<SecurityDetailsScreen> {
             color: AppPalette.accentBlue.withOpacity(0.1),
             shape: BoxShape.circle,
           ),
-          child: Icon(icon, color: AppPalette.accentBlue, size: 20),
+          child: assetPath != null 
+              ? Image.asset(assetPath, width: 20, height: 20)
+              : Icon(icon, color: AppPalette.accentBlue, size: 20),
         ),
         title: Text(title, style: const TextStyle(fontWeight: FontWeight.w600, fontSize: 15)),
         subtitle: Text(subtitle, style: TextStyle(color: Colors.grey[500], fontSize: 12)),

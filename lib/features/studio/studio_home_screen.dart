@@ -45,7 +45,7 @@ class StudioHomeScreen extends StatelessWidget {
                 ),
                 IconButton(
                   onPressed: () {},
-                  icon: Icon(Icons.notifications_outlined, color: theme.iconTheme.color),
+                  icon: Image.asset('assets/images/notification_icon_3d.png', width: 24, height: 24),
                 ),
               ],
             ),

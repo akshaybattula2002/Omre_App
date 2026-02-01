@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import '../../core/theme/palette.dart';
+import '../../core/constants/app_assets.dart';
 
 class CreateContactScreen extends StatefulWidget {
   const CreateContactScreen({super.key});
@@ -40,9 +41,9 @@ class _CreateContactScreenState extends State<CreateContactScreen> {
         padding: const EdgeInsets.all(24.0),
         child: Column(
           children: [
-             _buildTextField('First Name', Icons.person_outline, _firstNameController, isDark),
+             _buildTextField('First Name', Icons.person_outline, _firstNameController, isDark, assetPath: AppAssets.personalInfoIcon3d),
              const SizedBox(height: 20),
-             _buildTextField('Last Name', Icons.person_outline, _lastNameController, isDark),
+             _buildTextField('Last Name', Icons.person_outline, _lastNameController, isDark, assetPath: AppAssets.personalInfoIcon3d),
              const SizedBox(height: 20),
              Container(
                padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
@@ -70,14 +71,19 @@ class _CreateContactScreenState extends State<CreateContactScreen> {
     );
   }
 
-  Widget _buildTextField(String hint, IconData icon, TextEditingController controller, bool isDark, {TextInputType? keyboardType}) {
+  Widget _buildTextField(String hint, IconData icon, TextEditingController controller, bool isDark, {TextInputType? keyboardType, String? assetPath}) {
     return TextField(
       controller: controller,
       keyboardType: keyboardType,
       style: TextStyle(color: isDark ? Colors.white : Colors.black),
       decoration: InputDecoration(
         hintText: hint,
-        prefixIcon: Icon(icon, color: Colors.grey),
+        prefixIcon: assetPath != null 
+            ? Padding(
+                padding: const EdgeInsets.all(12.0),
+                child: Image.asset(assetPath, width: 20, height: 20),
+              )
+            : Icon(icon, color: Colors.grey),
         filled: true,
         fillColor: isDark ? Colors.white10 : Colors.grey[100],
         border: OutlineInputBorder(borderRadius: BorderRadius.circular(12), borderSide: BorderSide.none),

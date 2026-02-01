@@ -161,7 +161,7 @@ class _ShortsPageItemState extends State<ShortsPageItem> {
               }),
               const SizedBox(height: 20),
               _buildActionItem(
-                Icons.chat_bubble,
+                const Icon(Icons.comment_outlined, color: Colors.white, size: 36),
                 widget.short.comments,
                 Colors.white,
                 onTap: () {
@@ -277,12 +277,14 @@ class _ShortsPageItemState extends State<ShortsPageItem> {
     );
   }
 
-  Widget _buildActionItem(IconData icon, String label, Color color, {VoidCallback? onTap}) {
+  Widget _buildActionItem(dynamic icon, String label, Color color, {VoidCallback? onTap}) {
     return GestureDetector(
       onTap: onTap,
       child: Column(
         children: [
-          Icon(icon, color: color, size: 36),
+          icon is IconData 
+              ? Icon(icon, color: color, size: 36)
+              : SizedBox(width: 36, height: 36, child: icon),
           const SizedBox(height: 6),
           Text(
             label,

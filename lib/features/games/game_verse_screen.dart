@@ -86,11 +86,11 @@ class GameVerseScreen extends GetView<GamesController> {
                           BoxShadow(color: Colors.red.withOpacity(0.4), blurRadius: 8, offset: const Offset(0, 4)),
                         ],
                       ),
-                      child: const Row(
+                      child: Row(
                         children: [
-                          Icon(Icons.videocam, color: Colors.white, size: 20),
-                          SizedBox(width: 4),
-                          Text('Go Live', style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold)),
+                          Image.asset('assets/images/video_icon_3d.png', width: 24, height: 24),
+                          const SizedBox(width: 4),
+                          const Text('Go Live', style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold)),
                         ],
                       ),
                     ),

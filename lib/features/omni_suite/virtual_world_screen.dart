@@ -382,7 +382,9 @@ class _VirtualWorldScreenState extends State<VirtualWorldScreen> {
           child: Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Icon(caps[index]['icon'] as IconData, size: 16, color: Colors.blueAccent),
+              caps[index]['title'] == 'Learn'
+                  ? Image.asset('assets/images/learn_icon_3d.png', width: 16, height: 16)
+                  : Icon(caps[index]['icon'] as IconData, size: 16, color: Colors.blueAccent),
               const SizedBox(width: 10),
               Text(caps[index]['title'] as String, style: TextStyle(fontSize: 11, fontWeight: FontWeight.w600, color: isDark ? Colors.white : Colors.black87)),
             ],

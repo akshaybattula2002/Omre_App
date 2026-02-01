@@ -168,13 +168,13 @@ class _OrbitTopicDetailScreenState extends State<OrbitTopicDetailScreen> {
               ),
               const SizedBox(width: 6),
               if (widget.topic.isVerified)
-                const Icon(Icons.verified_user_outlined, color: Colors.blue, size: 16),
+                Image.asset(AppAssets.securitySafeIcon3d, width: 16, height: 16),
             ],
           ),
           const SizedBox(height: 2),
             Row(
             children: [
-                Icon(Icons.people_alt_rounded, size: 12, color: textSecondary),
+                Image.asset(AppAssets.friendsIcon3d, width: 12, height: 12),
                 const SizedBox(width: 4),
                 Text(
                 '${widget.topic.liveUsers} live',
@@ -381,7 +381,7 @@ class _OrbitTopicDetailScreenState extends State<OrbitTopicDetailScreen> {
               middleTextStyle: TextStyle(color: Theme.of(Get.context!).textTheme.bodyMedium?.color),
               confirm: TextButton(onPressed: () => Get.back(), child: const Text('Got it')),
             ),
-            child: Icon(Icons.help_outline, color: textSecondary, size: 16),
+            child: Image.asset(AppAssets.helpCenterIcon3d, width: 16, height: 16),
           ),
         ],
       ),
@@ -538,7 +538,7 @@ class _OrbitTopicDetailScreenState extends State<OrbitTopicDetailScreen> {
                       ),
                       child: Row(
                         children: [
-                          Icon(Icons.help_outline, size: 12, color: contributorColor),
+                          Image.asset(AppAssets.helpCenterIcon3d, width: 12, height: 12),
                           const SizedBox(width: 4),
                           Text(tag, style: TextStyle(color: contributorColor, fontSize: 10, fontWeight: FontWeight.bold)),
                         ],
@@ -957,7 +957,7 @@ class _OrbitTopicDetailScreenState extends State<OrbitTopicDetailScreen> {
            const SizedBox(height: 12),
           Row(
             children: [
-              IconButton(onPressed: () => _handleLanguage(cardColor, textPrimary, textSecondary, accentBlue, theme.scaffoldBackgroundColor), icon: Icon(Icons.language, color: textSecondary, size: 20)),
+              IconButton(onPressed: () => _handleLanguage(cardColor, textPrimary, textSecondary, accentBlue, theme.scaffoldBackgroundColor), icon: Image.asset(AppAssets.languageIcon3d, width: 20, height: 20)),
               const SizedBox(width: 8),
               IconButton(onPressed: () => _handleAttachment(cardColor, textPrimary, textSecondary, accentBlue, theme.scaffoldBackgroundColor), icon: Icon(Icons.library_books_outlined, color: textSecondary, size: 20)),
                const SizedBox(width: 8),
@@ -989,7 +989,7 @@ class _OrbitTopicDetailScreenState extends State<OrbitTopicDetailScreen> {
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Icon(Icons.people_outline, size: 12, color: textSecondary),
+              Image.asset(AppAssets.friendsIcon3d, width: 12, height: 12),
               const SizedBox(width: 4),
               RichText(
                 text: TextSpan(

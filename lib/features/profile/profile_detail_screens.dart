@@ -231,21 +231,23 @@ class ContactSupportScreen extends StatelessWidget {
           _buildHelpTile(Icons.report_problem_outlined, 'Report a Problem', 'Something isn\'t working correctly', 
             () => Get.to(() => const ReportProblemScreen())),
           _buildHelpTile(Icons.help_outline, 'Help Requests', 'View status of your support tickets', 
-            () => Get.to(() => const HelpRequestsScreen())),
+            () => Get.to(() => const HelpRequestsScreen()), assetPath: AppAssets.helpCenterIcon3d),
           _buildHelpTile(Icons.privacy_tip_outlined, 'Privacy Help', 'Report privacy issues or concerns', 
-            () => Get.to(() => const PrivacyHelpScreen())),
+            () => Get.to(() => const PrivacyHelpScreen()), assetPath: AppAssets.securitySafeIcon3d),
           _buildHelpTile(Icons.security_outlined, 'Security Help', 'Protect your account and data', 
-            () => Get.to(() => const SecurityHelpScreen())),
+            () => Get.to(() => const SecurityHelpScreen()), assetPath: AppAssets.securitySafeIcon3d),
           _buildHelpTile(Icons.verified_user_outlined, 'Account Status', 'Check if your account is in good standing', 
-            () => Get.to(() => const AccountStatusScreen())),
+            () => Get.to(() => const AccountStatusScreen()), assetPath: AppAssets.securitySafeIcon3d),
         ],
       ),
     );
   }
 
-  Widget _buildHelpTile(IconData icon, String title, String subtitle, VoidCallback onTap) {
+  Widget _buildHelpTile(IconData icon, String title, String subtitle, VoidCallback onTap, {String? assetPath}) {
     return ListTile(
-      leading: Icon(icon, color: AppPalette.accentBlue),
+      leading: assetPath != null 
+          ? Image.asset(assetPath, width: 24, height: 24)
+          : Icon(icon, color: AppPalette.accentBlue),
       title: Text(title, style: const TextStyle(fontWeight: FontWeight.w600)),
       subtitle: Text(subtitle, style: const TextStyle(fontSize: 12, color: Colors.grey)),
       trailing: const Icon(Icons.chevron_right, size: 20),
@@ -686,7 +688,7 @@ class SecurityHelpScreen extends StatelessWidget {
             onTap: () => Get.to(() => const TwoFactorAuthScreen()),
           ),
           ListTile(
-            leading: const Icon(Icons.security, color: AppPalette.accentBlue),
+            leading: Image.asset(AppAssets.securitySafeIcon3d, width: 24, height: 24),
             title: const Text('Security Checkup'),
             subtitle: const Text('Review recent security activity and recommendations'),
             trailing: const Icon(Icons.chevron_right, size: 20),
@@ -851,7 +853,7 @@ class SecurityCheckupScreen extends StatelessWidget {
             style: TextStyle(color: Colors.grey, fontSize: 14),
           ),
           const SizedBox(height: 24),
-          _buildCheckItem(Icons.verified_user, 'Login Activity', 'Recognized device log in from Mumbai, India', 'Review'),
+          _buildCheckItem(Icons.verified_user, 'Login Activity', 'Recognized device log in from Mumbai, India', 'Review', assetPath: AppAssets.securitySafeIcon3d),
           _buildCheckItem(Icons.email, 'Recovery Email', 'battula****@gmail.com', 'Update'),
           _buildCheckItem(Icons.phone_android, 'Recovery Phone', '+91 *******89', 'Update'),
           const Divider(height: 32),
@@ -869,14 +871,16 @@ class SecurityCheckupScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildCheckItem(IconData icon, String title, String subtitle, String action) {
+  Widget _buildCheckItem(IconData icon, String title, String subtitle, String action, {String? assetPath}) {
     return Card(
       margin: const EdgeInsets.only(bottom: 12),
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
       child: ListTile(
         leading: CircleAvatar(
           backgroundColor: AppPalette.accentBlue.withOpacity(0.1),
-          child: Icon(icon, color: AppPalette.accentBlue, size: 20),
+          child: assetPath != null 
+              ? Image.asset(assetPath, width: 20, height: 20)
+              : Icon(icon, color: AppPalette.accentBlue, size: 20),
         ),
         title: Text(title, style: const TextStyle(fontWeight: FontWeight.bold)),
         subtitle: Text(subtitle, style: const TextStyle(fontSize: 12)),

@@ -14,12 +14,14 @@ class CourseCategory {
   final int count;
   final IconData icon;
   final Color color;
+  final String? assetPath;
 
   CourseCategory({
     required this.name,
     required this.count,
     required this.icon,
     required this.color,
+    this.assetPath,
   });
 }
 
@@ -45,10 +47,10 @@ class CourseModel {
 
 class EducationController extends GetxController {
   final categories = <CourseCategory>[
-    CourseCategory(name: 'Development', count: 2450, icon: Icons.code, color: Colors.blue),
-    CourseCategory(name: 'Design', count: 1230, icon: Icons.palette, color: Colors.pink),
-    CourseCategory(name: 'Business', count: 980, icon: Icons.bar_chart, color: Colors.orange),
-    CourseCategory(name: 'Photography', count: 650, icon: Icons.camera_alt, color: Colors.green),
+    CourseCategory(name: 'Development', count: 2450, icon: Icons.code, color: Colors.blue, assetPath: 'assets/images/video_icon_3d.png'),
+    CourseCategory(name: 'Design', count: 1230, icon: Icons.palette, color: Colors.pink, assetPath: 'assets/images/studio_icon_3d.png'),
+    CourseCategory(name: 'Business', count: 980, icon: Icons.bar_chart, color: Colors.orange, assetPath: 'assets/images/biz_icon_3d.png'),
+    CourseCategory(name: 'Photography', count: 650, icon: Icons.camera_alt, color: Colors.green, assetPath: AppAssets.imagesIcon3d),
   ].obs;
 
   final recommendedCourses = <CourseModel>[

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'news_detail_screen.dart';
 import 'controllers/news_controller.dart';
+import '../../core/constants/app_assets.dart';
 
 class NewsHomeScreen extends GetView<NewsController> {
   const NewsHomeScreen({super.key});
@@ -152,13 +153,13 @@ class NewsHomeScreen extends GetView<NewsController> {
                                   overflow: TextOverflow.ellipsis,
                                 ),
                                 const SizedBox(height: 24),
-                                const Row(
+                                 Row(
                                   children: [
                                     Icon(Icons.favorite_border, color: Colors.white, size: 20),
                                     SizedBox(width: 8),
                                     Text('12.5k', style: TextStyle(color: Colors.white, fontSize: 13)), // Shortened number
                                     SizedBox(width: 24),
-                                    Icon(Icons.chat_bubble_outline, color: Colors.white, size: 20),
+                                    Image.asset('assets/images/chat_icon_3d.png', width: 20, height: 20),
                                     SizedBox(width: 8),
                                     Text('6.7k', style: TextStyle(color: Colors.white, fontSize: 13)), // Shortened number
                                     SizedBox(width: 24),
@@ -255,7 +256,7 @@ class NewsHomeScreen extends GetView<NewsController> {
                 const SizedBox(height: 12),
                  Row(
                    children: [
-                     Icon(Icons.bookmark_border, size: 20, color: theme.iconTheme.color?.withOpacity(0.5)),
+                     Image.asset(AppAssets.savedIcon3d, width: 20, height: 20, color: theme.iconTheme.color?.withOpacity(0.5)),
                      const SizedBox(width: 16),
                      Icon(Icons.ios_share_outlined, size: 20, color: theme.iconTheme.color?.withOpacity(0.5)),
                    ],

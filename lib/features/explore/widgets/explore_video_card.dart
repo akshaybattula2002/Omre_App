@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import '../../../core/constants/app_assets.dart';
 
 class ExploreVideoCard extends StatelessWidget {
   final Map<String, dynamic> video;
@@ -106,8 +107,10 @@ class ExploreVideoCard extends StatelessWidget {
                 final rxIsSaved = video['isSaved'];
                 final isSaved = rxIsSaved is RxBool ? rxIsSaved.value : false;
                 return IconButton(
-                  icon: Icon(
-                    isSaved ? Icons.bookmark : Icons.bookmark_border,
+                  icon: Image.asset(
+                    AppAssets.savedIcon3d,
+                    width: 24,
+                    height: 24,
                     color: isSaved ? Colors.blueAccent : (isDark ? Colors.grey[400] : Colors.grey[600]),
                   ),
                   onPressed: onSave,

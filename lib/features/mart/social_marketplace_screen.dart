@@ -113,6 +113,8 @@ class SocialMarketplaceScreen extends StatelessWidget {
                       ),
                     ),
                     const SizedBox(width: 4),
+                    Image.asset('assets/images/mart_icon_3d.png', width: 14, height: 14),
+                    const SizedBox(width: 4),
                     Icon(Icons.keyboard_arrow_down, size: 14, color: isDark ? Colors.white54 : Colors.grey[600]),
                   ],
                 ),
@@ -315,7 +317,9 @@ class SocialMarketplaceScreen extends StatelessWidget {
                     color: AppPalette.accentBlue.withOpacity(0.1),
                     shape: BoxShape.circle,
                 ),
-                child: Icon(getIconData(name), color: AppPalette.accentBlue, size: 28),
+                child: name == 'Education'
+                    ? Image.asset('assets/images/learn_icon_3d.png', width: 28, height: 28)
+                    : Icon(getIconData(name), color: AppPalette.accentBlue, size: 28),
             ),
             const SizedBox(height: 8),
             Text(

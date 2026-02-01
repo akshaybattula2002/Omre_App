@@ -22,7 +22,7 @@ class FriendsScreen extends StatelessWidget {
           onPressed: () => Get.back(),
         ),
         actions: [
-          IconButton(icon: Icon(Icons.search, color: theme.iconTheme.color), onPressed: () {}),
+          IconButton(icon: Image.asset('assets/images/search_icon_3d.png', width: 24, height: 24), onPressed: () {}),
           IconButton(icon: Icon(Icons.person_add, color: theme.iconTheme.color), onPressed: () {}),
         ],
       ),
@@ -143,7 +143,7 @@ class FriendsScreen extends StatelessWidget {
       ),
       title: Text(name, style: TextStyle(fontWeight: FontWeight.bold, color: isDark ? Colors.white : Colors.black)),
       trailing: IconButton(
-        icon: Icon(Icons.chat_bubble_outline, color: Colors.grey[600]),
+        icon: Image.asset('assets/images/chat_icon_3d.png', width: 24, height: 24),
         onPressed: () {},
       ),
       onTap: () => Get.to(() => FriendProfileScreen(name: name, image: img, cover: cover, isFriend: true)),

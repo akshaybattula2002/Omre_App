@@ -386,7 +386,7 @@ class WalletScreen extends GetView<BizController> {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               const Text('Available Balance', style: TextStyle(color: Colors.white60, fontSize: 14)),
-              const Icon(Icons.account_balance_wallet_outlined, color: Colors.white, size: 20),
+              Image.asset(AppAssets.walletIcon3d, width: 24, height: 24),
             ],
           ),
           const SizedBox(height: 8),

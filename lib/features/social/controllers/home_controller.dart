@@ -360,7 +360,7 @@ class HomeController extends GetxController {
                         child: Column(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
-                            const Icon(Icons.chat_bubble_outline, size: 48, color: Colors.grey),
+                            Icon(Icons.comment_outlined, size: 48, color: Colors.grey[400]),
                             const SizedBox(height: 16),
                             Text('No comments yet.', style: TextStyle(color: Colors.grey[600])),
                             const Text('Start the conversation.', style: TextStyle(fontSize: 12, color: Colors.grey)),

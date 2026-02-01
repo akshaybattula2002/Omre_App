@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'controllers/squad_finder_controller.dart';
+import '../../../core/constants/app_assets.dart';
 
 class SquadFinderScreen extends StatelessWidget {
   const SquadFinderScreen({super.key});
@@ -140,7 +141,7 @@ class SquadFinderScreen extends StatelessWidget {
             scrollDirection: Axis.horizontal,
             child: Row(
               children: [
-                _buildFilterChip(controller.selectedRegion, controller.regions, Icons.public, isDark, textColor, accentGreen),
+                _buildFilterChip(controller.selectedRegion, controller.regions, Icons.public, isDark, textColor, accentGreen, assetPath: AppAssets.languageIcon3d),
                 const SizedBox(width: 8),
                 _buildFilterChip(controller.selectedRank, controller.ranks, Icons.emoji_events, isDark, textColor, accentGreen),
                 const SizedBox(width: 8),
@@ -160,7 +161,7 @@ class SquadFinderScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildFilterChip(RxString selectedValue, List<String> options, IconData icon, bool isDark, Color textColor, Color accentGreen) {
+  Widget _buildFilterChip(RxString selectedValue, List<String> options, IconData icon, bool isDark, Color textColor, Color accentGreen, {String? assetPath}) {
     return Obx(() => GestureDetector(
       onTap: () => _showFilterOptions(selectedValue, options, isDark, textColor),
       child: Container(
@@ -172,7 +173,9 @@ class SquadFinderScreen extends StatelessWidget {
         ),
         child: Row(
           children: [
-            Icon(icon, color: selectedValue.value != options[0] ? accentGreen : textColor.withOpacity(0.4), size: 16),
+            assetPath != null 
+                ? Image.asset(assetPath, width: 16, height: 16)
+                : Icon(icon, color: selectedValue.value != options[0] ? accentGreen : textColor.withOpacity(0.4), size: 16),
             const SizedBox(width: 8),
             Text(selectedValue.value, style: TextStyle(color: textColor, fontSize: 13, fontWeight: FontWeight.w500)),
             const SizedBox(width: 4),
@@ -283,7 +286,7 @@ class SquadFinderScreen extends StatelessWidget {
             children: [
               _buildMetaItem(Icons.emoji_events, squad['rank'], Colors.amber),
               const SizedBox(width: 16),
-              _buildMetaItem(Icons.public, squad['region'], Colors.blueAccent),
+              _buildMetaItem(Icons.public, squad['region'], Colors.blueAccent, assetPath: AppAssets.languageIcon3d),
               const SizedBox(width: 16),
               if (squad['mic']) _buildMetaItem(Icons.mic, 'Mic Req', Colors.redAccent),
               const Spacer(),
@@ -311,10 +314,12 @@ class SquadFinderScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildMetaItem(IconData icon, String label, Color color) {
+  Widget _buildMetaItem(IconData icon, String label, Color color, {String? assetPath}) {
     return Row(
       children: [
-        Icon(icon, size: 14, color: color),
+        assetPath != null 
+            ? Image.asset(assetPath, width: 14, height: 14)
+            : Icon(icon, size: 14, color: color),
         const SizedBox(width: 4),
         Text(label, style: const TextStyle(color: Colors.grey, fontSize: 12)),
       ],

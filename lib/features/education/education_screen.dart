@@ -127,7 +127,9 @@ class EducationScreen extends StatelessWidget {
                 color: cat.color.withOpacity(isDark ? 0.1 : 0.05),
                 shape: BoxShape.circle,
               ),
-              child: Icon(cat.icon, color: cat.color, size: 28),
+              child: cat.assetPath != null
+                  ? Image.asset(cat.assetPath!, width: 28, height: 28)
+                  : Icon(cat.icon, color: cat.color, size: 28),
             ),
             const SizedBox(height: 12),
             Text(cat.name, style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 15)),
@@ -614,7 +616,7 @@ class EducationScreen extends StatelessWidget {
             spacing: 24,
             runSpacing: 16,
             children: [
-              _buildHeroStat(Icons.people_alt_outlined, '2M+ learners'),
+              _buildHeroStat(Icons.people_alt_outlined, '2M+ learners', assetPath: AppAssets.friendsIcon3d),
               _buildHeroStat(Icons.workspace_premium_outlined, '10K+ courses'),
               _buildHeroStat(Icons.trending_up, '95% completion rate'),
             ],
@@ -624,11 +626,13 @@ class EducationScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildHeroStat(IconData icon, String label) {
+  Widget _buildHeroStat(IconData icon, String label, {String? assetPath}) {
     return Row(
       mainAxisSize: MainAxisSize.min,
       children: [
-        Icon(icon, color: Colors.white, size: 20),
+        assetPath != null
+            ? Image.asset(assetPath, width: 20, height: 20)
+            : Icon(icon, color: Colors.white, size: 20),
         const SizedBox(width: 8),
         Text(
           label,

@@ -25,9 +25,9 @@ class VideoHomeScreen extends StatelessWidget {
               floating: true,
               title: const Text('Watch', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 24)),
               actions: [
-                _buildHeaderIcon(Icons.person, isDark),
+                _buildHeaderIcon(Image.asset('assets/images/profile_icon_3d.png', width: 24, height: 24), isDark),
                 const SizedBox(width: 8),
-                _buildHeaderIcon(Icons.search, isDark),
+                _buildHeaderIcon(Image.asset('assets/images/search_icon_3d.png', width: 24, height: 24), isDark),
                 const SizedBox(width: 16),
               ],
               bottom: PreferredSize(
@@ -109,14 +109,14 @@ class VideoHomeScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildHeaderIcon(IconData icon, bool isDark) {
+  Widget _buildHeaderIcon(Widget iconWidget, bool isDark) {
     return Container(
       padding: const EdgeInsets.all(8),
       decoration: BoxDecoration(
         color: isDark ? Colors.grey[800] : Colors.grey[200],
         shape: BoxShape.circle,
       ),
-      child: Icon(icon, color: isDark ? Colors.white : Colors.black, size: 20),
+      child: SizedBox(width: 20, height: 20, child: Center(child: iconWidget)),
     );
   }
 

@@ -22,7 +22,7 @@ class MoviesScreen extends StatelessWidget {
           onPressed: () => Get.back(),
         ),
         actions: [
-          IconButton(icon: Icon(Icons.search, color: isDark ? Colors.white : Colors.black), onPressed: () {}),
+          IconButton(icon: const Icon(Icons.search), onPressed: () => Get.snackbar('Search', 'Search for movies coming soon')),
         ],
       ),
       extendBodyBehindAppBar: true,
@@ -124,24 +124,24 @@ class MoviesScreen extends StatelessWidget {
                        ],
                      ),
                      const SizedBox(height: 16),
-                     Row(
-                       children: [
-                         ElevatedButton.icon(
-                           onPressed: () {},
-                           icon: const Icon(Icons.play_arrow),
-                           label: const Text('Watch Now'),
-                           style: ElevatedButton.styleFrom(
-                             backgroundColor: Colors.white,
-                             foregroundColor: Colors.black,
-                           ),
-                         ),
-                         const SizedBox(width: 12),
-                         IconButton(
-                           onPressed: () {},
-                           icon: const Icon(Icons.add, color: Colors.white),
-                         ),
-                       ],
-                     ),
+                      Row(
+                        children: [
+                          ElevatedButton.icon(
+                            onPressed: () => Get.snackbar('Movies', 'Starting stream for ${movie['title']}...'),
+                            icon: const Icon(Icons.play_arrow),
+                            label: const Text('Watch Now'),
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor: Colors.white,
+                              foregroundColor: Colors.black,
+                            ),
+                          ),
+                          const SizedBox(width: 12),
+                          IconButton(
+                            onPressed: () => Get.snackbar('Movies', '${movie['title']} added to your list'),
+                            icon: const Icon(Icons.add, color: Colors.white),
+                          ),
+                        ],
+                      ),
                   ],
                 ),
               ),

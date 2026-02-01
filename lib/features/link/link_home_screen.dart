@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import '../../core/theme/palette.dart';
+import '../../core/constants/app_assets.dart';
 import 'controllers/link_controller.dart';
 import 'screens/job_details_screen.dart';
 import 'screens/engineering_jobs_screen.dart';
@@ -125,7 +126,10 @@ class LinkHomeScreen extends StatelessWidget {
                             },
                             decoration: InputDecoration(
                               hintText: 'Job title, keywords, or company',
-                              prefixIcon: const Icon(Icons.search, color: Colors.grey),
+                              prefixIcon: Padding(
+                                padding: const EdgeInsets.all(12),
+                                child: Image.asset('assets/images/search_icon_3d.png', width: 20, height: 20),
+                              ),
                               border: InputBorder.none,
                               hintStyle: TextStyle(color: Colors.grey[400]),
                               contentPadding: EdgeInsets.zero,
@@ -213,15 +217,15 @@ class LinkHomeScreen extends StatelessWidget {
                   children: [
                     Row(
                       children: [
-                        Expanded(child: _buildStatCard('Active Jobs', '${controller.activeJobsCount}', Icons.work_outline, const Color(0xFF4F46E5), isDark)),
+                        Expanded(child: _buildStatCard('Active Jobs', '${controller.activeJobsCount}', Icons.work_outline, const Color(0xFF4F46E5), isDark, assetPath: 'assets/images/link_icon_3d.png')),
                         const SizedBox(width: 12),
-                        Expanded(child: _buildStatCard('Companies', '${controller.companiesCount}', Icons.business, const Color(0xFF10B981), isDark)),
+                        Expanded(child: _buildStatCard('Companies', '${controller.companiesCount}', Icons.business, const Color(0xFF10B981), isDark, assetPath: 'assets/images/biz_icon_3d.png')),
                       ],
                     ),
                     const SizedBox(height: 12),
                     Row(
                       children: [
-                        Expanded(child: _buildStatCard('Remote', '${controller.remoteJobsCount}', Icons.public, const Color(0xFFEC4899), isDark)),
+                        Expanded(child: _buildStatCard('Remote', '${controller.remoteJobsCount}', Icons.public, const Color(0xFFEC4899), isDark, assetPath: AppAssets.languageIcon3d)),
                         const SizedBox(width: 12),
                         Expanded(child: _buildStatCard('Avg Salary', controller.avgSalary, Icons.attach_money, const Color(0xFFFF9800), isDark)),
                       ],
@@ -257,12 +261,12 @@ class LinkHomeScreen extends StatelessWidget {
                   children: [
                     _buildCategoryCard('Engineering', '210 jobs', Icons.code_rounded, const Color(0xFF6366F1), isDark),
                     _buildCategoryCard('Design', '85 jobs', Icons.brush_outlined, const Color(0xFFEC4899), isDark),
-                    _buildCategoryCard('Marketing', '156 jobs', Icons.campaign, const Color(0xFF4F46E5), isDark),
+                    _buildCategoryCard('Marketing', '156 jobs', Icons.campaign, const Color(0xFF4F46E5), isDark, assetPath: AppAssets.adsIcon3d),
                     _buildCategoryCard('Sales', '123 jobs', Icons.trending_up, const Color(0xFF10B981), isDark),
-                    _buildCategoryCard('Product', '67 jobs', Icons.inventory_2_outlined, const Color(0xFFFF9800), isDark),
+                    _buildCategoryCard('Product', '67 jobs', Icons.inventory_2_outlined, const Color(0xFFFF9800), isDark, assetPath: AppAssets.catalogIcon3d),
                     _buildCategoryCard('Operations', '78 jobs', Icons.settings_outlined, const Color(0xFF00BCD4), isDark),
-                    _buildCategoryCard('HR', '45 jobs', Icons.groups_outlined, const Color(0xFFF43F5E), isDark),
-                    _buildCategoryCard('Education', '92 jobs', Icons.school_outlined, const Color(0xFF8B5CF6), isDark),
+                    _buildCategoryCard('HR', '45 jobs', Icons.groups_outlined, const Color(0xFFF43F5E), isDark, assetPath: AppAssets.groupsIcon3d),
+                    _buildCategoryCard('Education', '92 jobs', Icons.school_outlined, const Color(0xFF8B5CF6), isDark, assetPath: 'assets/images/learn_icon_3d.png'),
                   ],
                 ),
               ),
@@ -325,7 +329,7 @@ class LinkHomeScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildStatCard(String label, String value, IconData icon, Color color, bool isDark) {
+  Widget _buildStatCard(String label, String value, IconData icon, Color color, bool isDark, {String? assetPath}) {
     return Container(
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
@@ -341,7 +345,9 @@ class LinkHomeScreen extends StatelessWidget {
               color: color.withOpacity(0.1),
               borderRadius: BorderRadius.circular(12),
             ),
-            child: Icon(icon, color: color, size: 20),
+            child: assetPath != null 
+                ? Image.asset(assetPath, width: 20, height: 20)
+                : Icon(icon, color: color, size: 20),
           ),
           const SizedBox(width: 12),
           Column(
@@ -416,7 +422,10 @@ class LinkHomeScreen extends StatelessWidget {
                     },
                     decoration: InputDecoration(
                       hintText: 'Search for any service...',
-                      prefixIcon: const Icon(Icons.search),
+                      prefixIcon: Padding(
+                        padding: const EdgeInsets.all(12),
+                        child: Image.asset('assets/images/search_icon_3d.png', width: 20, height: 20),
+                      ),
                       border: InputBorder.none,
                       hintStyle: TextStyle(color: isDark ? Colors.grey[500] : Colors.grey[400]),
                     ),
@@ -656,8 +665,10 @@ class LinkHomeScreen extends StatelessWidget {
                   final isSaved = controller.savedJobIds.contains(job.id);
                   return GestureDetector(
                     onTap: () => controller.toggleSaveJob(job.id),
-                    child: Icon(
-                      isSaved ? Icons.bookmark : Icons.bookmark_border_rounded, 
+                    child: Image.asset(
+                      AppAssets.savedIcon3d,
+                      width: 24,
+                      height: 24,
                       color: isSaved ? AppPalette.accentBlue : (isDark ? Colors.grey[400] : Colors.grey[600])
                     ),
                   );
@@ -719,7 +730,7 @@ class LinkHomeScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildCategoryCard(String title, String count, IconData icon, Color color, bool isDark) {
+  Widget _buildCategoryCard(String title, String count, IconData icon, Color color, bool isDark, {String? assetPath}) {
     return GestureDetector(
       onTap: () => _handleCategoryTap(title),
       child: Container(
@@ -737,7 +748,9 @@ class LinkHomeScreen extends StatelessWidget {
                 color: color.withOpacity(0.1),
                 borderRadius: BorderRadius.circular(12),
               ),
-              child: Icon(icon, color: color, size: 20),
+              child: assetPath != null
+                  ? Image.asset(assetPath, width: 20, height: 20)
+                  : Icon(icon, color: color, size: 20),
             ),
             const SizedBox(width: 12),
             Expanded(
